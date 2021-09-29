@@ -1,9 +1,9 @@
 ---
-title: RAID 阵列
+title: Lab01 RAID 阵列
 weight: 1
 ---
 
-# RAID 阵列初体验
+# Lab01 RAID 阵列
 
 ## 实验目的
 
@@ -39,7 +39,7 @@ weight: 1
 登录密码：@buaa211
 ```
 
-你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。
+你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至[Next, ITELLYOU](https://next.itellyou.cn/)该网站上去下载相关系统的 ISO 镜像。
 
 ### 如何连接虚拟机
 
@@ -70,7 +70,7 @@ weight: 1
 ## 参考作业提交的 Markdown 模板
 
 ```markdown
-# Lab01 RAID 阵列初体验
+# Lab01 RAID 阵列
 
 > 班级：
 > 学号：
@@ -95,5 +95,4 @@ weight: 1
 > 观察有什么情况发生，数据是否损坏或者丢失
 
 ## 实验感想
-
 ```

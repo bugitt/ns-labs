@@ -3,31 +3,31 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="RAID 阵列初体验 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
+<meta name="description" content="Lab01 RAID 阵列 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
 实验内容 #  本实验通过软件 RAID 管理磁盘：
  打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体会 RAID 0 1 5 10 等方案下，在遇到磁盘损坏故障、冗余备份的效果等 [选做] 思考题：  为什么及在什么条件下选择用 RAID RAID &amp; 分布式存储 &amp; 集中存储的区别    暂定在 10 月 10 日晚 22：00 前提交至云平台，命名为：lab01-学号-姓名.pdf，如 lab01-18373722-朱英豪.pdf。
 实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
 按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
-登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。">
+登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU该网站上去下载相关系统的 ISO 镜像。">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="RAID 阵列" />
-<meta property="og:description" content="RAID 阵列初体验 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Lab01 RAID 阵列" />
+<meta property="og:description" content="Lab01 RAID 阵列 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
 实验内容 #  本实验通过软件 RAID 管理磁盘：
  打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体会 RAID 0 1 5 10 等方案下，在遇到磁盘损坏故障、冗余备份的效果等 [选做] 思考题：  为什么及在什么条件下选择用 RAID RAID &amp; 分布式存储 &amp; 集中存储的区别    暂定在 10 月 10 日晚 22：00 前提交至云平台，命名为：lab01-学号-姓名.pdf，如 lab01-18373722-朱英豪.pdf。
 实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
 按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
-登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。" />
+登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU该网站上去下载相关系统的 ISO 镜像。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/raid/" /><meta property="article:section" content="docs" />
 
-<meta property="article:modified_time" content="2021-09-29T13:33:22+08:00" />
+<meta property="article:modified_time" content="2021-09-29T13:36:52+08:00" />
 
-<title>RAID 阵列 | Network Storage Labs</title>
+<title>Lab01 RAID 阵列 | Network Storage Labs</title>
 <link rel="manifest" href="/ns-labs/manifest.json">
 <link rel="icon" href="/ns-labs/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
   <script defer src="/ns-labs/flexsearch.min.js"></script>
-  <script defer src="/ns-labs/en.search.min.8ec1bb8b0882dc3a2c1703bc43c38660a78c07683ad20ec7e08952f31c4bf5a4.js" integrity="sha256-jsG7iwiC3DosFwO8Q8OGYKeMB2g60g7H4IlS8xxL9aQ=" crossorigin="anonymous"></script>
+  <script defer src="/ns-labs/en.search.min.5ad22c855bdfdc9b2114e5bcb9113562f379d35ee32f9f2825aac2d5911567dd.js" integrity="sha256-WtIshVvf3JshFOW8uRE1YvN5017jL58oJarC1ZEVZ90=" crossorigin="anonymous"></script>
 
   <script defer src="/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js" integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin="anonymous"></script>
 <!--
@@ -94,7 +94,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="https://bugitt.github.io/ns-labs/docs/table-of-contents/raid/" class=" active">RAID 阵列</a>
+    <a href="https://bugitt.github.io/ns-labs/docs/table-of-contents/raid/" class=" active">Lab01 RAID 阵列</a>
   
 
         </li>
@@ -153,7 +153,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/ns-labs/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>RAID 阵列</strong>
+  <strong>Lab01 RAID 阵列</strong>
 
   <label for="toc-control">
     
@@ -169,7 +169,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#raid-阵列初体验">RAID 阵列初体验</a>
+    <li><a href="#lab01-raid-阵列">Lab01 RAID 阵列</a>
       <ul>
         <li><a href="#实验目的">实验目的</a></li>
         <li><a href="#实验内容">实验内容</a></li>
@@ -193,9 +193,9 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="raid-阵列初体验">
-  RAID 阵列初体验
-  <a class="anchor" href="#raid-%e9%98%b5%e5%88%97%e5%88%9d%e4%bd%93%e9%aa%8c">#</a>
+  <article class="markdown"><h1 id="lab01-raid-阵列">
+  Lab01 RAID 阵列
+  <a class="anchor" href="#lab01-raid-%e9%98%b5%e5%88%97">#</a>
 </h1>
 <h2 id="实验目的">
   实验目的
@@ -236,7 +236,8 @@ https://github.com/alex-shpak/hugo-book
 <pre tabindex="0"><code>登录IP：10.200.200.155
 登录用户名：admin
 登录密码：@buaa211
-</code></pre><p>你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。</p>
+</code></pre><p>你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至
+  <a href="https://next.itellyou.cn/">Next, ITELLYOU</a>该网站上去下载相关系统的 ISO 镜像。</p>
 <h3 id="如何连接虚拟机">
   如何连接虚拟机
   <a class="anchor" href="#%e5%a6%82%e4%bd%95%e8%bf%9e%e6%8e%a5%e8%99%9a%e6%8b%9f%e6%9c%ba">#</a>
@@ -268,7 +269,7 @@ https://github.com/alex-shpak/hugo-book
   参考作业提交的 Markdown 模板
   <a class="anchor" href="#%e5%8f%82%e8%80%83%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e7%9a%84-markdown-%e6%a8%a1%e6%9d%bf">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># Lab01 RAID 阵列初体验
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># Lab01 RAID 阵列
 <span style="color:#66d9ef">
 </span><span style="color:#66d9ef">&gt; </span><span style="font-style:italic">班级：
 </span><span style="font-style:italic"></span><span style="color:#66d9ef">&gt; </span><span style="font-style:italic">学号：
@@ -293,8 +294,7 @@ https://github.com/alex-shpak/hugo-book
 </span><span style="color:#66d9ef">&gt; </span><span style="font-style:italic">观察有什么情况发生，数据是否损坏或者丢失
 </span><span style="font-style:italic"></span>
 <span style="color:#75715e">## 实验感想
-</span><span style="color:#75715e"></span>
-</code></pre></div></article>
+</span></code></pre></div></article>
  
       
 
@@ -303,7 +303,7 @@ https://github.com/alex-shpak/hugo-book
   <div class="flex flex-wrap justify-between">
 
 
-  <div><a class="flex align-center" href="https://github.com/alex-shpak/hugo-book/commit/936d61f8b8c68f7b107389c7e5a8623a15b1a987" title='Last modified by Yinghao Zhu | September 29, 2021' target="_blank" rel="noopener">
+  <div><a class="flex align-center" href="https://github.com/alex-shpak/hugo-book/commit/13e7fc65592c8160553ba65ea1dc0880f16c875e" title='Last modified by Yinghao Zhu | September 29, 2021' target="_blank" rel="noopener">
       <img src="/ns-labs/svg/calendar.svg" class="book-icon" alt="Calendar" />
       <span>September 29, 2021</span>
     </a>
@@ -348,7 +348,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#raid-阵列初体验">RAID 阵列初体验</a>
+    <li><a href="#lab01-raid-阵列">Lab01 RAID 阵列</a>
       <ul>
         <li><a href="#实验目的">实验目的</a></li>
         <li><a href="#实验内容">实验内容</a></li>

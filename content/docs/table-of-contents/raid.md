@@ -1,5 +1,5 @@
 ---
-title: RAID 阵列初体验
+title: RAID 阵列
 weight: 1
 ---
 

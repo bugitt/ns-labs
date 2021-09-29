@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="RAID 阵列初体验 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
+实验内容 #  本实验通过软件 RAID 管理磁盘：
+ 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理  实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
+按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
+登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。
+如何连接虚拟机 #   在 Windows 中可使用“远程桌面连接”工具——win&#43;R 打开“运行”，然后输入 mstsc，然后在弹出窗口中输入 IP、账号、密码即可。 在 MacOS 上可使用 Parallels 等工具连接  注意：">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="RAID 阵列初体验" />
+<meta property="og:description" content="RAID 阵列初体验 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
+实验内容 #  本实验通过软件 RAID 管理磁盘：
+ 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理  实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
+按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
+登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。
+如何连接虚拟机 #   在 Windows 中可使用“远程桌面连接”工具——win&#43;R 打开“运行”，然后输入 mstsc，然后在弹出窗口中输入 IP、账号、密码即可。 在 MacOS 上可使用 Parallels 等工具连接  注意：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/example/table-of-contents/raid/" /><meta property="article:section" content="docs" />
+
+<meta property="article:modified_time" content="2021-09-29T12:59:33+08:00" />
+
+<title>RAID 阵列初体验 | Network Storage Labs</title>
+<link rel="manifest" href="/ns-labs/manifest.json">
+<link rel="icon" href="/ns-labs/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
+  <script defer src="/ns-labs/flexsearch.min.js"></script>
+  <script defer src="/ns-labs/en.search.min.f60084a4602adca9fc9ab88644fe0a3209edeca8973b71defa6b663042c3d769.js" integrity="sha256-9gCEpGAq3Kn8mriGRP4KMgnt7KiXO3He&#43;mtmMELD12k=" crossorigin="anonymous"></script>
+
+  <script defer src="/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js" integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/ns-labs/"><span>Network Storage Labs</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="https://bugitt.github.io/ns-labs/docs/example/" class="">你好，网存</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://bugitt.github.io/ns-labs/docs/example/table-of-contents/" class="">Table of Contents</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://bugitt.github.io/ns-labs/docs/example/table-of-contents/raid/" class=" active">RAID 阵列初体验</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="https://github.com/bugitt/ns-labs" target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/ns-labs/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>RAID 阵列初体验</strong>
+
+  <label for="toc-control">
+    
+    <img src="/ns-labs/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#raid-阵列初体验">RAID 阵列初体验</a>
+      <ul>
+        <li><a href="#实验目的">实验目的</a></li>
+        <li><a href="#实验内容">实验内容</a></li>
+        <li><a href="#实验指南">实验指南</a>
+          <ul>
+            <li><a href="#如何连接虚拟机">如何连接虚拟机</a></li>
+          </ul>
+        </li>
+        <li><a href="#作业-markdown-模板">作业 Markdown 模板</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="raid-阵列初体验">
+  RAID 阵列初体验
+  <a class="anchor" href="#raid-%e9%98%b5%e5%88%97%e5%88%9d%e4%bd%93%e9%aa%8c">#</a>
+</h1>
+<h2 id="实验目的">
+  实验目的
+  <a class="anchor" href="#%e5%ae%9e%e9%aa%8c%e7%9b%ae%e7%9a%84">#</a>
+</h2>
+<p>通过 RAID 原理实践理解阵列相关知识</p>
+<h2 id="实验内容">
+  实验内容
+  <a class="anchor" href="#%e5%ae%9e%e9%aa%8c%e5%86%85%e5%ae%b9">#</a>
+</h2>
+<p>本实验通过软件 RAID 管理磁盘：</p>
+<ul>
+<li>打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具”</li>
+<li>C 盘扩展卷</li>
+<li>检查其它磁盘是否联机，联机并初始化磁盘
+<ul>
+<li>尝试创建跨区卷并存储部分数据</li>
+<li>尝试创建镜像卷并存储部分数据</li>
+<li>尝试创建 RAID5 卷并存储部分数据</li>
+</ul>
+</li>
+<li>通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失</li>
+<li>[选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理</li>
+</ul>
+<h2 id="实验指南">
+  实验指南
+  <a class="anchor" href="#%e5%ae%9e%e9%aa%8c%e6%8c%87%e5%8d%97">#</a>
+</h2>
+<p>通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。</p>
+<p>按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。</p>
+<pre tabindex="0"><code>登录IP：10.200.200.155
+登录用户名：admin
+登录密码：@buaa211
+</code></pre><p>你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。</p>
+<h3 id="如何连接虚拟机">
+  如何连接虚拟机
+  <a class="anchor" href="#%e5%a6%82%e4%bd%95%e8%bf%9e%e6%8e%a5%e8%99%9a%e6%8b%9f%e6%9c%ba">#</a>
+</h3>
+<ul>
+<li>在 Windows 中可使用“远程桌面连接”工具——win+R 打开“运行”，然后输入 <code>mstsc</code>，然后在弹出窗口中输入 IP、账号、密码即可。</li>
+<li>在 MacOS 上可使用 Parallels 等工具连接</li>
+</ul>
+<p><strong>注意：</strong></p>
+<p>云平台上没有显示虚拟机 IP 或显示的 IP 无法登录怎么办？首先，可以用来登录的 IP 位于 10.251.252.1~10.251.255.254 之间。</p>
+<ul>
+<li>如果未登录过实验虚拟机：云平台上显示的 IP 是 169 或者无 IP 则暂时无法登录，需要重启虚拟机重新获取 IP。需要注意的是，虚拟机的重启、以及 DHCP IP 的获取都需要时间，开机后应等待 3 分钟以上，请勿频繁开关机</li>
+<li>如果之前登录过实验虚拟机：云平台上显示的是 192 开头的 IP 或者无 IP，可以尝试使用之前的可用 IP 进行登录。如果无法登录（包括密码错误），请联系助教解决。</li>
+</ul>
+<p>可能出现“发生身份验证错误，要求的函数不受支持”的错误，请参考该
+  <a href="https://blog.csdn.net/qq_35206244/article/details/84104995">博客</a>，使用解决方案一：配置本地机的组策略。</p>
+<ul>
+<li>Win+R 在弹出的“运行”框中，输入 <code>gpedit.msc</code></li>
+<li>进入到：计算机配置-&gt;管理模板-&gt;系统-&gt;凭据分配-&gt;加密数据库修正-&gt;启动该策略，将保护层级设置为“易受攻击&quot;。</li>
+</ul>
+<p><strong>重要提醒：</strong></p>
+<p>由于分配的 IP 均为 DHCP 自动获取，有可能实验虚拟机的 IP 会发生变化，尤其是在长时间关机再开启后。因此请登录实验虚拟机后，及时更改虚拟机密码，以避免以下情况发生：</p>
+<ul>
+<li>未意识到登录了他人的虚拟机， 帮助别人完成了实验工作</li>
+<li>自己的虚拟机别别人登录，已经做完的实验被破坏</li>
+</ul>
+<p>同时，虚拟机密码请设置非常用敏感密码。因为助教在帮助大家解决问题时往往需要你的密码登录到你的虚拟机。</p>
+<h2 id="作业-markdown-模板">
+  作业 Markdown 模板
+  <a class="anchor" href="#%e4%bd%9c%e4%b8%9a-markdown-%e6%a8%a1%e6%9d%bf">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># Lab01 RAID 阵列初体验
+<span style="color:#66d9ef">
+</span><span style="color:#66d9ef">&gt; </span><span style="font-style:italic">班级：
+</span><span style="font-style:italic"></span><span style="color:#66d9ef">&gt; </span><span style="font-style:italic">学号：
+</span><span style="font-style:italic"></span><span style="color:#66d9ef">&gt; </span><span style="font-style:italic">姓名：
+</span><span style="font-style:italic"></span>
+<span style="color:#75715e">## 实验内容
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">## 实验感想
+</span><span style="color:#75715e"></span>
+</code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+  <div><a class="flex align-center" href="https://github.com/alex-shpak/hugo-book/commit/5064092c22273cc6ee474e23cdede32f1b5cb17d" title='Last modified by Yinghao Zhu | September 29, 2021' target="_blank" rel="noopener">
+      <img src="/ns-labs/svg/calendar.svg" class="book-icon" alt="Calendar" />
+      <span>September 29, 2021</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/alex-shpak/hugo-book/edit/main/exampleSite/content/docs/example/table-of-contents/raid.md" target="_blank" rel="noopener">
+      <img src="/ns-labs/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#raid-阵列初体验">RAID 阵列初体验</a>
+      <ul>
+        <li><a href="#实验目的">实验目的</a></li>
+        <li><a href="#实验内容">实验内容</a></li>
+        <li><a href="#实验指南">实验指南</a>
+          <ul>
+            <li><a href="#如何连接虚拟机">如何连接虚拟机</a></li>
+          </ul>
+        </li>
+        <li><a href="#作业-markdown-模板">作业 Markdown 模板</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

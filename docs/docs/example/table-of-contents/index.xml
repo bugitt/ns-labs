@@ -6,23 +6,17 @@
     <description>Recent content on Network Storage Labs</description>
     <generator>Hugo -- gohugo.io</generator><atom:link href="https://bugitt.github.io/ns-labs/docs/example/table-of-contents/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>With ToC</title>
-      <link>https://bugitt.github.io/ns-labs/docs/example/table-of-contents/with-toc/</link>
+      <title>RAID 阵列初体验</title>
+      <link>https://bugitt.github.io/ns-labs/docs/example/table-of-contents/raid/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://bugitt.github.io/ns-labs/docs/example/table-of-contents/with-toc/</guid>
-      <description>Caput vino delphine in tamen vias #  Cognita laeva illo fracta #  Lorem markdownum pavent auras, surgit nunc cingentibus libet Laomedonque que est. Pastor An arbor filia foedat, ne fugit aliter, per. Helicona illas et callida neptem est Oresitrophos caput, dentibus est venit. Tenet reddite famuli praesentem fortibus, quaeque vis foret si frondes gelidos gravidae circumtulit inpulit armenta nativum.
- Te at cruciabere vides rubentis manebo Maturuit in praetemptat ruborem ignara postquam habitasse Subitarum supplevit quoque fontesque venabula spretis modo Montis tot est mali quasque gravis Quinquennem domus arsit ipse Pellem turis pugnabant locavit  Natus quaerere #  Pectora et sine mulcere, coniuge dum tincta incurvae.</description>
-    </item>
-    
-    <item>
-      <title>Without ToC</title>
-      <link>https://bugitt.github.io/ns-labs/docs/example/table-of-contents/without-toc/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://bugitt.github.io/ns-labs/docs/example/table-of-contents/without-toc/</guid>
-      <description>At me ipso nepotibus nunc celebratior genus #  Tanto oblite #  Lorem markdownum pectora novis patenti igne sua opus aurae feras materiaque illic demersit imago et aristas questaque posset. Vomit quoque suo inhaesuro clara. Esse cumque, per referri triste. Ut exponit solisque communis in tendens vincetis agisque iamque huic bene ante vetat omina Thebae rates. Aeacus servat admonitu concidit, ad resimas vultus et rugas vultu dignamque Siphnon.
-Quam iugulum regia simulacra, plus meruit humo pecorumque haesit, ab discedunt dixit: ritu pharetramque.</description>
+      <guid>https://bugitt.github.io/ns-labs/docs/example/table-of-contents/raid/</guid>
+      <description>RAID 阵列初体验 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
+实验内容 #  本实验通过软件 RAID 管理磁盘：
+ 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理  实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
+按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
+登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。
+如何连接虚拟机 #   在 Windows 中可使用“远程桌面连接”工具——win+R 打开“运行”，然后输入 mstsc，然后在弹出窗口中输入 IP、账号、密码即可。 在 MacOS 上可使用 Parallels 等工具连接  注意：</description>
     </item>
     
   </channel>

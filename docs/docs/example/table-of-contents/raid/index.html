@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="RAID 阵列初体验 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
 实验内容 #  本实验通过软件 RAID 管理磁盘：
- 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理  实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
+ 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理  暂定在 10 月 10 日晚 22：00 前提交至云平台，命名为：lab01-学号-姓名.pdf，如 lab01-18373722-朱英豪.pdf。
+实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
 按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
 登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。
 如何连接虚拟机 #   在 Windows 中可使用“远程桌面连接”工具——win&#43;R 打开“运行”，然后输入 mstsc，然后在弹出窗口中输入 IP、账号、密码即可。 在 MacOS 上可使用 Parallels 等工具连接  注意：">
@@ -13,21 +14,22 @@
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="RAID 阵列初体验" />
 <meta property="og:description" content="RAID 阵列初体验 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
 实验内容 #  本实验通过软件 RAID 管理磁盘：
- 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理  实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
+ 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理  暂定在 10 月 10 日晚 22：00 前提交至云平台，命名为：lab01-学号-姓名.pdf，如 lab01-18373722-朱英豪.pdf。
+实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
 按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
 登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。
 如何连接虚拟机 #   在 Windows 中可使用“远程桌面连接”工具——win&#43;R 打开“运行”，然后输入 mstsc，然后在弹出窗口中输入 IP、账号、密码即可。 在 MacOS 上可使用 Parallels 等工具连接  注意：" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/example/table-of-contents/raid/" /><meta property="article:section" content="docs" />
 
-<meta property="article:modified_time" content="2021-09-29T12:59:33+08:00" />
+<meta property="article:modified_time" content="2021-09-29T13:10:06+08:00" />
 
 <title>RAID 阵列初体验 | Network Storage Labs</title>
 <link rel="manifest" href="/ns-labs/manifest.json">
 <link rel="icon" href="/ns-labs/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
   <script defer src="/ns-labs/flexsearch.min.js"></script>
-  <script defer src="/ns-labs/en.search.min.f60084a4602adca9fc9ab88644fe0a3209edeca8973b71defa6b663042c3d769.js" integrity="sha256-9gCEpGAq3Kn8mriGRP4KMgnt7KiXO3He&#43;mtmMELD12k=" crossorigin="anonymous"></script>
+  <script defer src="/ns-labs/en.search.min.09408ae4a0dfe9c29b782ebf1b4c2422e2f26ba1d65a7232bce8ce501a7ba7b8.js" integrity="sha256-CUCK5KDf6cKbeC6/G0wkIuLya6HWWnIyvOjOUBp7p7g=" crossorigin="anonymous"></script>
 
   <script defer src="/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js" integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin="anonymous"></script>
 <!--
@@ -196,7 +198,7 @@ https://github.com/alex-shpak/hugo-book
             <li><a href="#如何连接虚拟机">如何连接虚拟机</a></li>
           </ul>
         </li>
-        <li><a href="#作业-markdown-模板">作业 Markdown 模板</a></li>
+        <li><a href="#参考作业提交的-markdown-模板">参考作业提交的 Markdown 模板</a></li>
       </ul>
     </li>
   </ul>
@@ -238,6 +240,7 @@ https://github.com/alex-shpak/hugo-book
 <li>通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失</li>
 <li>[选做] 自行设计与扩展，体验 RAID 阵列下的磁盘管理</li>
 </ul>
+<p>暂定在 10 月 10 日晚 22：00 前提交至云平台，命名为：<code>lab01-学号-姓名.pdf</code>，如 <code>lab01-18373722-朱英豪.pdf</code>。</p>
 <h2 id="实验指南">
   实验指南
   <a class="anchor" href="#%e5%ae%9e%e9%aa%8c%e6%8c%87%e5%8d%97">#</a>
@@ -275,9 +278,9 @@ https://github.com/alex-shpak/hugo-book
 <li>自己的虚拟机别别人登录，已经做完的实验被破坏</li>
 </ul>
 <p>同时，虚拟机密码请设置非常用敏感密码。因为助教在帮助大家解决问题时往往需要你的密码登录到你的虚拟机。</p>
-<h2 id="作业-markdown-模板">
-  作业 Markdown 模板
-  <a class="anchor" href="#%e4%bd%9c%e4%b8%9a-markdown-%e6%a8%a1%e6%9d%bf">#</a>
+<h2 id="参考作业提交的-markdown-模板">
+  参考作业提交的 Markdown 模板
+  <a class="anchor" href="#%e5%8f%82%e8%80%83%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e7%9a%84-markdown-%e6%a8%a1%e6%9d%bf">#</a>
 </h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># Lab01 RAID 阵列初体验
 <span style="color:#66d9ef">
@@ -287,6 +290,22 @@ https://github.com/alex-shpak/hugo-book
 </span><span style="font-style:italic"></span>
 <span style="color:#75715e">## 实验内容
 </span><span style="color:#75715e"></span>
+<span style="color:#75715e">### 体验“磁盘管理工具”
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">### C 盘扩展卷
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">### 检查其它磁盘是否联机，联机并初始化磁盘
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">-</span> 尝试创建跨区卷并存储部分数据
+
+<span style="color:#66d9ef">-</span> 尝试创建镜像卷并存储部分数据
+
+<span style="color:#66d9ef">-</span> 尝试创建 RAID5 卷并存储部分数据
+
+<span style="color:#75715e">### 通过设备管理禁用其中一块磁盘，模拟磁盘损坏。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">
+</span><span style="color:#66d9ef">&gt; </span><span style="font-style:italic">观察有什么情况发生，数据是否损坏或者丢失
+</span><span style="font-style:italic"></span>
 <span style="color:#75715e">## 实验感想
 </span><span style="color:#75715e"></span>
 </code></pre></div></article>
@@ -298,7 +317,7 @@ https://github.com/alex-shpak/hugo-book
   <div class="flex flex-wrap justify-between">
 
 
-  <div><a class="flex align-center" href="https://github.com/alex-shpak/hugo-book/commit/5064092c22273cc6ee474e23cdede32f1b5cb17d" title='Last modified by Yinghao Zhu | September 29, 2021' target="_blank" rel="noopener">
+  <div><a class="flex align-center" href="https://github.com/alex-shpak/hugo-book/commit/7942285a3c3dbf3b36e0cc692a44dab6f46c3cd4" title='Last modified by Yinghao Zhu | September 29, 2021' target="_blank" rel="noopener">
       <img src="/ns-labs/svg/calendar.svg" class="book-icon" alt="Calendar" />
       <span>September 29, 2021</span>
     </a>
@@ -352,7 +371,7 @@ https://github.com/alex-shpak/hugo-book
             <li><a href="#如何连接虚拟机">如何连接虚拟机</a></li>
           </ul>
         </li>
-        <li><a href="#作业-markdown-模板">作业 Markdown 模板</a></li>
+        <li><a href="#参考作业提交的-markdown-模板">参考作业提交的 Markdown 模板</a></li>
       </ul>
     </li>
   </ul>

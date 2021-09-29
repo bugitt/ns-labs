@@ -1,41 +1,23 @@
 ---
-title: Introduction
+title: 网络存储实验规划
 type: docs
 ---
 
-# Acerbo datus maxime
+# 网络存储实验规划
 
-{{< columns >}}
-## Astris ipse furtiva
+## 提交方式
 
-Est in vagis et Pittheus tu arge accipiter regia iram vocatur nurus. Omnes ut
-olivae sensit **arma sorori** deducit, inesset **crudus**, ego vetuere aliis,
-modo arsit? Utinam rapta fiducia valuere litora _adicit cursu_, ad facies
+- 我们会提供实验的 Markdown 模板，请在完成实验后导出 PDF 上传至北航软件学院云平台。命名方式见各实验的详细说明。
 
-<--->
+## 实验进度
 
-## Suis quot vota
+- 预计总共有 5 个实验，其中包含一个可选申优答辩的课设实验
+  - RAID 阵列初体验
+  - 主机虚拟化实验
+  - FreeNas 实验
+  - Ceph 实践
 
-Ea _furtique_ risere fratres edidit terrae magis. Colla tam mihi tenebat:
-miseram excita suadent es pecudes iam. Concilio _quam_ velatus posset ait quod
-nunc! Fragosis suae dextra geruntur functus vulgata.
-{{< /columns >}}
+## 助教联系方式
 
-
-## Tempora nisi nunc
-
-Lorem **markdownum** emicat gestu. Cannis sol pressit ducta. **Est** Idaei,
-tremens ausim se tutaeque, illi ulnis hausit, sed, lumina cutem. Quae avis
-sequens!
-
-    var panel = ram_design;
-    if (backup + system) {
-        file.readPoint = network_native;
-        sidebar_engine_device(cell_tftp_raster,
-                dual_login_paper.adf_vci.application_reader_design(
-                graphicsNvramCdma, lpi_footer_snmp, integer_model));
-    }
-
-## Locis suis novi cum suoque decidit eadem
-
-Idmoniae ripis, at aves, ali missa adest, ut _et autem_, et ab?
+- 李楠（微信 zhanoan619）
+- 朱英豪（微信 zhuyinghao）

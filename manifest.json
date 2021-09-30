@@ -1,0 +1,15 @@
+{
+  "name": "Network Storage Labs",
+  "short_name": "Network Storage Labs",
+  "start_url": "/ns-labs/",
+  "scope": "/ns-labs/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/ns-labs/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}

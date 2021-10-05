@@ -1,22 +1,27 @@
 <!doctype html><html lang=en dir=ltr>
 <head>
-<meta name=generator content="Hugo 0.88.1">
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="网络存储实验规划 #  提交方式 #   我们会提供实验的 Markdown 模板，请在完成实验后导出 PDF 上传至北航软件学院云平台。命名方式见各实验的详细说明。  实验进度 #   预计总共有 5 个实验，其中包含一个可选申优答辩的课设实验  RAID 阵列实验 主机虚拟化实验 FreeNas 实验 Ceph 实践    助教联系方式 #   李楠（微信 zhanoan619） 朱英豪（微信 zhuyinghao）  ">
+<meta name=description content="操作系统 #  常见操作系统 ISO 镜像可至官网、 MSDN，我告诉你、 Next, ITELLYOU 等网站上去下载。
+Windows Server 2019 #  ED2K 下载：ed2k://|file|cn_windows_server_2019_updated_july_2020_x64_dvd_2c9b67da.iso|5675251712|19AE348F0D321785007D95B7D2FAF320|/
+使用 KMS 激活方式如下：
+# 使用管理员身份打开PowerShell DISM /online /Set-Edition:ServerDatacenter /ProductKey:WMDGN-G9PQG-XVVXX-R3X43-63DFG /AcceptEula # 打开 CMD (管理员) slmgr.vbs /ipk WMDGN-G9PQG-XVVXX-R3X43-63DFG slmgr.vbs /skms kms.teevee.asia slmgr.vbs /ato ">
 <meta name=theme-color content="#FFFFFF">
-<meta name=color-scheme content="light dark"><meta property="og:title" content="网络存储实验规划">
-<meta property="og:description" content>
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://bugitt.github.io/ns-labs/">
-<title>网络存储实验规划 | Network Storage Labs</title>
+<meta name=color-scheme content="light dark"><meta property="og:title" content="操作系统">
+<meta property="og:description" content="操作系统 #  常见操作系统 ISO 镜像可至官网、 MSDN，我告诉你、 Next, ITELLYOU 等网站上去下载。
+Windows Server 2019 #  ED2K 下载：ed2k://|file|cn_windows_server_2019_updated_july_2020_x64_dvd_2c9b67da.iso|5675251712|19AE348F0D321785007D95B7D2FAF320|/
+使用 KMS 激活方式如下：
+# 使用管理员身份打开PowerShell DISM /online /Set-Edition:ServerDatacenter /ProductKey:WMDGN-G9PQG-XVVXX-R3X43-63DFG /AcceptEula # 打开 CMD (管理员) slmgr.vbs /ipk WMDGN-G9PQG-XVVXX-R3X43-63DFG slmgr.vbs /skms kms.teevee.asia slmgr.vbs /ato ">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/resources/os/"><meta property="article:section" content="docs">
+<meta property="article:modified_time" content="2021-10-05T20:41:40+08:00">
+<title>操作系统 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
 <script defer src=/ns-labs/en.search.min.3728cdc527e41a1393954e05719ea0ccd8bd0d4ad9f8a75b1bbe60747cf47c08.js integrity="sha256-NyjNxSfkGhOTlU4FcZ6gzNi9DUrZ+KdbG75gdHz0fAg=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
-<link rel=alternate type=application/rss+xml href=https://bugitt.github.io/ns-labs/index.xml title="Network Storage Labs">
 </head>
 <body dir=ltr>
 <input type=checkbox class="hidden toggle" id=menu-control>
@@ -47,7 +52,7 @@
 <a href=https://bugitt.github.io/ns-labs/docs/resources/>Resources</a>
 <ul>
 <li>
-<a href=https://bugitt.github.io/ns-labs/docs/resources/os/>操作系统</a>
+<a href=https://bugitt.github.io/ns-labs/docs/resources/os/ class=active>操作系统</a>
 </li>
 </ul>
 </li>
@@ -69,7 +74,7 @@ Github
 <label for=menu-control>
 <img src=/ns-labs/svg/menu.svg class=book-icon alt=Menu>
 </label>
-<strong>网络存储实验规划</strong>
+<strong>操作系统</strong>
 <label for=toc-control>
 <img src=/ns-labs/svg/toc.svg class=book-icon alt="Table of Contents">
 </label>
@@ -77,60 +82,44 @@ Github
 <aside class="hidden clearfix">
 <nav id=TableOfContents>
 <ul>
-<li><a href=#网络存储实验规划>网络存储实验规划</a>
+<li><a href=#操作系统>操作系统</a>
 <ul>
-<li><a href=#提交方式>提交方式</a></li>
-<li><a href=#实验进度>实验进度</a></li>
-<li><a href=#助教联系方式>助教联系方式</a></li>
+<li><a href=#windows-server-2019>Windows Server 2019</a></li>
 </ul>
 </li>
 </ul>
 </nav>
 </aside>
 </header>
-<article class=markdown><h1 id=网络存储实验规划>
-网络存储实验规划
-<a class=anchor href=#%e7%bd%91%e7%bb%9c%e5%ad%98%e5%82%a8%e5%ae%9e%e9%aa%8c%e8%a7%84%e5%88%92>#</a>
+<article class=markdown><h1 id=操作系统>
+操作系统
+<a class=anchor href=#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f>#</a>
 </h1>
-<h2 id=提交方式>
-提交方式
-<a class=anchor href=#%e6%8f%90%e4%ba%a4%e6%96%b9%e5%bc%8f>#</a>
+<p>常见操作系统 ISO 镜像可至官网、
+<a href=https://msdn.itellyou.cn/>MSDN，我告诉你</a>、
+<a href=https://next.itellyou.cn/>Next, ITELLYOU</a> 等网站上去下载。</p>
+<h2 id=windows-server-2019>
+Windows Server 2019
+<a class=anchor href=#windows-server-2019>#</a>
 </h2>
-<ul>
-<li>我们会提供实验的 Markdown 模板，请在完成实验后导出 PDF 上传至北航软件学院云平台。命名方式见各实验的详细说明。</li>
-</ul>
-<h2 id=实验进度>
-实验进度
-<a class=anchor href=#%e5%ae%9e%e9%aa%8c%e8%bf%9b%e5%ba%a6>#</a>
-</h2>
-<ul>
-<li>预计总共有 5 个实验，其中包含一个可选申优答辩的课设实验
-<ul>
-<li>RAID 阵列实验</li>
-<li>主机虚拟化实验</li>
-<li>FreeNas 实验</li>
-<li>Ceph 实践</li>
-</ul>
-</li>
-</ul>
-<h2 id=助教联系方式>
-助教联系方式
-<a class=anchor href=#%e5%8a%a9%e6%95%99%e8%81%94%e7%b3%bb%e6%96%b9%e5%bc%8f>#</a>
-</h2>
-<ul>
-<li>李楠（微信 zhanoan619）</li>
-<li>朱英豪（微信 zhuyinghao）</li>
-</ul>
-</article>
+<p>ED2K 下载：<code>ed2k://|file|cn_windows_server_2019_updated_july_2020_x64_dvd_2c9b67da.iso|5675251712|19AE348F0D321785007D95B7D2FAF320|/</code></p>
+<p>使用 KMS 激活方式如下：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#75715e># 使用管理员身份打开PowerShell</span>
+DISM /online /Set-Edition:ServerDatacenter /ProductKey:WMDGN-G9PQG-XVVXX-R3X43-63DFG /AcceptEula
+<span style=color:#75715e># 打开 CMD (管理员)</span>
+slmgr.vbs /ipk WMDGN-G9PQG-XVVXX-R3X43-63DFG
+slmgr.vbs /skms kms.teevee.asia
+slmgr.vbs /ato
+</code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/13e7fc65592c8160553ba65ea1dc0880f16c875e title="Last modified by Yinghao Zhu | September 29, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/216e95525a42f5f6838e45de50b8cbf499ed5cda title="Last modified by TualatinX | October 5, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
-<span>September 29, 2021</span>
+<span>October 5, 2021</span>
 </a>
 </div>
 <div>
-<a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/edit/main/exampleSite/content/_index.md target=_blank rel=noopener>
+<a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/edit/main/exampleSite/content/docs/resources/os.md target=_blank rel=noopener>
 <img src=/ns-labs/svg/edit.svg class=book-icon alt=Edit>
 <span>Edit this page</span>
 </a>
@@ -146,11 +135,9 @@ Github
 <div class=book-toc-content>
 <nav id=TableOfContents>
 <ul>
-<li><a href=#网络存储实验规划>网络存储实验规划</a>
+<li><a href=#操作系统>操作系统</a>
 <ul>
-<li><a href=#提交方式>提交方式</a></li>
-<li><a href=#实验进度>实验进度</a></li>
-<li><a href=#助教联系方式>助教联系方式</a></li>
+<li><a href=#windows-server-2019>Windows Server 2019</a></li>
 </ul>
 </li>
 </ul>

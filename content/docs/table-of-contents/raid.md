@@ -25,7 +25,7 @@ weight: 1
   - 为什么及在什么条件下选择用 RAID
   - RAID & 分布式存储 & 集中存储的区别
 
-暂定在 10 月 10 日晚 22：00 前提交至云平台，命名为：`lab01-学号-姓名.pdf`，如 `lab01-18373722-朱英豪.pdf`。
+请在 10 月 11 日中午 12：00 前提交至云平台，命名为：`lab01-学号-姓名.pdf`，如 `lab01-18373722-朱英豪.pdf`。
 
 ## 实验指南
 
@@ -39,7 +39,7 @@ weight: 1
 登录密码：@buaa211
 ```
 
-你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至[Next, ITELLYOU](https://next.itellyou.cn/)该网站上去下载相关系统的 ISO 镜像。
+你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至[Next, ITELLYOU](https://next.itellyou.cn/) 该网站上去下载相关系统的 ISO 镜像。
 
 ### 如何连接虚拟机
 

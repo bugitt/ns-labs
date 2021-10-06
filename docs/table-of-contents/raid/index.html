@@ -6,25 +6,25 @@
 实验内容 #  本实验通过软件 RAID 管理磁盘：
  打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体会 RAID 0 1 5 10 等方案下，在遇到磁盘损坏故障、冗余备份的效果等 [选做] 思考题：  为什么及在什么条件下选择用 RAID RAID & 分布式存储 & 集中存储的区别    请在 10 月 11 日中午 12：00 前提交至云平台，命名为：lab01-学号-姓名.pdf，如 lab01-18373722-朱英豪.pdf。
 实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
-按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
-登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU 该网站上去下载相关系统的 ISO 镜像。">
+按要求完成实验，撰写实验报告（每种配置都做一遍），以下为样例的 IP 和云平台默认分配的用户名、密码。
+登录IP：10.200.200.155 登录用户名：Administrator 登录密码：@buaa21 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU 该网站上去下载相关系统的 ISO 镜像。">
 <meta name=theme-color content="#FFFFFF">
 <meta name=color-scheme content="light dark"><meta property="og:title" content="Lab01 RAID 阵列">
 <meta property="og:description" content="Lab01 RAID 阵列 #  实验目的 #  通过 RAID 原理实践理解阵列相关知识
 实验内容 #  本实验通过软件 RAID 管理磁盘：
  打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘  尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据   通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体会 RAID 0 1 5 10 等方案下，在遇到磁盘损坏故障、冗余备份的效果等 [选做] 思考题：  为什么及在什么条件下选择用 RAID RAID & 分布式存储 & 集中存储的区别    请在 10 月 11 日中午 12：00 前提交至云平台，命名为：lab01-学号-姓名.pdf，如 lab01-18373722-朱英豪.pdf。
 实验指南 #  通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
-按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
-登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU 该网站上去下载相关系统的 ISO 镜像。">
+按要求完成实验，撰写实验报告（每种配置都做一遍），以下为样例的 IP 和云平台默认分配的用户名、密码。
+登录IP：10.200.200.155 登录用户名：Administrator 登录密码：@buaa21 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU 该网站上去下载相关系统的 ISO 镜像。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/raid/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-10-05T20:41:40+08:00">
+<meta property="article:modified_time" content="2021-10-06T12:15:59+08:00">
 <title>Lab01 RAID 阵列 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.3728cdc527e41a1393954e05719ea0ccd8bd0d4ad9f8a75b1bbe60747cf47c08.js integrity="sha256-NyjNxSfkGhOTlU4FcZ6gzNi9DUrZ+KdbG75gdHz0fAg=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.ec4372f10f92c3dc5b03f9ea46956c7ed4f2e180a67f08b21cdc0d0af7795891.js integrity="sha256-7ENy8Q+Sw9xbA/nqRpVsftTy4YCmfwiyHNwNCvd5WJE=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -141,10 +141,10 @@ Lab01 RAID 阵列
 <a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8c%87%e5%8d%97>#</a>
 </h2>
 <p>通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。</p>
-<p>按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。</p>
+<p>按要求完成实验，撰写实验报告（每种配置都做一遍），以下为样例的 IP 和云平台默认分配的用户名、密码。</p>
 <pre tabindex=0><code>登录IP：10.200.200.155
-登录用户名：admin
-登录密码：@buaa211
+登录用户名：Administrator
+登录密码：@buaa21
 </code></pre><p>你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至
 <a href=https://next.itellyou.cn/>Next, ITELLYOU</a> 该网站上去下载相关系统的 ISO 镜像。</p>
 <h3 id=如何连接虚拟机>
@@ -206,9 +206,9 @@ Lab01 RAID 阵列
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/216e95525a42f5f6838e45de50b8cbf499ed5cda title="Last modified by TualatinX | October 5, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/6dd111f0b0fc04bf9cda8d20158ac58569d8a355 title="Last modified by Yinghao Zhu | October 6, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
-<span>October 5, 2021</span>
+<span>October 6, 2021</span>
 </a>
 </div>
 <div>

@@ -2,8 +2,8 @@
 实验内容 # 本实验通过软件 RAID 管理磁盘：
 打开“管理工具-计算机管理-存储-磁盘管理”，体验“磁盘管理工具” C 盘扩展卷 检查其它磁盘是否联机，联机并初始化磁盘 尝试创建跨区卷并存储部分数据 尝试创建镜像卷并存储部分数据 尝试创建 RAID5 卷并存储部分数据 通过设备管理禁用其中一块磁盘，模拟磁盘损坏。观察有什么情况发生，数据是否损坏或者丢失 [选做] 自行设计与扩展，体会 RAID 0 1 5 10 等方案下，在遇到磁盘损坏故障、冗余备份的效果等 [选做] 思考题： 为什么及在什么条件下选择用 RAID RAID &amp;amp; 分布式存储 &amp;amp; 集中存储的区别 请在 10 月 11 日中午 12：00 前提交至云平台，命名为：lab01-学号-姓名.pdf，如 lab01-18373722-朱英豪.pdf。
 实验指南 # 通过实验平台获取虚拟机，通过远程桌面访问获取的虚拟机的 IP 地址（ipv4），用户名密码通过实验平台获取。
-按要求完成实验，撰写实验报告（每种配置都做一遍），如下为样例的 IP、用户名、密码。
-登录IP：10.200.200.155 登录用户名：admin 登录密码：@buaa211 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU 该网站上去下载相关系统的 ISO 镜像。</description></item><item><title>操作系统</title><link>https://bugitt.github.io/ns-labs/docs/resources/os/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bugitt.github.io/ns-labs/docs/resources/os/</guid><description>操作系统 # 常见操作系统 ISO 镜像可至官网、 MSDN，我告诉你、 Next, ITELLYOU 等网站上去下载。
+按要求完成实验，撰写实验报告（每种配置都做一遍），以下为样例的 IP 和云平台默认分配的用户名、密码。
+登录IP：10.200.200.155 登录用户名：Administrator 登录密码：@buaa21 你也可以自己在 VMware 等虚拟机中安装 Windows Server 2016 (或更高的版本)，不使用云平台的资源去做实验。可至 Next, ITELLYOU 该网站上去下载相关系统的 ISO 镜像。</description></item><item><title>操作系统</title><link>https://bugitt.github.io/ns-labs/docs/resources/os/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bugitt.github.io/ns-labs/docs/resources/os/</guid><description>操作系统 # 常见操作系统 ISO 镜像可至官网、 MSDN，我告诉你、 Next, ITELLYOU 等网站上去下载。
 Windows Server 2019 # ED2K 下载：ed2k://|file|cn_windows_server_2019_updated_july_2020_x64_dvd_2c9b67da.iso|5675251712|19AE348F0D321785007D95B7D2FAF320|/
 使用 KMS 激活方式如下：
 # 使用管理员身份打开PowerShell DISM /online /Set-Edition:ServerDatacenter /ProductKey:WMDGN-G9PQG-XVVXX-R3X43-63DFG /AcceptEula # 打开 CMD (管理员) slmgr.vbs /ipk WMDGN-G9PQG-XVVXX-R3X43-63DFG slmgr.vbs /skms kms.teevee.asia slmgr.vbs /ato</description></item></channel></rss>

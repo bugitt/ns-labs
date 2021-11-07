@@ -1,0 +1,491 @@
+<!doctype html><html lang=en dir=ltr>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="Lab02 虚拟化实验 #  实验目标 #   实施计算虚拟化，安装配置环境，熟悉计算虚拟化的概念，理解基本操作，掌握基础知识。 理解集中管理对于虚化的作用，通过部署集中vCenter体验集群的设置，分布式交换机的设置，了解主机从不同网络进行迁移的实际需求。  实验内容 #   按照实验指南的指导，完成实验。 按照实验报告模板，撰写实验报告，将重要的实验步骤截图，填入实验报告中，并回答相应问题。  实验可以在分配的虚拟机中进行，也可以在本地机器中进行。（如果本地机器内存大于12G，则建议在本地进行，以获得更流畅的实验体验）。在本地进行实验的同学，可以前往 这里下载需要的资源；使用云平台虚拟机的同学，相应的资源已经放到了虚拟机桌面上。
+请在云平台作业提交截止时间之前，将作业提交到云平台，命名为：lab02-学号-姓名.pdf，如 lab02-18373722-朱英豪.pdf。
+前情提要 #  推荐开始试验前，首先查看 资源文件夹中的”虚拟化实验.pptx“。
+有任何问题，请首先阅读 FAQ
+如果还有问题，还可尝试阅读 官方文档（如下图所示，请注意选择正确的版本号）
+  Hypervisor #  我们知道，一台计算机一般有以下的结构：
+操作系统负责管理硬件资源（CPU，内存，硬盘等），并向上提供相应的系统调用，供具体的应用程序使用。
+而我们平常提到的操作系统的虚拟化，本质上就是要模拟出一套硬件（包括虚拟CPU，虚拟内存，虚拟硬盘等），然后在这一套虚拟的硬件的基础上部署客户操作系统。客户操作系统完全不需要做任何修改，即可在这个“虚拟的机器”中顺利执行。但客户操作系统的运行结果（比如接收键盘输入，输出图像和声音等），最终都是要靠原始的“实实在在”的硬件（物理机）来完成的。也就是说，需要有那么一个结构，能够将这个“虚拟的机器”的行为翻译到物理机的行为（比如将虚拟CPU的指令翻译到物理机的CPU指令）。负责做这件事情的结构被称为Hypervisor，又称为虚拟机监控器（virtual machine monitor，缩写为 VMM）。
+根据工作方式的不同，Hypervisor分为以下两种。
+ 第一种是我们比较熟悉的情况，本质上就是在主操作系统（Host Operating System）上安装了一个虚拟化软件，它来负责充当虚拟机的管理者，并通过主操作系统的系统调用来完成对物理机硬件的使用。VMware Workstation、Virtual Box、Qemu等都属这类虚拟化软件。除了这个虚拟化软件之外，主操作系统上还会运行其他“正常”的应用程序，比如，你在用VMware Workstation的同时还能听歌聊天等。
+第二种Hypervisor则直接舍弃了主操作系统（因为毕竟隔着一层，性能会有损失），而是直接把Hypervisor部署在硬件上。在这种情况下，物理机变成了更纯粹的“为虚拟化而生”的机器。Hypervisor能够直接与硬件沟通，其实在某种程度上也承担了主操作系统的角色（管理硬件），因此，我们也可以把这种Hypervisor看作是一种为虚拟化特制的操作系统。这其中典型的就是VMware ESXi。
+因为我们不可能要求每位同学都制备一套硬件来安装学习VMware ESXi，所以需要首先使用VMware Workstation来模拟出一套硬件。但VMware Workstation仅仅起一个前置作用，在实际的实验中并不会涉及到。请大家首先理清这层关系。
+实验指南 #  0. 安装VMware Workstation #  使用分配的虚拟机的桌面上的安装包安装即可。
+安装完成后需重启机器。
+打开VMware Workstation时， 选择试用即可。
+ 1.">
+<meta name=theme-color content="#FFFFFF">
+<meta name=color-scheme content="light dark"><meta property="og:title" content="Lab02 虚拟化实验">
+<meta property="og:description" content="Lab02 虚拟化实验 #  实验目标 #   实施计算虚拟化，安装配置环境，熟悉计算虚拟化的概念，理解基本操作，掌握基础知识。 理解集中管理对于虚化的作用，通过部署集中vCenter体验集群的设置，分布式交换机的设置，了解主机从不同网络进行迁移的实际需求。  实验内容 #   按照实验指南的指导，完成实验。 按照实验报告模板，撰写实验报告，将重要的实验步骤截图，填入实验报告中，并回答相应问题。  实验可以在分配的虚拟机中进行，也可以在本地机器中进行。（如果本地机器内存大于12G，则建议在本地进行，以获得更流畅的实验体验）。在本地进行实验的同学，可以前往 这里下载需要的资源；使用云平台虚拟机的同学，相应的资源已经放到了虚拟机桌面上。
+请在云平台作业提交截止时间之前，将作业提交到云平台，命名为：lab02-学号-姓名.pdf，如 lab02-18373722-朱英豪.pdf。
+前情提要 #  推荐开始试验前，首先查看 资源文件夹中的”虚拟化实验.pptx“。
+有任何问题，请首先阅读 FAQ
+如果还有问题，还可尝试阅读 官方文档（如下图所示，请注意选择正确的版本号）
+  Hypervisor #  我们知道，一台计算机一般有以下的结构：
+操作系统负责管理硬件资源（CPU，内存，硬盘等），并向上提供相应的系统调用，供具体的应用程序使用。
+而我们平常提到的操作系统的虚拟化，本质上就是要模拟出一套硬件（包括虚拟CPU，虚拟内存，虚拟硬盘等），然后在这一套虚拟的硬件的基础上部署客户操作系统。客户操作系统完全不需要做任何修改，即可在这个“虚拟的机器”中顺利执行。但客户操作系统的运行结果（比如接收键盘输入，输出图像和声音等），最终都是要靠原始的“实实在在”的硬件（物理机）来完成的。也就是说，需要有那么一个结构，能够将这个“虚拟的机器”的行为翻译到物理机的行为（比如将虚拟CPU的指令翻译到物理机的CPU指令）。负责做这件事情的结构被称为Hypervisor，又称为虚拟机监控器（virtual machine monitor，缩写为 VMM）。
+根据工作方式的不同，Hypervisor分为以下两种。
+ 第一种是我们比较熟悉的情况，本质上就是在主操作系统（Host Operating System）上安装了一个虚拟化软件，它来负责充当虚拟机的管理者，并通过主操作系统的系统调用来完成对物理机硬件的使用。VMware Workstation、Virtual Box、Qemu等都属这类虚拟化软件。除了这个虚拟化软件之外，主操作系统上还会运行其他“正常”的应用程序，比如，你在用VMware Workstation的同时还能听歌聊天等。
+第二种Hypervisor则直接舍弃了主操作系统（因为毕竟隔着一层，性能会有损失），而是直接把Hypervisor部署在硬件上。在这种情况下，物理机变成了更纯粹的“为虚拟化而生”的机器。Hypervisor能够直接与硬件沟通，其实在某种程度上也承担了主操作系统的角色（管理硬件），因此，我们也可以把这种Hypervisor看作是一种为虚拟化特制的操作系统。这其中典型的就是VMware ESXi。
+因为我们不可能要求每位同学都制备一套硬件来安装学习VMware ESXi，所以需要首先使用VMware Workstation来模拟出一套硬件。但VMware Workstation仅仅起一个前置作用，在实际的实验中并不会涉及到。请大家首先理清这层关系。
+实验指南 #  0. 安装VMware Workstation #  使用分配的虚拟机的桌面上的安装包安装即可。
+安装完成后需重启机器。
+打开VMware Workstation时， 选择试用即可。
+ 1.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/virtual/"><meta property="article:section" content="docs">
+<meta property="article:modified_time" content="2021-11-07T22:34:21+08:00">
+<title>Lab02 虚拟化实验 | Network Storage Labs</title>
+<link rel=manifest href=/ns-labs/manifest.json>
+<link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
+<link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
+<script defer src=/ns-labs/flexsearch.min.js></script>
+<script defer src=/ns-labs/en.search.min.709122550c79d59cfca48accfa220f9f9b7df9c82afa48e4645af54a057e803a.js integrity="sha256-cJEiVQx51Zz8pIrM+iIPn5t9+cgq+kjkZFr1SgV+gDo=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
+</head>
+<body dir=ltr>
+<input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control>
+<main class="container flex">
+<aside class=book-menu>
+<div class=book-menu-content>
+<nav>
+<h2 class=book-brand>
+<a class="flex align-center" href=/ns-labs/><span>Network Storage Labs</span>
+</a>
+</h2>
+<div class=book-search>
+<input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/>
+<div class="book-search-spinner hidden"></div>
+<ul id=book-search-results></ul>
+</div>
+<ul>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/>Table of Contents</a>
+<ul>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/raid/>Lab01 RAID 阵列</a>
+</li>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/virtual/ class=active>Lab02 虚拟化实验</a>
+</li>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/faq/>FAQ</a>
+</li>
+</ul>
+</li>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/resources/>Resources</a>
+<ul>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/resources/os/>操作系统</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<a href=https://github.com/bugitt/ns-labs target=_blank rel=noopener>
+Github
+</a>
+</li>
+</ul>
+</nav>
+<script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+</div>
+</aside>
+<div class=book-page>
+<header class=book-header>
+<div class="flex align-center justify-between">
+<label for=menu-control>
+<img src=/ns-labs/svg/menu.svg class=book-icon alt=Menu>
+</label>
+<strong>Lab02 虚拟化实验</strong>
+<label for=toc-control>
+<img src=/ns-labs/svg/toc.svg class=book-icon alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id=TableOfContents>
+<ul>
+<li><a href=#lab02-虚拟化实验>Lab02 虚拟化实验</a>
+<ul>
+<li><a href=#实验目标>实验目标</a></li>
+<li><a href=#实验内容>实验内容</a></li>
+<li><a href=#前情提要>前情提要</a>
+<ul>
+<li><a href=#hypervisor>Hypervisor</a></li>
+</ul>
+</li>
+<li><a href=#实验指南>实验指南</a>
+<ul>
+<li><a href=#0-安装vmware-workstation>0. 安装VMware Workstation</a></li>
+<li><a href=#1-安装vmware-esxi>1. 安装VMware ESXi</a></li>
+<li><a href=#2-访问esxi>2. 访问ESXi</a></li>
+<li><a href=#3-观察和体验vsphere-client提供的功能>3. 观察和体验vSphere Client提供的功能</a></li>
+<li><a href=#4-资源池>4. 资源池</a></li>
+<li><a href=#5-新建和安装虚拟机>5. 新建和安装虚拟机</a></li>
+<li><a href=#6-虚拟机文件系统格式和种类>6. 虚拟机文件系统格式和种类</a></li>
+<li><a href=#7-虚拟机导出>7. 虚拟机导出</a></li>
+<li><a href=#8-vmware-tools选做>8. VMware Tools（选做）</a></li>
+<li><a href=#9-角色和用户选做>9. 角色和用户（选做）</a></li>
+<li><a href=#10-创建与配置集群待完善>10. 创建与配置集群（待完善）</a></li>
+<li><a href=#11-创建分布式虚拟交换机待完善>11. 创建分布式虚拟交换机（待完善）</a></li>
+<li><a href=#12-网络待完善>12. 网络（待完善）</a></li>
+</ul>
+</li>
+<li><a href=#实验报告模板>实验报告模板</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class=markdown><h1 id=lab02-虚拟化实验>
+Lab02 虚拟化实验
+<a class=anchor href=#lab02-%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e9%aa%8c>#</a>
+</h1>
+<h2 id=实验目标>
+实验目标
+<a class=anchor href=#%e5%ae%9e%e9%aa%8c%e7%9b%ae%e6%a0%87>#</a>
+</h2>
+<ol>
+<li>实施计算虚拟化，安装配置环境，熟悉计算虚拟化的概念，理解基本操作，掌握基础知识。</li>
+<li>理解集中管理对于虚化的作用，通过部署集中vCenter体验集群的设置，分布式交换机的设置，了解主机从不同网络进行迁移的实际需求。</li>
+</ol>
+<h2 id=实验内容>
+实验内容
+<a class=anchor href=#%e5%ae%9e%e9%aa%8c%e5%86%85%e5%ae%b9>#</a>
+</h2>
+<ol>
+<li>按照实验指南的指导，完成实验。</li>
+<li>按照实验报告模板，撰写实验报告，将重要的实验步骤截图，填入实验报告中，并回答相应问题。</li>
+</ol>
+<p>实验可以在分配的虚拟机中进行，也可以在本地机器中进行。（如果本地机器内存大于12G，则建议在本地进行，以获得更流畅的实验体验）。在本地进行实验的同学，可以前往
+<a href=https://bhpan.buaa.edu.cn:443/link/59127115D38C8C1C4C1B16DDC16D91F5>这里</a>下载需要的资源；使用云平台虚拟机的同学，相应的资源已经放到了虚拟机桌面上。</p>
+<p>请在云平台作业提交截止时间之前，将作业提交到云平台，命名为：lab02-学号-姓名.pdf，如 lab02-18373722-朱英豪.pdf。</p>
+<h2 id=前情提要>
+前情提要
+<a class=anchor href=#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81>#</a>
+</h2>
+<p>推荐开始试验前，首先查看
+<a href=https://bhpan.buaa.edu.cn:443/link/59127115D38C8C1C4C1B16DDC16D91F5>资源文件夹</a>中的”虚拟化实验.pptx“。</p>
+<blockquote class="book-hint danger">
+<p>有任何问题，请首先阅读
+<a href=/ns-labs/docs/table-of-contents/faq/>FAQ</a></p>
+<p>如果还有问题，还可尝试阅读
+<a href=https://docs.vmware.com/cn/VMware-vSphere/index.html>官方文档</a>（如下图所示，请注意选择正确的版本号）</p>
+<p>
+<img src=https://cdn.loheagn.com/142844.png alt></p>
+</blockquote>
+<h3 id=hypervisor>
+Hypervisor
+<a class=anchor href=#hypervisor>#</a>
+</h3>
+<p>我们知道，一台计算机一般有以下的结构：</p>
+<img src=https://cdn.loheagn.com/image-20211107205517736.png alt=image-20211107205517736 style=zoom:50%>
+<p>操作系统负责管理硬件资源（CPU，内存，硬盘等），并向上提供相应的系统调用，供具体的应用程序使用。</p>
+<p>而我们平常提到的操作系统的虚拟化，本质上就是要模拟出一套硬件（包括虚拟CPU，虚拟内存，虚拟硬盘等），然后在这一套虚拟的硬件的基础上部署客户操作系统。客户操作系统完全不需要做任何修改，即可在这个“虚拟的机器”中顺利执行。但客户操作系统的运行结果（比如接收键盘输入，输出图像和声音等），最终都是要靠原始的“实实在在”的硬件（物理机）来完成的。也就是说，需要有那么一个结构，能够将这个“虚拟的机器”的行为翻译到物理机的行为（比如将虚拟CPU的指令翻译到物理机的CPU指令）。负责做这件事情的结构被称为Hypervisor，又称为虚拟机监控器（virtual machine monitor，缩写为 VMM）。</p>
+<p>根据工作方式的不同，Hypervisor分为以下两种。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107213246128.png alt=image-20211107213246128></p>
+<p>第一种是我们比较熟悉的情况，本质上就是在主操作系统（Host Operating System）上安装了一个虚拟化软件，它来负责充当虚拟机的管理者，并通过主操作系统的系统调用来完成对物理机硬件的使用。VMware Workstation、Virtual Box、Qemu等都属这类虚拟化软件。除了这个虚拟化软件之外，主操作系统上还会运行其他“正常”的应用程序，比如，你在用VMware Workstation的同时还能听歌聊天等。</p>
+<p>第二种Hypervisor则直接舍弃了主操作系统（因为毕竟隔着一层，性能会有损失），而是直接把Hypervisor部署在硬件上。在这种情况下，物理机变成了更纯粹的“为虚拟化而生”的机器。Hypervisor能够直接与硬件沟通，其实在某种程度上也承担了主操作系统的角色（管理硬件），因此，我们也可以把这种Hypervisor看作是一种为虚拟化特制的操作系统。这其中典型的就是VMware ESXi。</p>
+<p>因为我们不可能要求每位同学都制备一套硬件来安装学习VMware ESXi，所以需要首先使用VMware Workstation来模拟出一套硬件。但VMware Workstation仅仅起一个前置作用，在实际的实验中并不会涉及到。请大家首先理清这层关系。</p>
+<h2 id=实验指南>
+实验指南
+<a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8c%87%e5%8d%97>#</a>
+</h2>
+<h3 id=0-安装vmware-workstation>
+0. 安装VMware Workstation
+<a class=anchor href=#0-%e5%ae%89%e8%a3%85vmware-workstation>#</a>
+</h3>
+<p>使用分配的虚拟机的桌面上的安装包安装即可。</p>
+<p>安装完成后需重启机器。</p>
+<p>打开VMware Workstation时， 选择试用即可。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107120821035.png alt=image-20211107120821035></p>
+<h3 id=1-安装vmware-esxi>
+1. 安装VMware ESXi
+<a class=anchor href=#1-%e5%ae%89%e8%a3%85vmware-esxi>#</a>
+</h3>
+<p>使用桌面上的ESXi镜像创建虚拟机。</p>
+<blockquote class="book-hint info">
+注意选择客户操作系统的类型。
+</blockquote>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107121139109.png alt=image-20211107121139109></p>
+<p>虚拟机创建完成后，直接打开电源即可启动ESXi操作系统的安装流程，这一过程可能需要等待较长时间。</p>
+<p>安装流程中总是保持默认选项即可。</p>
+<blockquote class="book-hint info">
+在此流程中，可能需要使用使用到某些快捷键，这些快捷键可能会首先被你本机的操作系统捕获，在本机的系统设置中暂时屏蔽该快捷键即可。
+</blockquote>
+<blockquote class="book-hint danger">
+请务必牢记设置的root密码。
+</blockquote>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107122136324.png alt=image-20211107122136324></p>
+<p>安装完成后，可以看到如下界面。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107163915642.png alt=image-20211107163915642></p>
+<p>可以看到，ESXi系统获得了一个IPv4地址<code>192.168.80.128</code>，并且这个地址是通过<code>DHCP</code>的方式获得的。这里用到的DHCP服务器其实是VMware Workstation内置的。也就是说，<code>192.168.80.128</code>这个地址只有在安装VMware Workstation的机器上才是有效的。</p>
+<h3 id=2-访问esxi>
+2. 访问ESXi
+<a class=anchor href=#2-%e8%ae%bf%e9%97%aeesxi>#</a>
+</h3>
+<p>一般情况下，可以使用桌面客户端VMware vSphere Client作为“Client”和ESXi（作为“Server”）通信。</p>
+<p>VMware vSphere Client使用如下图所示的安装包安装即可。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107165049138.png alt=image-20211107165049138></p>
+<p>安装完成后，打开vSphere Client，填入ESXi的IP地址、root的用户名和密码后即可建立起与ESXi的连接。</p>
+<blockquote class="book-hint info">
+如果弹出安全证书警告，直接忽略即可。
+</blockquote>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107164923128.png alt=image-20211107164923128></p>
+<p>除了桌面客户端，也可以直接使用浏览器访问。访问的地址就是ESXi的地址，用户名和密码与vSphere Client的相同。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107165815482.png alt=image-20211107165815482></p>
+<p>如下图所示，可以为ESXi分配许可证。</p>
+<p>可用的KEY：</p>
+<pre tabindex=0><code>4F092-DML5N-H8E20-4HC54-17K4D      
+1G2J8-4K097-48DU1-HH3G2-C6H60      
+4V4JR-40317-H88H1-83ANP-23H76
+1G002-DRK5J-08429-K035K-0KK16
+NY01K-AP343-M89H8-WJ9EK-2VK1F    
+1F29K-4W14M-H8099-PA8X2-9KUHD
+</code></pre><p>
+<img src=https://cdn.loheagn.com/image-20211107170758629.png alt=image-20211107170758629></p>
+<p>后续实验内容可以在Web端进行，也可以在vSphere Client桌面客户端进行。</p>
+<h3 id=3-观察和体验vsphere-client提供的功能>
+3. 观察和体验vSphere Client提供的功能
+<a class=anchor href=#3-%e8%a7%82%e5%af%9f%e5%92%8c%e4%bd%93%e9%aa%8cvsphere-client%e6%8f%90%e4%be%9b%e7%9a%84%e5%8a%9f%e8%83%bd>#</a>
+</h3>
+<p>Client侧界面主要包含导航器、主体内容和任务事件这三部分。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107172432364.png alt=image-20211107172432364></p>
+<p>请浏览左侧导航栏的不同模块和不同模块下不同选项卡的内容，对ESXi提供的功能有个大致的了解。</p>
+<p>其中，存储部分可以查看ESXi虚拟机可访问的数据内容。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107173326427.png alt=image-20211107173326427></p>
+<p>可以通过使用“数据存储浏览器”查看、下载、上传、下载“存储”中的文件。</p>
+<h3 id=4-资源池>
+4. 资源池
+<a class=anchor href=#4-%e8%b5%84%e6%ba%90%e6%b1%a0>#</a>
+</h3>
+<p>资源池可以实现对CPU和内存的池化管理。</p>
+<p>尝试在vSphere Client中新建资源池。</p>
+<p>
+<img src=https://cdn.loheagn.com/2020-11-03-17-11-57.png alt=2020-11-03-17-11-57></p>
+<p>理解资源池“预留”和“限制”的含义。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107180212183.png alt=image-20211107180212183></p>
+<h3 id=5-新建和安装虚拟机>
+5. 新建和安装虚拟机
+<a class=anchor href=#5-%e6%96%b0%e5%bb%ba%e5%92%8c%e5%ae%89%e8%a3%85%e8%99%9a%e6%8b%9f%e6%9c%ba>#</a>
+</h3>
+<p>ESXi最主要的功能就是对虚拟机的管理。</p>
+<p>vSphere Client和Web端都有显著的入口供用户创建虚拟机。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107180409949.png alt=image-20211107180409949></p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107180541776.png alt=image-20211107180541776></p>
+<p>创建虚拟机的流程与使用VMware Workstation创建虚拟机没有太大区别，按照创建向导进行即可。</p>
+<p>在创建过程的“自定义设置”阶段，需要手动配置CD/DVD驱动器，插入桌面上的CentOS或Tiny Core Linux的安装镜像，以使虚拟机在开机时，能自动进入安装镜像的安装引导界面。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107181242690.png alt=image-20211107181242690></p>
+<p>当然，你也可以在虚拟机创建完成后，打开电源之前，手动编辑虚拟机配置，添加对应的镜像文件。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107181633965.png alt=image-20211107181633965></p>
+<p>完成后，打开虚拟机电源，即可进入操作系统的安装引导流程。</p>
+<h3 id=6-虚拟机文件系统格式和种类>
+6. 虚拟机文件系统格式和种类
+<a class=anchor href=#6-%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e6%a0%bc%e5%bc%8f%e5%92%8c%e7%a7%8d%e7%b1%bb>#</a>
+</h3>
+<p>添加虚拟机后，可以在“存储”中看到每台虚拟机中包含的文件内容。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107181915857.png alt=image-20211107181915857></p>
+<p>了解这些不同格式的文件和含义和作用。</p>
+<h3 id=7-虚拟机导出>
+7. 虚拟机导出
+<a class=anchor href=#7-%e8%99%9a%e6%8b%9f%e6%9c%ba%e5%af%bc%e5%87%ba>#</a>
+</h3>
+<p>关闭虚拟机电源后，即可将虚拟机导出。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107182140360.png alt=image-20211107182140360></p>
+<p>观察导出文件格式与虚拟机正常文件的区别。</p>
+<h3 id=8-vmware-tools选做>
+8. VMware Tools（选做）
+<a class=anchor href=#8-vmware-tools%e9%80%89%e5%81%9a>#</a>
+</h3>
+<p>可以在如下图所示的虚拟机控制台的“操作”选项中找到“安装VMware Tools”的选项。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107183923365.png alt=image-20211107183923365></p>
+<p>点击“安装VMware Tools”后，ESXi会给虚拟机挂载一个包含了安装脚本的光盘。根据安装的操作系统的不同，具体的安装方式也有区别。对于Linux系统，可以在<code>/dev</code>目录下找到该光盘，并将其挂载到文件系统中，然后进入其中，执行安装脚本。</p>
+<h3 id=9-角色和用户选做>
+9. 角色和用户（选做）
+<a class=anchor href=#9-%e8%a7%92%e8%89%b2%e5%92%8c%e7%94%a8%e6%88%b7%e9%80%89%e5%81%9a>#</a>
+</h3>
+<p>可以在Web端创建不同的角色和用户，根据角色的不同，用户将获得不同的权限。尝试使用不同的用户账号登录Client，以体验权限限制带来的差异。</p>
+<p>
+<img src=https://cdn.loheagn.com/image-20211107184717658.png alt=image-20211107184717658></p>
+<h3 id=10-创建与配置集群待完善>
+10. 创建与配置集群（待完善）
+<a class=anchor href=#10-%e5%88%9b%e5%bb%ba%e4%b8%8e%e9%85%8d%e7%bd%ae%e9%9b%86%e7%be%a4%e5%be%85%e5%ae%8c%e5%96%84>#</a>
+</h3>
+<h3 id=11-创建分布式虚拟交换机待完善>
+11. 创建分布式虚拟交换机（待完善）
+<a class=anchor href=#11-%e5%88%9b%e5%bb%ba%e5%88%86%e5%b8%83%e5%bc%8f%e8%99%9a%e6%8b%9f%e4%ba%a4%e6%8d%a2%e6%9c%ba%e5%be%85%e5%ae%8c%e5%96%84>#</a>
+</h3>
+<h3 id=12-网络待完善>
+12. 网络（待完善）
+<a class=anchor href=#12-%e7%bd%91%e7%bb%9c%e5%be%85%e5%ae%8c%e5%96%84>#</a>
+</h3>
+<h2 id=实验报告模板>
+实验报告模板
+<a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%e6%a8%a1%e6%9d%bf>#</a>
+</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-markdown data-lang=markdown># Lab02 虚拟化实验（上）
+<span style=color:#66d9ef>
+</span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>班级：
+</span><span style=font-style:italic></span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>学号：
+</span><span style=font-style:italic></span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>姓名：
+</span><span style=font-style:italic></span>
+---
+
+<span style=color:#75715e>## 实验内容
+</span><span style=color:#75715e></span>
+<span style=color:#75715e>### 1. 安装VMware ESXi
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 2. 访问ESXi
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>#### ESXi分配许可证
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 3. 观察和体验vSphere Client提供的功能
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 4. 资源池
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>#### “预留”和“限制”
+</span><span style=color:#75715e></span>
+
+
+
+<span style=color:#75715e>### 5. 新建和安装虚拟机
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 6. 虚拟机文件系统格式和种类
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>#### 不同格式的文件和含义和作用
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 7. 虚拟机导出
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>#### 导出文件格式与虚拟机正常文件的区别
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 8. VMware Tools（选做）
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 9. 角色和用户（选做）
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 10. 创建与配置集群
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 11. 创建分布式虚拟交换机
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>### 12. 网络
+</span><span style=color:#75715e></span>
+
+
+<span style=color:#75715e>## 实验总结与心得
+</span><span style=color:#75715e></span>
+
+
+</code></pre></div></article>
+<footer class=book-footer>
+<div class="flex flex-wrap justify-between">
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/4d4b36a5ef5ea050eadcbaac09fca11bbc858292 title="Last modified by loheagn | November 7, 2021" target=_blank rel=noopener>
+<img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
+<span>November 7, 2021</span>
+</a>
+</div>
+<div>
+<a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/edit/main/exampleSite/content/docs/table-of-contents/virtual.md target=_blank rel=noopener>
+<img src=/ns-labs/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span>
+</a>
+</div>
+</div>
+<script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+</footer>
+<div class=book-comments>
+</div>
+<label for=menu-control class="hidden book-menu-overlay"></label>
+</div>
+<aside class=book-toc>
+<div class=book-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#lab02-虚拟化实验>Lab02 虚拟化实验</a>
+<ul>
+<li><a href=#实验目标>实验目标</a></li>
+<li><a href=#实验内容>实验内容</a></li>
+<li><a href=#前情提要>前情提要</a>
+<ul>
+<li><a href=#hypervisor>Hypervisor</a></li>
+</ul>
+</li>
+<li><a href=#实验指南>实验指南</a>
+<ul>
+<li><a href=#0-安装vmware-workstation>0. 安装VMware Workstation</a></li>
+<li><a href=#1-安装vmware-esxi>1. 安装VMware ESXi</a></li>
+<li><a href=#2-访问esxi>2. 访问ESXi</a></li>
+<li><a href=#3-观察和体验vsphere-client提供的功能>3. 观察和体验vSphere Client提供的功能</a></li>
+<li><a href=#4-资源池>4. 资源池</a></li>
+<li><a href=#5-新建和安装虚拟机>5. 新建和安装虚拟机</a></li>
+<li><a href=#6-虚拟机文件系统格式和种类>6. 虚拟机文件系统格式和种类</a></li>
+<li><a href=#7-虚拟机导出>7. 虚拟机导出</a></li>
+<li><a href=#8-vmware-tools选做>8. VMware Tools（选做）</a></li>
+<li><a href=#9-角色和用户选做>9. 角色和用户（选做）</a></li>
+<li><a href=#10-创建与配置集群待完善>10. 创建与配置集群（待完善）</a></li>
+<li><a href=#11-创建分布式虚拟交换机待完善>11. 创建分布式虚拟交换机（待完善）</a></li>
+<li><a href=#12-网络待完善>12. 网络（待完善）</a></li>
+</ul>
+</li>
+<li><a href=#实验报告模板>实验报告模板</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</aside>
+</main>
+</body>
+</html>

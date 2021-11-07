@@ -1,0 +1,336 @@
+<!doctype html><html lang=en dir=ltr>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="FAQ #  如何登录实验虚拟机 #  在云平台中查看虚拟机访问IP、账户以及密码
+Windows win+R 打开“运行”，然后输入mstsc，然后在弹出窗口中输入IP、账号、密码即可 MacOS（Linux？）   Parallels Client Microsoft Remote Desktop （有Bug——或者说是Feature——无法使用macOS本地工具截图） VMware Fusion   云平台上没有显示虚拟机IP或显示的IP无法登录怎么办 #  可以用来登录的IP位于10.251.252.1~10.251.255.254之间
+  如果未登录过实验虚拟机
+ 云平台上显示的IP是169或者无IP则暂时无法登录，需要重启虚拟机重新获取IP。需要注意的是，虚拟机的重启、以及DHCP IP的获取都需要时间，开机后应等待3分钟以上，请勿频繁开关机    如果之前登录过实验虚拟机
+ 云平台上显示的是192开头的IP或者无IP，可以尝试使用之前的可用IP进行登录。如果无法登录（包括密码错误），请联系助教解决。    重要提醒 #  由于分配的IP均为DHCP自动获取，有可能实验虚拟机的IP会发生变化，尤其是在长时间关机再开启后。因此请登录实验虚拟机后，及时更改虚拟机密码，以避免以下情况发生：
+ 未意识到登录了他人的虚拟机， 帮助别人完成了实验工作 自己的虚拟机别别人登录，已经做完的实验被破坏  同时，虚拟机密码请设置非常用敏感密码。因为助教在帮助大家解决问题时往往需要你的密码登录到你的虚拟机。
+用到的安装包、镜像文件如何获取 #    Workstation安装包(Mware-workstation-full-14.1.3-9474260.exe)、ESXi镜像(VMware-VMvisor-Installer-6.5.0-4564106.x86_64-Dell_Customized-A00.iso)、TinyOS镜像(Core-10.1.iso)以及可选使用的CentOS镜像(CentOS-7-x86_64-Minimal-1908.iso)均放在了实验虚拟机桌面上，可以直接使用。
+  vSphere Client安装包可以在 课程中心下载（推荐此方式）或在 临时的资源存放网站下载。
+  同时，所需的资源文件都在 临时的资源存放网站存有备份
+  Workstation与ESXi在本实验中的用处 #  Workstation是用来安装ESXi的。安装ESXi成功后，只要保证Workstation正常运转即可，后续的实验都是通过vSphere (Web) Client在ESXi中完成的">
+<meta name=theme-color content="#FFFFFF">
+<meta name=color-scheme content="light dark"><meta property="og:title" content="FAQ">
+<meta property="og:description" content="FAQ #  如何登录实验虚拟机 #  在云平台中查看虚拟机访问IP、账户以及密码
+Windows win+R 打开“运行”，然后输入mstsc，然后在弹出窗口中输入IP、账号、密码即可 MacOS（Linux？）   Parallels Client Microsoft Remote Desktop （有Bug——或者说是Feature——无法使用macOS本地工具截图） VMware Fusion   云平台上没有显示虚拟机IP或显示的IP无法登录怎么办 #  可以用来登录的IP位于10.251.252.1~10.251.255.254之间
+  如果未登录过实验虚拟机
+ 云平台上显示的IP是169或者无IP则暂时无法登录，需要重启虚拟机重新获取IP。需要注意的是，虚拟机的重启、以及DHCP IP的获取都需要时间，开机后应等待3分钟以上，请勿频繁开关机    如果之前登录过实验虚拟机
+ 云平台上显示的是192开头的IP或者无IP，可以尝试使用之前的可用IP进行登录。如果无法登录（包括密码错误），请联系助教解决。    重要提醒 #  由于分配的IP均为DHCP自动获取，有可能实验虚拟机的IP会发生变化，尤其是在长时间关机再开启后。因此请登录实验虚拟机后，及时更改虚拟机密码，以避免以下情况发生：
+ 未意识到登录了他人的虚拟机， 帮助别人完成了实验工作 自己的虚拟机别别人登录，已经做完的实验被破坏  同时，虚拟机密码请设置非常用敏感密码。因为助教在帮助大家解决问题时往往需要你的密码登录到你的虚拟机。
+用到的安装包、镜像文件如何获取 #    Workstation安装包(Mware-workstation-full-14.1.3-9474260.exe)、ESXi镜像(VMware-VMvisor-Installer-6.5.0-4564106.x86_64-Dell_Customized-A00.iso)、TinyOS镜像(Core-10.1.iso)以及可选使用的CentOS镜像(CentOS-7-x86_64-Minimal-1908.iso)均放在了实验虚拟机桌面上，可以直接使用。
+  vSphere Client安装包可以在 课程中心下载（推荐此方式）或在 临时的资源存放网站下载。
+  同时，所需的资源文件都在 临时的资源存放网站存有备份
+  Workstation与ESXi在本实验中的用处 #  Workstation是用来安装ESXi的。安装ESXi成功后，只要保证Workstation正常运转即可，后续的实验都是通过vSphere (Web) Client在ESXi中完成的">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/faq/"><meta property="article:section" content="docs">
+<meta property="article:modified_time" content="2021-11-07T22:34:36+08:00">
+<title>FAQ | Network Storage Labs</title>
+<link rel=manifest href=/ns-labs/manifest.json>
+<link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
+<link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
+<script defer src=/ns-labs/flexsearch.min.js></script>
+<script defer src=/ns-labs/en.search.min.709122550c79d59cfca48accfa220f9f9b7df9c82afa48e4645af54a057e803a.js integrity="sha256-cJEiVQx51Zz8pIrM+iIPn5t9+cgq+kjkZFr1SgV+gDo=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
+</head>
+<body dir=ltr>
+<input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control>
+<main class="container flex">
+<aside class=book-menu>
+<div class=book-menu-content>
+<nav>
+<h2 class=book-brand>
+<a class="flex align-center" href=/ns-labs/><span>Network Storage Labs</span>
+</a>
+</h2>
+<div class=book-search>
+<input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/>
+<div class="book-search-spinner hidden"></div>
+<ul id=book-search-results></ul>
+</div>
+<ul>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/>Table of Contents</a>
+<ul>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/raid/>Lab01 RAID 阵列</a>
+</li>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/virtual/>Lab02 虚拟化实验</a>
+</li>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/table-of-contents/faq/ class=active>FAQ</a>
+</li>
+</ul>
+</li>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/resources/>Resources</a>
+<ul>
+<li>
+<a href=https://bugitt.github.io/ns-labs/docs/resources/os/>操作系统</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<a href=https://github.com/bugitt/ns-labs target=_blank rel=noopener>
+Github
+</a>
+</li>
+</ul>
+</nav>
+<script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+</div>
+</aside>
+<div class=book-page>
+<header class=book-header>
+<div class="flex align-center justify-between">
+<label for=menu-control>
+<img src=/ns-labs/svg/menu.svg class=book-icon alt=Menu>
+</label>
+<strong>FAQ</strong>
+<label for=toc-control>
+<img src=/ns-labs/svg/toc.svg class=book-icon alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id=TableOfContents>
+<ul>
+<li><a href=#faq>FAQ</a>
+<ul>
+<li><a href=#如何登录实验虚拟机>如何登录实验虚拟机</a></li>
+<li><a href=#云平台上没有显示虚拟机ip或显示的ip无法登录怎么办>云平台上没有显示虚拟机IP或显示的IP无法登录怎么办</a>
+<ul>
+<li><a href=#重要提醒>重要提醒</a></li>
+</ul>
+</li>
+<li><a href=#用到的安装包镜像文件如何获取>用到的安装包、镜像文件如何获取</a></li>
+<li><a href=#workstation与esxi在本实验中的用处>Workstation与ESXi在本实验中的用处</a></li>
+<li><a href=#安装workstation时报错的解决方法关于-net-framework的错误>安装workstation时报错的解决方法（关于 .net framework的错误）</a></li>
+<li><a href=#如何在workstation中载入esxi镜像>如何在workstation中载入ESXi镜像</a></li>
+<li><a href=#载入workstation后界面无反应鼠标消失怎么办>载入workstation后界面无反应/鼠标消失怎么办</a></li>
+<li><a href=#安装esxi时的ip如何配置>安装ESXi时的IP如何配置</a></li>
+<li><a href=#如何登录vsphere-client>如何登录vSphere Client</a></li>
+<li><a href=#使用web-client还是传统的本地client>使用web client还是传统的本地client</a></li>
+<li><a href=#访问web-client时报错的解决方法>访问web client时报错的解决方法</a></li>
+<li><a href=#创建用户时提示用户名或密码格式无效的解决方法>创建用户时提示“用户名或密码格式无效”的解决方法</a></li>
+<li><a href=#关于进行虚拟机设置时使用vsphere-client提示无法使用vsphere-client编辑版本为12或更高版本的虚拟机的设置的解决方法>关于进行虚拟机设置时，使用vSphere Client提示“无法使用vSphere Client编辑版本为12或更高版本的虚拟机的设置”的解决方法</a></li>
+<li><a href=#开启虚拟机电源后打开本地vsphere-client的虚拟机控制台显示黑屏>开启虚拟机电源后，打开本地vSphere Client的虚拟机控制台显示黑屏</a></li>
+<li><a href=#安装虚拟机操作系统时显示找不到os>安装虚拟机操作系统时显示找不到OS</a></li>
+<li><a href=#虚拟机无法连接外网>虚拟机无法连接外网</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class=markdown><h1 id=faq>
+FAQ
+<a class=anchor href=#faq>#</a>
+</h1>
+<h2 id=如何登录实验虚拟机>
+如何登录实验虚拟机
+<a class=anchor href=#%e5%a6%82%e4%bd%95%e7%99%bb%e5%bd%95%e5%ae%9e%e9%aa%8c%e8%99%9a%e6%8b%9f%e6%9c%ba>#</a>
+</h2>
+<p>在云平台中查看虚拟机访问IP、账户以及密码</p>
+<div class=book-tabs><input type=radio class=toggle name=tabs-uniqueid id=tabs-uniqueid-0 checked>
+<label for=tabs-uniqueid-0>Windows</label>
+<div class="book-tabs-content markdown-inner">win+R 打开“运行”，然后输入<code>mstsc</code>，然后在弹出窗口中输入IP、账号、密码即可
+<img src=https://cdn.loheagn.com/mstsc.png alt=mstsc></div><input type=radio class=toggle name=tabs-uniqueid id=tabs-uniqueid-1>
+<label for=tabs-uniqueid-1>MacOS（Linux？）</label>
+<div class="book-tabs-content markdown-inner"><ul>
+<li>
+<a href=https://bhpan.buaa.edu.cn:443/link/930A373912ACB5A1FC3CE603C3AF9520>Parallels Client</a></li>
+<li>Microsoft Remote Desktop （有Bug——或者说是Feature——无法使用macOS本地工具截图）</li>
+<li>VMware Fusion</li>
+</ul>
+</div></div>
+<h2 id=云平台上没有显示虚拟机ip或显示的ip无法登录怎么办>
+云平台上没有显示虚拟机IP或显示的IP无法登录怎么办
+<a class=anchor href=#%e4%ba%91%e5%b9%b3%e5%8f%b0%e4%b8%8a%e6%b2%a1%e6%9c%89%e6%98%be%e7%a4%ba%e8%99%9a%e6%8b%9f%e6%9c%baip%e6%88%96%e6%98%be%e7%a4%ba%e7%9a%84ip%e6%97%a0%e6%b3%95%e7%99%bb%e5%bd%95%e6%80%8e%e4%b9%88%e5%8a%9e>#</a>
+</h2>
+<p>可以用来登录的IP位于10.251.252.1~10.251.255.254之间</p>
+<ul>
+<li>
+<p>如果未登录过实验虚拟机</p>
+<ul>
+<li>云平台上显示的IP是169或者无IP则暂时无法登录，需要重启虚拟机重新获取IP。需要注意的是，虚拟机的重启、以及DHCP IP的获取都需要时间，开机后应等待3分钟以上，请勿频繁开关机</li>
+</ul>
+</li>
+<li>
+<p>如果之前登录过实验虚拟机</p>
+<ul>
+<li>云平台上显示的是192开头的IP或者无IP，可以尝试使用之前的可用IP进行登录。如果无法登录（包括密码错误），请联系助教解决。</li>
+</ul>
+</li>
+</ul>
+<h3 id=重要提醒>
+重要提醒
+<a class=anchor href=#%e9%87%8d%e8%a6%81%e6%8f%90%e9%86%92>#</a>
+</h3>
+<p>由于分配的IP均为DHCP自动获取，有可能实验虚拟机的IP会发生变化，尤其是在长时间关机再开启后。因此请登录实验虚拟机后，及时更改虚拟机密码，以避免以下情况发生：</p>
+<ul>
+<li>未意识到登录了他人的虚拟机， 帮助别人完成了实验工作</li>
+<li>自己的虚拟机别别人登录，已经做完的实验被破坏</li>
+</ul>
+<p>同时，虚拟机密码请设置非常用敏感密码。因为助教在帮助大家解决问题时往往需要你的密码登录到你的虚拟机。</p>
+<h2 id=用到的安装包镜像文件如何获取>
+用到的安装包、镜像文件如何获取
+<a class=anchor href=#%e7%94%a8%e5%88%b0%e7%9a%84%e5%ae%89%e8%a3%85%e5%8c%85%e9%95%9c%e5%83%8f%e6%96%87%e4%bb%b6%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96>#</a>
+</h2>
+<ul>
+<li>
+<p>Workstation安装包(<code>Mware-workstation-full-14.1.3-9474260.exe</code>)、ESXi镜像(<code>VMware-VMvisor-Installer-6.5.0-4564106.x86_64-Dell_Customized-A00.iso</code>)、TinyOS镜像(<code>Core-10.1.iso</code>)以及可选使用的CentOS镜像(<code>CentOS-7-x86_64-Minimal-1908.iso</code>)均放在了实验虚拟机桌面上，可以直接使用。</p>
+</li>
+<li>
+<p>vSphere Client安装包可以在
+<a href=http://course.buaa.edu.cn/access/content/group/b7656edd-6e82-4c48-80b3-c9397cf89f72/%E4%BA%91%E5%AE%9E%E9%AA%8C%E8%B5%84%E6%BA%90/VMware-viclient-all-6.0.0.exe>课程中心下载</a>（推荐此方式）或在
+<a href=http://10.251.254.150/VMware-viclient-all-6.0.0.exe>临时的资源存放网站</a>下载。</p>
+</li>
+<li>
+<p>同时，所需的资源文件都在
+<a href=http://10.251.254.150>临时的资源存放网站</a>存有备份</p>
+</li>
+</ul>
+<h2 id=workstation与esxi在本实验中的用处>
+Workstation与ESXi在本实验中的用处
+<a class=anchor href=#workstation%e4%b8%8eesxi%e5%9c%a8%e6%9c%ac%e5%ae%9e%e9%aa%8c%e4%b8%ad%e7%9a%84%e7%94%a8%e5%a4%84>#</a>
+</h2>
+<p>Workstation是用来安装ESXi的。安装ESXi成功后，只要保证Workstation正常运转即可，后续的实验<strong>都是通过vSphere (Web) Client在ESXi中完成的</strong></p>
+<h2 id=安装workstation时报错的解决方法关于-net-framework的错误>
+安装workstation时报错的解决方法（关于 .net framework的错误）
+<a class=anchor href=#%e5%ae%89%e8%a3%85workstation%e6%97%b6%e6%8a%a5%e9%94%99%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95%e5%85%b3%e4%ba%8e-net-framework%e7%9a%84%e9%94%99%e8%af%af>#</a>
+</h2>
+<p>
+<img src=https://cdn.loheagn.com/dotnet_error.png alt=dotneterror>
+打开浏览器登录校园网验证，连接网络之后会自动安装补丁修复此错误。</p>
+<h2 id=如何在workstation中载入esxi镜像>
+如何在workstation中载入ESXi镜像
+<a class=anchor href=#%e5%a6%82%e4%bd%95%e5%9c%a8workstation%e4%b8%ad%e8%bd%bd%e5%85%a5esxi%e9%95%9c%e5%83%8f>#</a>
+</h2>
+<ul>
+<li>在workstation中，创建虚拟机时
+<img src=https://cdn.loheagn.com/vmware_workstation_run_4.png alt=workstation_image></li>
+</ul>
+<h2 id=载入workstation后界面无反应鼠标消失怎么办>
+载入workstation后界面无反应/鼠标消失怎么办
+<a class=anchor href=#%e8%bd%bd%e5%85%a5workstation%e5%90%8e%e7%95%8c%e9%9d%a2%e6%97%a0%e5%8f%8d%e5%ba%94%e9%bc%a0%e6%a0%87%e6%b6%88%e5%a4%b1%e6%80%8e%e4%b9%88%e5%8a%9e>#</a>
+</h2>
+<p>workstation中的虚拟机是会占用鼠标的，按ctrl+alt即可将鼠标焦点从workstation虚拟机中移出。如果安装程序超过2分钟还没有自动启动，重启workstation中的ESXi虚拟机</p>
+<h2 id=安装esxi时的ip如何配置>
+安装ESXi时的IP如何配置
+<a class=anchor href=#%e5%ae%89%e8%a3%85esxi%e6%97%b6%e7%9a%84ip%e5%a6%82%e4%bd%95%e9%85%8d%e7%bd%ae>#</a>
+</h2>
+<p>ESXi的IP不需要特殊配置，使用DHCP分配的动态IP即可。请注意，此IP只在虚拟机中可以有有效访问</p>
+<h2 id=如何登录vsphere-client>
+如何登录vSphere Client
+<a class=anchor href=#%e5%a6%82%e4%bd%95%e7%99%bb%e5%bd%95vsphere-client>#</a>
+</h2>
+<p>安装
+<a href=http://course.buaa.edu.cn/access/content/group/b7656edd-6e82-4c48-80b3-c9397cf89f72/%E4%BA%91%E5%AE%9E%E9%AA%8C%E8%B5%84%E6%BA%90/VMware-viclient-all-6.0.0.exe>vSpehre Client</a>成功后，打开vSphere Client，输入ESXi显示的IP，以及安装ESXi过程中设置的账号密码即可登录。</p>
+<h2 id=使用web-client还是传统的本地client>
+使用web client还是传统的本地client
+<a class=anchor href=#%e4%bd%bf%e7%94%a8web-client%e8%bf%98%e6%98%af%e4%bc%a0%e7%bb%9f%e7%9a%84%e6%9c%ac%e5%9c%b0client>#</a>
+</h2>
+<p>本次实验大部分操作要求在本地client中完成。如果遇到本地client无法完成的操作，则要登录web client完成</p>
+<h2 id=访问web-client时报错的解决方法>
+访问web client时报错的解决方法
+<a class=anchor href=#%e8%ae%bf%e9%97%aeweb-client%e6%97%b6%e6%8a%a5%e9%94%99%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95>#</a>
+</h2>
+<p>
+<img src=https://cdn.loheagn.com/web_client_error.png alt=web_client_error></p>
+<p>按ESC键忽略此错误即可</p>
+<h2 id=创建用户时提示用户名或密码格式无效的解决方法>
+创建用户时提示“用户名或密码格式无效”的解决方法
+<a class=anchor href=#%e5%88%9b%e5%bb%ba%e7%94%a8%e6%88%b7%e6%97%b6%e6%8f%90%e7%a4%ba%e7%94%a8%e6%88%b7%e5%90%8d%e6%88%96%e5%af%86%e7%a0%81%e6%a0%bc%e5%bc%8f%e6%97%a0%e6%95%88%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95>#</a>
+</h2>
+<p>密码要求包含数字、大小写字母以及符号，缺一不可</p>
+<h2 id=关于进行虚拟机设置时使用vsphere-client提示无法使用vsphere-client编辑版本为12或更高版本的虚拟机的设置的解决方法>
+关于进行虚拟机设置时，使用vSphere Client提示“无法使用vSphere Client编辑版本为12或更高版本的虚拟机的设置”的解决方法
+<a class=anchor href=#%e5%85%b3%e4%ba%8e%e8%bf%9b%e8%a1%8c%e8%99%9a%e6%8b%9f%e6%9c%ba%e8%ae%be%e7%bd%ae%e6%97%b6%e4%bd%bf%e7%94%a8vsphere-client%e6%8f%90%e7%a4%ba%e6%97%a0%e6%b3%95%e4%bd%bf%e7%94%a8vsphere-client%e7%bc%96%e8%be%91%e7%89%88%e6%9c%ac%e4%b8%ba12%e6%88%96%e6%9b%b4%e9%ab%98%e7%89%88%e6%9c%ac%e7%9a%84%e8%99%9a%e6%8b%9f%e6%9c%ba%e7%9a%84%e8%ae%be%e7%bd%ae%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95>#</a>
+</h2>
+<p>1、创建虚拟机时，第一个页面“配置”不选择“典型”，选择“自定义”，并在“虚拟机版本”处选择虚拟机版本11或以下版本。
+2、使用Web客户端登录ESXi管理页面，在虚拟机浏览器中输入ESXi地址即可访问。
+以上两种方法使用一种即可。</p>
+<h2 id=开启虚拟机电源后打开本地vsphere-client的虚拟机控制台显示黑屏>
+开启虚拟机电源后，打开本地vSphere Client的虚拟机控制台显示黑屏
+<a class=anchor href=#%e5%bc%80%e5%90%af%e8%99%9a%e6%8b%9f%e6%9c%ba%e7%94%b5%e6%ba%90%e5%90%8e%e6%89%93%e5%bc%80%e6%9c%ac%e5%9c%b0vsphere-client%e7%9a%84%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%8e%a7%e5%88%b6%e5%8f%b0%e6%98%be%e7%a4%ba%e9%bb%91%e5%b1%8f>#</a>
+</h2>
+<p>换用Web客户端访问。</p>
+<h2 id=安装虚拟机操作系统时显示找不到os>
+安装虚拟机操作系统时显示找不到OS
+<a class=anchor href=#%e5%ae%89%e8%a3%85%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e6%97%b6%e6%98%be%e7%a4%ba%e6%89%be%e4%b8%8d%e5%88%b0os>#</a>
+</h2>
+<ul>
+<li>确保连接了正确的镜像文件</li>
+<li>确保虚拟光驱的状态为“已连接”（可在设置中更改）</li>
+</ul>
+<p>一般可以自动检测，无需进入BIOS调整启动顺序或手动选择启动选项，但如果排查过上面的情况仍然无法安装操作系统，可以手动进入BIOS更改一下引导选项。</p>
+<h2 id=虚拟机无法连接外网>
+虚拟机无法连接外网
+<a class=anchor href=#%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%97%a0%e6%b3%95%e8%bf%9e%e6%8e%a5%e5%a4%96%e7%bd%91>#</a>
+</h2>
+<ul>
+<li>确保设置了正确的DNS、已经通过gw认证登录</li>
+<li>如果无法访问认证页面，可以在控制面板\网络和 Internet\网络连接中查看是否有多余的网卡（不包括VMware Network Adapter），查看这些网卡的IP，将多余的网卡禁用（注意不要禁用错了，要保留IP地址与远程登录地址相同的网卡）</li>
+</ul>
+</article>
+<footer class=book-footer>
+<div class="flex flex-wrap justify-between">
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/487315a1a17955b24cec56de51f6a636be246d83 title="Last modified by loheagn | November 7, 2021" target=_blank rel=noopener>
+<img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
+<span>November 7, 2021</span>
+</a>
+</div>
+<div>
+<a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/edit/main/exampleSite/content/docs/table-of-contents/faq.md target=_blank rel=noopener>
+<img src=/ns-labs/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span>
+</a>
+</div>
+</div>
+<script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+</footer>
+<div class=book-comments>
+</div>
+<label for=menu-control class="hidden book-menu-overlay"></label>
+</div>
+<aside class=book-toc>
+<div class=book-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#faq>FAQ</a>
+<ul>
+<li><a href=#如何登录实验虚拟机>如何登录实验虚拟机</a></li>
+<li><a href=#云平台上没有显示虚拟机ip或显示的ip无法登录怎么办>云平台上没有显示虚拟机IP或显示的IP无法登录怎么办</a>
+<ul>
+<li><a href=#重要提醒>重要提醒</a></li>
+</ul>
+</li>
+<li><a href=#用到的安装包镜像文件如何获取>用到的安装包、镜像文件如何获取</a></li>
+<li><a href=#workstation与esxi在本实验中的用处>Workstation与ESXi在本实验中的用处</a></li>
+<li><a href=#安装workstation时报错的解决方法关于-net-framework的错误>安装workstation时报错的解决方法（关于 .net framework的错误）</a></li>
+<li><a href=#如何在workstation中载入esxi镜像>如何在workstation中载入ESXi镜像</a></li>
+<li><a href=#载入workstation后界面无反应鼠标消失怎么办>载入workstation后界面无反应/鼠标消失怎么办</a></li>
+<li><a href=#安装esxi时的ip如何配置>安装ESXi时的IP如何配置</a></li>
+<li><a href=#如何登录vsphere-client>如何登录vSphere Client</a></li>
+<li><a href=#使用web-client还是传统的本地client>使用web client还是传统的本地client</a></li>
+<li><a href=#访问web-client时报错的解决方法>访问web client时报错的解决方法</a></li>
+<li><a href=#创建用户时提示用户名或密码格式无效的解决方法>创建用户时提示“用户名或密码格式无效”的解决方法</a></li>
+<li><a href=#关于进行虚拟机设置时使用vsphere-client提示无法使用vsphere-client编辑版本为12或更高版本的虚拟机的设置的解决方法>关于进行虚拟机设置时，使用vSphere Client提示“无法使用vSphere Client编辑版本为12或更高版本的虚拟机的设置”的解决方法</a></li>
+<li><a href=#开启虚拟机电源后打开本地vsphere-client的虚拟机控制台显示黑屏>开启虚拟机电源后，打开本地vSphere Client的虚拟机控制台显示黑屏</a></li>
+<li><a href=#安装虚拟机操作系统时显示找不到os>安装虚拟机操作系统时显示找不到OS</a></li>
+<li><a href=#虚拟机无法连接外网>虚拟机无法连接外网</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</aside>
+</main>
+</body>
+</html>

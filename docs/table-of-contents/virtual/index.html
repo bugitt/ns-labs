@@ -38,13 +38,13 @@
  1.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/virtual/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-11-08T18:20:45+08:00">
+<meta property="article:modified_time" content="2021-11-12T23:02:03+08:00">
 <title>Lab02 虚拟化实验 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.539422961fe5fde71b1c4326a1309d68f308c56ba05c6302fc3fa4265e15282b.js integrity="sha256-U5Qilh/l/ecbHEMmoTCdaPMIxWugXGMC/D+kJl4VKCs=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.cac24563e9205e5fad8907a405ec169de9e9fa1ec56a77dd712f97bdc2ef6a73.js integrity="sha256-ysJFY+kgXl+tiQekBewWnenp+h7FanfdcS+XvcLvanM=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -133,9 +133,8 @@ Github
 <li><a href=#7-虚拟机导出>7. 虚拟机导出</a></li>
 <li><a href=#8-vmware-tools选做>8. VMware Tools（选做）</a></li>
 <li><a href=#9-角色和用户选做>9. 角色和用户（选做）</a></li>
-<li><a href=#10-创建与配置集群待完善>10. 创建与配置集群（待完善）</a></li>
-<li><a href=#11-创建分布式虚拟交换机待完善>11. 创建分布式虚拟交换机（待完善）</a></li>
-<li><a href=#12-网络待完善>12. 网络（待完善）</a></li>
+<li><a href=#10-创建与配置虚拟机选做>10. 创建与配置虚拟机（选做）</a></li>
+<li><a href=#11-分布式交换机选做>11. 分布式交换机（选做）</a></li>
 </ul>
 </li>
 <li><a href=#实验报告模板>实验报告模板</a></li>
@@ -333,18 +332,51 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 <p>可以在Web端创建不同的角色和用户，根据角色的不同，用户将获得不同的权限。尝试使用不同的用户账号登录Client，以体验权限限制带来的差异。</p>
 <p>
 <img src=https://cdn.loheagn.com/image-20211107184717658.png alt=image-20211107184717658></p>
-<h3 id=10-创建与配置集群待完善>
-10. 创建与配置集群（待完善）
-<a class=anchor href=#10-%e5%88%9b%e5%bb%ba%e4%b8%8e%e9%85%8d%e7%bd%ae%e9%9b%86%e7%be%a4%e5%be%85%e5%ae%8c%e5%96%84>#</a>
+<h3 id=10-创建与配置虚拟机选做>
+10. 创建与配置虚拟机（选做）
+<a class=anchor href=#10-%e5%88%9b%e5%bb%ba%e4%b8%8e%e9%85%8d%e7%bd%ae%e8%99%9a%e6%8b%9f%e6%9c%ba%e9%80%89%e5%81%9a>#</a>
 </h3>
-<h3 id=11-创建分布式虚拟交换机待完善>
-11. 创建分布式虚拟交换机（待完善）
-<a class=anchor href=#11-%e5%88%9b%e5%bb%ba%e5%88%86%e5%b8%83%e5%bc%8f%e8%99%9a%e6%8b%9f%e4%ba%a4%e6%8d%a2%e6%9c%ba%e5%be%85%e5%ae%8c%e5%96%84>#</a>
+<p>后面这两部分实验内容比较复杂，实验环境也不是特别理想，有兴趣的同学可以选择尝试。</p>
+<p>在上面的实验中，我们进行了ESXi的部署，并使用ESXi创建了一些虚拟机。在实际应用中，往往需要多个ESXi主机组成集群，来提供更多的资源，或者提高可用性。在接下来的实验中，我们将使用vCenter Server管理多个ESXi主机，来管理所有的虚拟机和ESXi“物理机”集群。</p>
+<ol>
+<li>
+<p>在VMware Workstation中新建一个新的ESXi虚拟机。该虚拟机内存可以给大一些，比如14G，磁盘大小也可以大一些，比如100G。以方便后续在其上安装vCenter Server。</p>
+<blockquote class="book-hint danger">
+<p>可以在VMware Workstation中给机器开大内存和大容量磁盘。</p>
+<p>因为内存和磁盘是虚拟的，所以即使本机物理内存和磁盘容量不够，也把握得住。</p>
+<p>如果后续实验中，确实出现了内存或磁盘容量不够的情况，请联系助教扩容。</p>
+</blockquote>
+</li>
+<li>
+<p>安装打开vCenter Server安装包<code>VMware-VIM-all-6.5.0-4602587.iso</code>，在本机（或虚拟机）中装载该ISO文件，可以看到README文件，其中包含着具体的安装指引。<strong>之后的安装步骤，如无特殊说明，无需改动默认选项，直接下一步即可</strong>
+<img src=https://cdn.loheagn.com/125244.png alt></p>
+</li>
+<li>
+<p>我们刚刚启动的只是一个安装器程序，vCenter Server本质上还是要安装在一个特定的ESXi主机中。所以，在选择安装目标时，需要填入刚才新建的那个内存和磁盘容量都比较大的ESXi虚拟机的相关信息。
+<img src=https://cdn.loheagn.com/131933.png alt></p>
+</li>
+<li>
+<p>在最后的网络配置这里，选择<code>DHCP</code>
+<img src=https://cdn.loheagn.com/132706.png alt></p>
+</li>
+<li>
+<p>安装完成后，浏览器访问虚拟机地址或者使用vSphere Client均可访问到vCenter。</p>
+</li>
+<li>
+<p>创建数据中心。</p>
+</li>
+<li>
+<p>添加主机。把本次实验创建的两个ESXi主机都添加进去。在添加主机时会弹出安全警示，选择“是”继续添加即可。
+<img src=https://cdn.loheagn.com/vcenter_addhosts.png alt></p>
+</li>
+</ol>
+<h3 id=11-分布式交换机选做>
+11. 分布式交换机（选做）
+<a class=anchor href=#11-%e5%88%86%e5%b8%83%e5%bc%8f%e4%ba%a4%e6%8d%a2%e6%9c%ba%e9%80%89%e5%81%9a>#</a>
 </h3>
-<h3 id=12-网络待完善>
-12. 网络（待完善）
-<a class=anchor href=#12-%e7%bd%91%e7%bb%9c%e5%be%85%e5%ae%8c%e5%96%84>#</a>
-</h3>
+<p>默认情况下，两台主机中的虚拟机之间的网络是不通的。这很显然不符合我们的需求——搭建集群的主要目的就是为了整合不同主机的资源，虚拟机对其在哪个主机上应该是无感的。</p>
+<p>因此，就需要使用分布式交换机，将两个或多个主机的网络连通起来。</p>
+<p>感兴趣的同学，可以查找相关资料，在配置好的集群上，创建分布式虚拟交换机。并分别在不同的主机上部署虚拟机，实现它们之间的网络互通。</p>
 <h2 id=实验报告模板>
 实验报告模板
 <a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%e6%a8%a1%e6%9d%bf>#</a>
@@ -412,15 +444,11 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 </span><span style=color:#75715e></span>
 
 
-<span style=color:#75715e>### 10. 创建与配置集群
+<span style=color:#75715e>### 10. 创建与配置集群（选做）
 </span><span style=color:#75715e></span>
 
 
-<span style=color:#75715e>### 11. 创建分布式虚拟交换机
-</span><span style=color:#75715e></span>
-
-
-<span style=color:#75715e>### 12. 网络
+<span style=color:#75715e>### 11. 分布式虚拟交换机（选做）
 </span><span style=color:#75715e></span>
 
 
@@ -431,9 +459,9 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/09fbee79bbd091e892e1a0ee9859a09ecbe91925 title="Last modified by Nan Li | November 8, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/29c07ab143594761c12563c45f8180520a55a228 title="Last modified by loheagn | November 12, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
-<span>November 8, 2021</span>
+<span>November 12, 2021</span>
 </a>
 </div>
 <div>
@@ -474,9 +502,8 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 <li><a href=#7-虚拟机导出>7. 虚拟机导出</a></li>
 <li><a href=#8-vmware-tools选做>8. VMware Tools（选做）</a></li>
 <li><a href=#9-角色和用户选做>9. 角色和用户（选做）</a></li>
-<li><a href=#10-创建与配置集群待完善>10. 创建与配置集群（待完善）</a></li>
-<li><a href=#11-创建分布式虚拟交换机待完善>11. 创建分布式虚拟交换机（待完善）</a></li>
-<li><a href=#12-网络待完善>12. 网络（待完善）</a></li>
+<li><a href=#10-创建与配置虚拟机选做>10. 创建与配置虚拟机（选做）</a></li>
+<li><a href=#11-分布式交换机选做>11. 分布式交换机（选做）</a></li>
 </ul>
 </li>
 <li><a href=#实验报告模板>实验报告模板</a></li>

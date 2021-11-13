@@ -38,13 +38,13 @@
  1.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/virtual/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-11-12T23:02:03+08:00">
+<meta property="article:modified_time" content="2021-11-13T14:38:13+08:00">
 <title>Lab02 虚拟化实验 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.cac24563e9205e5fad8907a405ec169de9e9fa1ec56a77dd712f97bdc2ef6a73.js integrity="sha256-ysJFY+kgXl+tiQekBewWnenp+h7FanfdcS+XvcLvanM=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.9f989c22117e564fdc11ba59d15cc29caa79305c49819eb5b0f6e465b1a477af.js integrity="sha256-n5icIhF+Vk/cEbpZ0VzCnKp5MFxJgZ61sPbkZbGkd68=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -133,7 +133,7 @@ Github
 <li><a href=#7-虚拟机导出>7. 虚拟机导出</a></li>
 <li><a href=#8-vmware-tools选做>8. VMware Tools（选做）</a></li>
 <li><a href=#9-角色和用户选做>9. 角色和用户（选做）</a></li>
-<li><a href=#10-创建与配置虚拟机选做>10. 创建与配置虚拟机（选做）</a></li>
+<li><a href=#10-创建与配置集群选做>10. 创建与配置集群（选做）</a></li>
 <li><a href=#11-分布式交换机选做>11. 分布式交换机（选做）</a></li>
 </ul>
 </li>
@@ -332,9 +332,9 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 <p>可以在Web端创建不同的角色和用户，根据角色的不同，用户将获得不同的权限。尝试使用不同的用户账号登录Client，以体验权限限制带来的差异。</p>
 <p>
 <img src=https://cdn.loheagn.com/image-20211107184717658.png alt=image-20211107184717658></p>
-<h3 id=10-创建与配置虚拟机选做>
-10. 创建与配置虚拟机（选做）
-<a class=anchor href=#10-%e5%88%9b%e5%bb%ba%e4%b8%8e%e9%85%8d%e7%bd%ae%e8%99%9a%e6%8b%9f%e6%9c%ba%e9%80%89%e5%81%9a>#</a>
+<h3 id=10-创建与配置集群选做>
+10. 创建与配置集群（选做）
+<a class=anchor href=#10-%e5%88%9b%e5%bb%ba%e4%b8%8e%e9%85%8d%e7%bd%ae%e9%9b%86%e7%be%a4%e9%80%89%e5%81%9a>#</a>
 </h3>
 <p>后面这两部分实验内容比较复杂，实验环境也不是特别理想，有兴趣的同学可以选择尝试。</p>
 <p>在上面的实验中，我们进行了ESXi的部署，并使用ESXi创建了一些虚拟机。在实际应用中，往往需要多个ESXi主机组成集群，来提供更多的资源，或者提高可用性。在接下来的实验中，我们将使用vCenter Server管理多个ESXi主机，来管理所有的虚拟机和ESXi“物理机”集群。</p>
@@ -348,7 +348,50 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 </blockquote>
 </li>
 <li>
-<p>安装打开vCenter Server安装包<code>VMware-VIM-all-6.5.0-4602587.iso</code>，在本机（或虚拟机）中装载该ISO文件，可以看到README文件，其中包含着具体的安装指引。<strong>之后的安装步骤，如无特殊说明，无需改动默认选项，直接下一步即可</strong>
+<p>安装vCenter Server</p>
+</li>
+</ol>
+<div class=book-tabs><input type=radio class=toggle name=tabs-vCenter id=tabs-vCenter-0 checked>
+<label for=tabs-vCenter-0>VMware-VIM-all-6.5.0-4602587.iso</label>
+<div class="book-tabs-content markdown-inner"><ol>
+<li>
+<p>打开vCenter Server安装包
+<a href=https://bhpan.buaa.edu.cn:443/link/C7C16536FDE46C8F9210C8CAB35E5848><code>VMware-VIM-all-6.5.0-4602587.iso</code></a>，双击<code>autorun</code>启动安装程序。<strong>之后的安装步骤，如无特殊说明，无需改动默认选项，直接下一步即可</strong>
+<img src=https://cdn.loheagn.com/060106.png alt>
+<img src=https://cdn.loheagn.com/install_vcenter.png alt></p>
+</li>
+<li>
+<p>点击[安装]按钮，（等待几十秒），会弹出另一个安装页面。选择默认选项“vCenter Server 和嵌入式Platform Services Controller”。</p>
+</li>
+<li>
+<p>在<code>系统网络名称</code>页面，要填入虚拟机的本机IP。点击确认后会弹出两次提示，确认并无视即可。<strong>本实验中应该是10.251开头的IP</strong>
+<img src=https://cdn.loheagn.com/fqdn.png alt></p>
+</li>
+<li>
+<p>在<code>vCenter Single Sing-On 配置</code>页面，需要设置登录vCenter的密码。域名建议不改动，密码需要符合下面的要求，站点名称可以随意更改。
+<img src=https://cdn.loheagn.com/vcenter_pwd.png alt></p>
+</li>
+<li>
+<p>vCenter Server所需的端口。如果点击下一步时提示某个端口被占用，在cmd中执行<code>netstat -ano | findstr "{port_num}"</code>即可找到占用端口的进程（把<code>{port_num}</code>替换为相应的端口号，注意两侧有引号），找到对应的进程号后，使用<code>tskill ${pid}</code>kill对应的进程即可。其中，80端口的进程号为<code>4</code>的服务可以使用<code>NET stop HTTP</code>杀掉。<strong>不推荐</strong>更改默认端口号。
+<img src=https://cdn.loheagn.com/vcenter_ports.png alt></p>
+</li>
+<li>
+<p>安装完成后，浏览器访问虚拟机地址或者使用vSphere Client均可访问到vCenter。账号为<code>administrator@vsphere.local</code>，密码为第4步中设置的密码。</p>
+</li>
+<li>
+<p>创建数据中心。</p>
+</li>
+<li>
+<p>添加主机。把本次实验创建的两个ESXi主机都添加进去。在添加主机时会弹出安全警示，选择“是”继续添加即可。
+<img src=https://cdn.loheagn.com/vcenter_addhosts.png alt></p>
+</li>
+</ol>
+</div><input type=radio class=toggle name=tabs-vCenter id=tabs-vCenter-1>
+<label for=tabs-vCenter-1>VMware-VCSA-all-6.5.0-4602587.iso</label>
+<div class="book-tabs-content markdown-inner"><ol>
+<li>
+<p>安装打开vCenter Server安装包
+<a href=https://bhpan.buaa.edu.cn:443/link/73FCD6D1FB5716CD0FA5A93B338C1C4A><code>VMware-VCSA-all-6.5.0-4602587.iso</code></a>，在本机（或虚拟机）中装载该ISO文件，可以看到README文件，其中包含着具体的安装指引。<strong>之后的安装步骤，如无特殊说明，无需改动默认选项，直接下一步即可</strong>
 <img src=https://cdn.loheagn.com/125244.png alt></p>
 </li>
 <li>
@@ -370,6 +413,7 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 <img src=https://cdn.loheagn.com/vcenter_addhosts.png alt></p>
 </li>
 </ol>
+</div></div>
 <h3 id=11-分布式交换机选做>
 11. 分布式交换机（选做）
 <a class=anchor href=#11-%e5%88%86%e5%b8%83%e5%bc%8f%e4%ba%a4%e6%8d%a2%e6%9c%ba%e9%80%89%e5%81%9a>#</a>
@@ -459,9 +503,9 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/29c07ab143594761c12563c45f8180520a55a228 title="Last modified by loheagn | November 12, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/161dcc61f9f186363642cee763c5596e0903c33d title="Last modified by loheagn | November 13, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
-<span>November 12, 2021</span>
+<span>November 13, 2021</span>
 </a>
 </div>
 <div>
@@ -502,7 +546,7 @@ NY01K-AP343-M89H8-WJ9EK-2VK1F
 <li><a href=#7-虚拟机导出>7. 虚拟机导出</a></li>
 <li><a href=#8-vmware-tools选做>8. VMware Tools（选做）</a></li>
 <li><a href=#9-角色和用户选做>9. 角色和用户（选做）</a></li>
-<li><a href=#10-创建与配置虚拟机选做>10. 创建与配置虚拟机（选做）</a></li>
+<li><a href=#10-创建与配置集群选做>10. 创建与配置集群（选做）</a></li>
 <li><a href=#11-分布式交换机选做>11. 分布式交换机（选做）</a></li>
 </ul>
 </li>

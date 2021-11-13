@@ -222,7 +222,7 @@ vSphere Client和Web端都有显著的入口供用户创建虚拟机。
 
 ![image-20211107184717658](https://cdn.loheagn.com/image-20211107184717658.png)
 
-### 10. 创建与配置虚拟机（选做）
+### 10. 创建与配置集群（选做）
 
 后面这两部分实验内容比较复杂，实验环境也不是特别理想，有兴趣的同学可以选择尝试。
 
@@ -240,21 +240,57 @@ vSphere Client和Web端都有显著的入口供用户创建虚拟机。
 
     {{< /hint >}}
 
-2. 安装打开vCenter Server安装包`VMware-VIM-all-6.5.0-4602587.iso`，在本机（或虚拟机）中装载该ISO文件，可以看到README文件，其中包含着具体的安装指引。**之后的安装步骤，如无特殊说明，无需改动默认选项，直接下一步即可**
+2. 安装vCenter Server
+
+{{< tabs "vCenter" >}}
+
+{{< tab "VMware-VIM-all-6.5.0-4602587.iso" >}}
+
+1. 打开vCenter Server安装包[`VMware-VIM-all-6.5.0-4602587.iso`](https://bhpan.buaa.edu.cn:443/link/C7C16536FDE46C8F9210C8CAB35E5848)，双击`autorun`启动安装程序。**之后的安装步骤，如无特殊说明，无需改动默认选项，直接下一步即可**
+    ![](https://cdn.loheagn.com/060106.png)
+    ![](https://cdn.loheagn.com/install_vcenter.png)
+
+2. 点击[安装]按钮，（等待几十秒），会弹出另一个安装页面。选择默认选项“vCenter Server 和嵌入式Platform Services Controller”。
+
+3. 在`系统网络名称`页面，要填入虚拟机的本机IP。点击确认后会弹出两次提示，确认并无视即可。**本实验中应该是10.251开头的IP**
+    ![](https://cdn.loheagn.com/fqdn.png)
+
+4. 在`vCenter Single Sing-On 配置`页面，需要设置登录vCenter的密码。域名建议不改动，密码需要符合下面的要求，站点名称可以随意更改。
+    ![](https://cdn.loheagn.com/vcenter_pwd.png)
+
+5. vCenter Server所需的端口。如果点击下一步时提示某个端口被占用，在cmd中执行`netstat -ano | findstr "{port_num}"`即可找到占用端口的进程（把`{port_num}`替换为相应的端口号，注意两侧有引号），找到对应的进程号后，使用`tskill ${pid}`kill对应的进程即可。其中，80端口的进程号为`4`的服务可以使用`NET stop HTTP`杀掉。**不推荐**更改默认端口号。
+    ![](https://cdn.loheagn.com/vcenter_ports.png)
+
+6. 安装完成后，浏览器访问虚拟机地址或者使用vSphere Client均可访问到vCenter。账号为`administrator@vsphere.local`，密码为第4步中设置的密码。
+
+7. 创建数据中心。
+
+8. 添加主机。把本次实验创建的两个ESXi主机都添加进去。在添加主机时会弹出安全警示，选择“是”继续添加即可。
+    ![](https://cdn.loheagn.com/vcenter_addhosts.png)
+
+{{< /tab >}}
+
+{{< tab "VMware-VCSA-all-6.5.0-4602587.iso" >}}
+
+1. 安装打开vCenter Server安装包[`VMware-VCSA-all-6.5.0-4602587.iso`](https://bhpan.buaa.edu.cn:443/link/73FCD6D1FB5716CD0FA5A93B338C1C4A)，在本机（或虚拟机）中装载该ISO文件，可以看到README文件，其中包含着具体的安装指引。**之后的安装步骤，如无特殊说明，无需改动默认选项，直接下一步即可**
     ![](https://cdn.loheagn.com/125244.png)
 
-3. 我们刚刚启动的只是一个安装器程序，vCenter Server本质上还是要安装在一个特定的ESXi主机中。所以，在选择安装目标时，需要填入刚才新建的那个内存和磁盘容量都比较大的ESXi虚拟机的相关信息。
+2. 我们刚刚启动的只是一个安装器程序，vCenter Server本质上还是要安装在一个特定的ESXi主机中。所以，在选择安装目标时，需要填入刚才新建的那个内存和磁盘容量都比较大的ESXi虚拟机的相关信息。
     ![](https://cdn.loheagn.com/131933.png)
 
-4. 在最后的网络配置这里，选择`DHCP`
+3. 在最后的网络配置这里，选择`DHCP`
     ![](https://cdn.loheagn.com/132706.png)
 
-5. 安装完成后，浏览器访问虚拟机地址或者使用vSphere Client均可访问到vCenter。
+4. 安装完成后，浏览器访问虚拟机地址或者使用vSphere Client均可访问到vCenter。
 
-6. 创建数据中心。
+5. 创建数据中心。
 
-7. 添加主机。把本次实验创建的两个ESXi主机都添加进去。在添加主机时会弹出安全警示，选择“是”继续添加即可。
+6. 添加主机。把本次实验创建的两个ESXi主机都添加进去。在添加主机时会弹出安全警示，选择“是”继续添加即可。
     ![](https://cdn.loheagn.com/vcenter_addhosts.png)
+
+{{< /tab >}}
+
+{{< /tabs >}}
 
 ### 11. 分布式交换机（选做）
 

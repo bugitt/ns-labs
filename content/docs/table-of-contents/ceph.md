@@ -11,7 +11,7 @@ Ceph是一个分布式的存储集群。大多数生产可用的分布式集群�
 
 实验文档不可能将整个Ceph的文档都搬过来，因此，在实验的整个过程中，请务必将[Ceph官方文档](https://docs.ceph.com/en/pacific/)也作为重要的参考依据。实验文档中有描述不到位的地方，可以参考[Ceph官方文档](https://docs.ceph.com/en/pacific/)的相关讨论。
 
-另外，因为Ceph是Red Hat主导开发的产品，因此，Red Hat也有关于Ceph完整的技术介绍，[它的文档](https://access.Red Hat.com/documentation/en-us/red_hat_ceph_storage/5)同样值得参考，比如，你在这里可以找到它的[Ceph部署指南](https://access.Red Hat.com/documentation/en-us/red_hat_ceph_storage/5/html/installation_guide/index)，甚至在很多方面比Ceph官方更加详实。
+另外，因为Ceph是Red Hat主导开发的产品，因此，Red Hat也有关于Ceph完整的技术介绍，[它的文档](https://access.redhat.com/documentation/en-us/red_hat_ceph_storage/5)同样值得参考，比如，你在这里可以找到它的[Ceph部署指南](https://access.redhat.com/documentation/en-us/red_hat_ceph_storage/5/html/installation_guide/index)，甚至在很多方面比Ceph官方更加详实。
 
 {{< /hint >}}
 

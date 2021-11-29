@@ -346,6 +346,38 @@ ceph mgr services
 
 #### 添加其他节点
 
+{{< hint danger >}}
 
+添加其他节点前，请保证所有节点都处于联网状态
+
+{{< /hint >}}
+
+接下来，我们将把其他机器添加到现有的这个mini集群中来。
+
+前面提到过，cephadm是通过ssh协议与其他机器通信的。所以，这里需要首先把Bootstrap Host机器的公钥copy到其他的所有机器：
+
+```bash
+ssh-copy-id -f -i /etc/ceph/ceph.pub root@*<new-host>*
+```
+
+例如，如果你的有一台机器的IP是`10.252.252.40`，那么这条命令应该是：
+
+```bash
+ssh-copy-id -f -i /etc/ceph/ceph.pub root@10.252.252.40
+```
+
+处理完所有的机器后，就可以正式将它们加入到mini集群中来了：
+
+```bash
+ceph orch host add *<newhost>* [*<ip>*] [*<label1> ...*]
+```
+
+例如，你有一台机器的Hostname是`ceph-02`，IP是`10.252.252.40`，那么这条命令应该是：
+
+```bash
+ceph orch host add ceph-02 10.252.252.40
+```
+
+添加完成后，你可以通过`ceph -s`查看当前集群状态的变化。也可以通过Ceph Dashboard看到变化。
 
 #### 创建OSD进程

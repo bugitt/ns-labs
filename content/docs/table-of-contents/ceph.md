@@ -562,3 +562,36 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 ![](https://cdn.loheagn.com/105544.png)
 
 使用同样的方法，将所有节点的附加硬盘都加入进来。
+
+## 实验报告模板
+
+
+```markdown
+# Lab03 Ceph存储实践
+
+> 班级：
+> 学号：
+> 姓名：
+> 合作者学号：
+
+---
+
+## 实验内容
+
+#### 基本概念
+
+#### Pool、Placement Group 与 OSD 之间的关系
+
+### Ceph部署
+
+<!-- 本部分内容可以根据部署方式的不同进行不同的改动，这里是使用Cephadm部署的模板 -->
+
+#### Bootstrap
+
+#### 添加 Host
+
+#### 创建 OSD 
+
+## 实验总结与心得
+
+```

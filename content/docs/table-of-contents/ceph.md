@@ -188,6 +188,8 @@ nmtui edit ens150
 
 在打开的如下图所示的界面中，编辑`IPv4 CONFIGURATION`下面的几项。
 
+![](https://cdn.loheagn.com/064525.png)
+
 首先，将`Automatic`切换为`Manual`。意思是，不希望通过DHCP自动获取IP，而是手动指定IP。
 
 然后，编辑`Address`，填入你当前的IP地址，并给出子网掩码的位数。对于云平台的机器子网掩码位数是`22`；使用本地机器的同学，请根据实际情况配置。
@@ -288,3 +290,6 @@ cephadm bootstrap --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 --mon-ip 10.251.2
 > 
 > - Add the _admin label to the bootstrap host. By default, any host with this label will (also) get a copy of /etc/ceph/ceph.conf and /etc/ceph/ceph.client.admin.keyring.
 
+#### 添加其他节点
+
+#### 创建OSD进程

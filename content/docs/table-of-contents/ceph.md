@@ -272,10 +272,10 @@ cephadm bootstrap --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 --mon-ip *<mon-ip
 如：
 
 ```bash
-cephadm bootstrap --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 --mon-ip 10.251.253.10 --log-to-file
+cephadm --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 bootstrap --mon-ip 10.251.219.248
 ```
 
-上面这条命令中，`--image`制定了Cephadm启动容器时使用的镜像名称，`--mon-ip`指定了Cephadm要在哪个机器上启动一个mini集群，`--log-to-file`指定Cephadm将log输出到文件中，这样可以方便我们在日后排查问题。
+上面这条命令中，`--image`制定了Cephadm启动容器时使用的镜像名称，`--mon-ip`指定了Cephadm要在哪个机器上启动一个mini集群。
 
 更详细地，这条命令将会做如下事情：
 
@@ -291,6 +291,61 @@ cephadm bootstrap --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 --mon-ip 10.251.2
 > 
 > - Add the _admin label to the bootstrap host. By default, any host with this label will (also) get a copy of /etc/ceph/ceph.conf and /etc/ceph/ceph.client.admin.keyring.
 
+命令执行完成后，我们可以通过`ceph -s`查看当前集群的状态。
+
+![](https://cdn.loheagn.com/074508.png)
+
+可以看到，确实启动了一个Monitor进程和一个Manager进程。
+
+另外，我们还注意到，当前集群的健康状态是`HEALTH_WARN`，原因下面也列出来了：`OSD count 0 < osd_pool_default_size 3`。这是因为当前Ceph集群默认的每个Pool的副本数应该是3，但我们OSD的进程数是0。不用着急，马上我们就会创建足够的OSD进程。
+
+![](https://cdn.loheagn.com/074750.png)
+
+#### Ceph Dashboard（可选）
+
+注意看`bootstrap`指令的输出，你可以看到一段这样的内容：
+
+![](https://cdn.loheagn.com/074911.png)
+
+显然，这是在告诉我们，cephadm同样启动了一个`Ceph Dashboard`，这是一个Ceph的管理前端。通过访问这个页面，我们就可以以可视化的方式观察到当前集群的状态。
+
+这段信息中的`ceph-01`代指的就是你当前这台机器的IP（当然，如果你的Hostname不是`ceph-01`的话，得到的将是其他的结果）。用你的机器的IP替换这个`ceph-01`，尝试在浏览器访问它。
+
+是不是访问失败了？这是因为Ceph Dashboard默认使用的是HTTPS协议，而且它用的HTTPS证书还是自己签发的。。。为了能正常访问，我们可以手动禁用SSL：
+
+```bash
+ceph config set mgr mgr/dashboard/ssl false
+```
+
+但禁用SSL后，Dashboard服务将默认监听8080端口。但在CentOS中，8080端口默认是被防火墙屏蔽的。
+
+你可以选择手动打开防火墙的8080端口；也可以像下面这样，将Dashboard服务的监听端口手动改为8443（因为这个端口就是使用HTTPS时Dashboard的监听端口，在刚才的Bootstrap时已经在防火墙中打开了）：
+
+```bash
+ceph config set mgr mgr/dashboard/server_port 8443
+```
+
+然后，重启该Dashboard服务，使刚才的配置生效。
+
+```bash
+ceph mgr module disable dashboard
+ceph mgr module enable dashboard
+```
+
+然后，查看当前的服务状态（如果输出为空的话，耐心多等一会儿）：
+
+```bash
+ceph mgr services
+```
+
+![](https://cdn.loheagn.com/080831.png)
+
+现在，你应该可以正常访问Dashboard服务了。注意，用户名和密码是我们前面提到的Bootstrap命令输出的那堆信息中提到的。
+
+![](https://cdn.loheagn.com/081143.png)
+
 #### 添加其他节点
+
+
 
 #### 创建OSD进程

@@ -301,6 +301,12 @@ cephadm --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 bootstrap --mon-ip 10.251.2
 
 ![](https://cdn.loheagn.com/074750.png)
 
+mini集群启动完成后，可以使用`podman ps`查看当前启动的容器的状态：
+
+![](https://cdn.loheagn.com/091703.png)
+
+可以看到，最上面那两个容器，对应的就是ceph集群的Monitor进程和Manager进程。
+
 #### Ceph Dashboard（可选）
 
 注意看`bootstrap`指令的输出，你可以看到一段这样的内容：

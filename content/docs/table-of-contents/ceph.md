@@ -387,3 +387,62 @@ ceph orch host add ceph-02 10.252.252.40
 添加完成后，你可以通过`ceph -s`查看当前集群状态的变化。也可以通过Ceph Dashboard看到变化。
 
 #### 创建OSD进程
+
+我们知道，OSD进程是真正用来做数据读写的进程。我们可以用一块专门的磁盘交给OSD进程来读写数据，ceph集群所存储的数据就将保存在这些磁盘中。
+
+这些被用来交给OSD进程管理的磁盘，应该满足以下条件：
+
+> - The device must have no partitions.
+> 
+> - The device must not have any LVM state.
+> 
+> - The device must not be mounted.
+> 
+> - The device must not contain a file system.
+> 
+> - The device must not contain a Ceph BlueStore OSD.
+> 
+> - The device must be larger than 5 GB.
+
+简单来说，就是将一块干净的磁盘插入机器后，什么都不用做就好。
+
+在云平台分配的虚拟机中，每台机器都额外插入了一块这样干净的磁盘。可以通过`fdisk -l`来查看：
+
+![](https://cdn.loheagn.com/090352.png)
+
+注意看上面这两块磁盘：
+
+- 第一个名称是`/dev/sda`，容量是16G，有两个分区：`/dev/sda1`，`/dev/sda2`。这就是我们现在在使用的这个系统所用的磁盘，系统数据都存储在这个磁盘中。
+
+- 第二个名称是`/dev/sdb`，容量是10G，没有任何分区。这就是我们即将交给OSD管理的磁盘。
+
+使用下面的命令来创建OSD进程：
+
+```bash
+ceph orch daemon add osd *<hostname>*:*<device-name>*
+```
+
+比如，你要在主机`ceph-01`的名称为`/dev/sdb`的磁盘上创建OSD进程，那么命令应该是：
+
+
+```bash
+ceph orch daemon add osd ceph-01:/dev/sdb
+```
+
+{{< hint info >}}
+
+这条命令默认不会有输出创建OSD进程的详细信息，也就是说，如果该命令很耗时的话，那么你将在什么输出都没有的情况下等待较长时间，这可能令人发慌。你可以加上`--verbose`参数（缩写为`-v`），来让它输出详细信息。
+
+比如：
+
+```bash
+ceph orch daemon add osd ceph-01:/dev/sdb --verbose
+```
+
+{{< /hint >}}
+
+执行完成后，可以使用`ceph -s`查看当前的集群状态，可以发现已经有一个OSD进程加入了进来。
+
+![](https://cdn.loheagn.com/105544.png)
+
+使用同样的方法，将所有节点的附加硬盘都加入进来。

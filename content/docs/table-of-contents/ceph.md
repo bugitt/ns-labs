@@ -572,7 +572,7 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 > 班级：
 > 学号：
 > 姓名：
-> 合作者学号：
+> 合作者们：['学号-姓名', '学号-姓名']
 
 ---
 
@@ -587,6 +587,12 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 ### Ceph部署
 
 <!-- 本部分内容可以根据部署方式的不同进行不同的改动，这里是使用Cephadm部署的模板 -->
+
+#### 实验前置准备
+
+<!-- 可写内容包括： -->
+<!-- 云平台/本机，操作系统的具体版本，各台机器的Hostname -->
+<!-- 一些前置工具的安装、配静态IP、改Hostname的记录 -->
 
 #### Bootstrap
 

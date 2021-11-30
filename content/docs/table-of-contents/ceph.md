@@ -380,7 +380,7 @@ echo '你的机器的Hostname' > /etc/hostname
 我们首先需要在一台选定的机器上，使用`cephadm`启动一个mini集群。
 
 ```bash
-cephadm bootstrap --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 --mon-ip *<mon-ip>* --log-to-file
+cephadm bootstrap --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 --mon-ip *<mon-ip>*
 ```
 
 请将`*<mon-ip>*`替换为你执行这命令的机器的IP。

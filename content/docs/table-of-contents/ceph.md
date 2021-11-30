@@ -563,7 +563,7 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 
 ![](https://cdn.loheagn.com/105544.png)
 
-使用同样的方法，将所有节点的附加硬盘都加入进来。
+使用同样的方法，将所有节点的附加硬盘都加入进来。至此，我们再使用`ceph -s`查看当前集群的状态，应为`HEALTH_OK`。
 
 ## 实验报告模板
 

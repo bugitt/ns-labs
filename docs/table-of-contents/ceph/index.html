@@ -54,13 +54,13 @@ Ceph是一个分布式的存储集群。大多数生产可用的分布式集群�
   ……">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-11-30T18:17:52+08:00">
+<meta property="article:modified_time" content="2021-11-30T18:57:53+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.31824d4f67b6195c004dd652c7fd429a76111bd664dd64ca0d6e68c5d6689490.js integrity="sha256-MYJNT2e2GVwATdZSx/1CmnYRG9Zk3WTKDW5oxdZolJA=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.dde237d67f6fe2971b666493562173a65e2081c6cca203bf2dba8aabad0de183.js integrity="sha256-3eI31n9v4pcbZmSTViFzpl4ggcbMogO/LbqKq60N4YM=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -603,7 +603,7 @@ ceph mgr module enable dashboard
 </span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>班级：
 </span><span style=font-style:italic></span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>学号：
 </span><span style=font-style:italic></span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>姓名：
-</span><span style=font-style:italic></span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>合作者学号：
+</span><span style=font-style:italic></span><span style=color:#66d9ef>&gt; </span><span style=font-style:italic>合作者们：[&#39;学号-姓名&#39;, &#39;学号-姓名&#39;]
 </span><span style=font-style:italic></span>
 ---
 
@@ -619,6 +619,12 @@ ceph mgr module enable dashboard
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>&lt;!-- 本部分内容可以根据部署方式的不同进行不同的改动，这里是使用Cephadm部署的模板 --&gt;</span>
 
+<span style=color:#75715e>#### 实验前置准备
+</span><span style=color:#75715e></span>
+<span style=color:#75715e>&lt;!-- 可写内容包括： --&gt;</span>
+<span style=color:#75715e>&lt;!-- 云平台/本机，操作系统的具体版本，各台机器的Hostname --&gt;</span>
+<span style=color:#75715e>&lt;!-- 一些前置工具的安装、配静态IP、改Hostname的记录 --&gt;</span>
+
 <span style=color:#75715e>#### Bootstrap
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>#### 添加 Host
@@ -630,7 +636,7 @@ ceph mgr module enable dashboard
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/f1958b1fbabd229e9a7447b4a4cf3e8e0278ec38 title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/c0f20de52e307b2e8890d673c6a48393163c21f5 title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>November 30, 2021</span>
 </a>

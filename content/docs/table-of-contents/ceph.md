@@ -230,7 +230,7 @@ Cephadm是基于“容器技术（Container）”进行工作的，每个Ceph的
 
 Cephadm也是个命令行工具，在使用前也需要额外安装这个工具。
 
-1. 保证系统已经安装好Python3
+1. 保证系统已经安装好curl、Python3、Podman/Docker(推荐使用Podman，都是自家RedHat的产品)
 
 2. 下载Cephadm：
 

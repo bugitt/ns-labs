@@ -54,7 +54,7 @@ Ceph是一个分布式的存储集群。大多数生产可用的分布式集群�
   ……">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-11-30T22:59:35+08:00">
+<meta property="article:modified_time" content="2021-11-30T23:02:34+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
@@ -400,10 +400,10 @@ cephadm install ceph-common
 <p>登录到虚拟机后，使用<code>nmtui</code>编辑需要配置静态IP的网卡：</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>nmtui edit ens150
 </code></pre></div><blockquote class="book-hint danger">
-<h1 id=指定正确的网卡>
+<h4 id=指定正确的网卡>
 指定正确的网卡
 <a class=anchor href=#%e6%8c%87%e5%ae%9a%e6%ad%a3%e7%a1%ae%e7%9a%84%e7%bd%91%e5%8d%a1>#</a>
-</h1>
+</h4>
 <p>上面这条命令中的<code>ens150</code>指的是你要指定静态IP的网卡名称。请根据自己的实际情况指定网卡名称。</p>
 <p>如何查看自己的网卡名称？</p>
 <p>在终端中输入<code>ip a</code>，将得到大致如下的输出：</p>
@@ -637,7 +637,7 @@ ceph mgr module enable dashboard
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/45d177b349d7809c7ba0e8fca30f23fbba3e65dd title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/a6f6d182017166ce8a17794d01c455e906d702db title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>November 30, 2021</span>
 </a>

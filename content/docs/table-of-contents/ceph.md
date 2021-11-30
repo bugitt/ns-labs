@@ -413,7 +413,7 @@ cephadm --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 bootstrap --mon-ip 10.251.2
 
 可以看到，确实启动了一个Monitor进程和一个Manager进程。
 
-另外，我们还注意到，当前集群的健康状态是`HEALTH_WARN`，原因下面也列出来了：`OSD count 0 < osd_pool_default_size 3`。这是因为当前Ceph集群默认的每个Pool的副本数应该是3（即，Ceph中存储的每份数据必须复制3份，放在3个不同的OSD中），但我们OSD的进程数是0。不用着急，马上我们就会创建足够的OSD进程。
+另外，我们还注意到，当前集群的健康状态是`HEALTH_WARN`，原因下面也列出来了：`OSD count 0 < osd_pool_default_size 3`。这是因为当前Ceph集群默认的每个Pool的副本数应该是3（即，Ceph中存储的每份数据必须复制3份，放在3个不同的OSD中），但我们OSD的进程数是0。不用着急，马上我们就会创建足够的OSD进程（Bootstrap Host、另外两台主机都为他们创建OSD进程）。
 
 ![](https://cdn.loheagn.com/074750.png)
 

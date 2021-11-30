@@ -54,13 +54,13 @@ Ceph是一个分布式的存储集群。大多数生产可用的分布式集群�
   ……">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-11-30T19:47:24+08:00">
+<meta property="article:modified_time" content="2021-11-30T21:56:56+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.828a0bde2ad812c7cb9f99c277605e9f9fa1d6f72321e9f8eca80d75543a343f.js integrity="sha256-gooL3irYEsfLn5nCd2Ben5+h1vcjIen47KgNdVQ6ND8=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.15924fff3bcd703d65645ea97e1cfc3ca9f0e2e41744d1127c474db5838aa89d.js integrity="sha256-FZJP/zvNcD1lZF6pfhz8PKnw4uQXRNESfEdNtYOKqJ0=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -568,7 +568,8 @@ ceph mgr module enable dashboard
 </ul>
 </blockquote>
 <p>简单来说，就是将一块干净的磁盘插入机器后，什么都不用做就好。</p>
-<p>在云平台分配的虚拟机中，每台机器都额外插入了一块这样干净的磁盘。可以通过<code>fdisk -l</code>来查看：</p>
+<p>在云平台分配的虚拟机中，每台机器都额外插入了一块这样干净的磁盘。如是在自己本机上做，可在VMware中添加磁盘，重启后即可看到新添加的干净磁盘sdb。</p>
+<p>可以通过<code>fdisk -l</code>来查看：</p>
 <p>
 <img src=https://cdn.loheagn.com/090352.png alt></p>
 <p>注意看上面这两块磁盘：</p>
@@ -636,7 +637,7 @@ ceph mgr module enable dashboard
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/236bc6a130bbfab685d94bca53aced35e10fc163 title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/9a1181133868b79e79fefa929170ac23abfd92f9 title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>November 30, 2021</span>
 </a>

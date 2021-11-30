@@ -578,7 +578,9 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 
 ## 实验内容
 
-#### 基本概念
+### 基本概念思考
+
+回答下列问题：
 
 #### Pool、Placement Group 与 OSD 之间的关系
 

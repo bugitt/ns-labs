@@ -54,13 +54,13 @@ Ceph是一个分布式的存储集群。大多数生产可用的分布式集群�
   ……">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-11-30T21:56:56+08:00">
+<meta property="article:modified_time" content="2021-11-30T22:51:15+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.15924fff3bcd703d65645ea97e1cfc3ca9f0e2e41744d1127c474db5838aa89d.js integrity="sha256-FZJP/zvNcD1lZF6pfhz8PKnw4uQXRNESfEdNtYOKqJ0=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.894c45f9fb8a821c8647e9b09f5ad8f24282be3e31577aed1445b9f8e219e8b7.js integrity="sha256-iUxF+fuKghyGR+mwn1rY8kKCvj4xV3rtFEW5+OIZ6Lc=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -491,7 +491,7 @@ BootStrap
 <p>
 <img src=https://cdn.loheagn.com/074508.png alt></p>
 <p>可以看到，确实启动了一个Monitor进程和一个Manager进程。</p>
-<p>另外，我们还注意到，当前集群的健康状态是<code>HEALTH_WARN</code>，原因下面也列出来了：<code>OSD count 0 &lt; osd_pool_default_size 3</code>。这是因为当前Ceph集群默认的每个Pool的副本数应该是3（即，Ceph中存储的每份数据必须复制3份，放在3个不同的OSD中），但我们OSD的进程数是0。不用着急，马上我们就会创建足够的OSD进程。</p>
+<p>另外，我们还注意到，当前集群的健康状态是<code>HEALTH_WARN</code>，原因下面也列出来了：<code>OSD count 0 &lt; osd_pool_default_size 3</code>。这是因为当前Ceph集群默认的每个Pool的副本数应该是3（即，Ceph中存储的每份数据必须复制3份，放在3个不同的OSD中），但我们OSD的进程数是0。不用着急，马上我们就会创建足够的OSD进程（Bootstrap Host、另外两台主机都为他们创建OSD进程）。</p>
 <p>
 <img src=https://cdn.loheagn.com/074750.png alt></p>
 <p>mini集群启动完成后，可以使用<code>podman ps</code>查看当前启动的容器的状态：</p>
@@ -637,7 +637,7 @@ ceph mgr module enable dashboard
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/9a1181133868b79e79fefa929170ac23abfd92f9 title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/fe90710373db234bc070ee54aa2f1c0aa560bd42 title="Last modified by Yinghao Zhu | November 30, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>November 30, 2021</span>
 </a>

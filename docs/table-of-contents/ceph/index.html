@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-01T16:10:03+08:00">
+<meta property="article:modified_time" content="2021-12-01T23:39:50+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.83dd58a93e9cccdb40de5cb74229b254bd61b66ea3774f493c953c447bdfbea7.js integrity="sha256-g91YqT6czNtA3ly3QimyVL1htm6jd09JPJU8RHvfvqc=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.31ff54fa981079c3061cef76883e46e2bc4e762092238613d17efb01377cae31.js integrity="sha256-Mf9U+pgQecMGHO92iD5G4rxOdiCSI4YT0X77ATd8rjE=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -126,6 +126,11 @@ Github
 <ul>
 <li><a href=#部署-cephfs>部署 CephFS</a></li>
 <li><a href=#挂载-cephfs>挂载 CephFS</a></li>
+</ul>
+</li>
+<li><a href=#ceph-rgw-对象存储>Ceph RGW 对象存储</a>
+<ul>
+<li><a href=#deploy-rgw>Deploy RGW</a></li>
 </ul>
 </li>
 <li><a href=#实验报告模板>实验报告模板</a></li>
@@ -623,7 +628,7 @@ host3  10.1.2.5
 </code></pre></div><p>但他们都没有 Label 标签，我们可通过 <code>ceph orch host label add host1 mylabel</code> 添加指定的 Label。</p>
 <p>则 <code>[--placement="&lt;placement spec>"]</code> 可为 <code>--placement="label:mylabel"</code></p>
 <p>想折腾的可能会想到如何删除 CephFS，Ceph 中非常“贴心”地防止你误删除，所以删除起来会有一些麻烦。</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph fs volume rm ns_ceph_fs <span style=color:#f92672>[</span>--yes-i-really-mean-it<span style=color:#f92672>]</span> <span style=color:#75715e># 要加上这么一长串后缀，但这样其实还是没法删除</span>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph fs volume rm &lt;fs_name&gt; <span style=color:#f92672>[</span>--yes-i-really-mean-it<span style=color:#f92672>]</span> <span style=color:#75715e># 要加上这么一长串后缀，但这样其实还是没法删除</span>
 ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还需要通过这条命令修改ceph config配置</span>
 </code></pre></div><blockquote class="book-hint info">
 <ul>
@@ -667,6 +672,44 @@ chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <sp
 </ul>
 <p>通过这些命令，应能看到挂接盘 mycephfs 的存在，查看到其容量等信息。</p>
 </blockquote>
+<h2 id=ceph-rgw-对象存储>
+Ceph RGW 对象存储
+<a class=anchor href=#ceph-rgw-%e5%af%b9%e8%b1%a1%e5%ad%98%e5%82%a8>#</a>
+</h2>
+<p>Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADOS 接口封装实现的 FastCGI 服务，对外提供存储和管理对象数据的 Restful API。对象存储适用于图片、视频等各类文件的上传下载，可以设置相应的访问权限。目前 Ceph RGW 兼容常见的对象存储 API，例如兼容绝大部分 Amazon S3 API，兼容 OpenStack Swift API。</p>
+<p>通俗理解是 RGW 作为一个协议转换层，把从上层应用符合 S3 或 Swift 协议的请求转换成 rados 的请求，将数据保存在 rados 集群中。</p>
+<blockquote class="book-hint info">
+<p><strong>内部概念</strong></p>
+<ul>
+<li>zone：包含多个 RGW 实例的一个逻辑概念。zone 不能跨集群，同一个 zone 的数据保存在同一组 pool 中。</li>
+<li>zonegroup：一个 zonegroup 如果包含 1 个或多个 zone。如果一个 zonegroup 包含多个 zone，必须指定一个 zone 作为 master</li>
+<li>zone，用来处理 bucket 和用户的创建。一个集群可以创建多个 zonegroup，一个 zonegroup 也可以跨多个集群。</li>
+<li>realm：一个 realm 包含 1 个或多个 zonegroup。如果 realm 包含多个 zonegroup，必须指定一个 zonegroup 为 master</li>
+<li>zonegroup， 用来处理系统操作。一个系统中可以包含多个 realm，多个 realm 之间资源完全隔离。</li>
+</ul>
+<p><strong>外部概念</strong></p>
+<ul>
+<li>user：对象存储的使用者，默认情况下，一个用户只能创建 1000 个存储桶。</li>
+<li>bucket：存储桶，用来管理对象的容器。</li>
+<li>object：对象，泛指一个文档、图片或视频文件等，尽管用户可以直接上传一个目录，但是 ceph 并不按目录层级结构保存对象， ceph 所有的对象扁平化的保存在 bucket 中。</li>
+</ul>
+<p>
+<a href=https://durantthorvalds.top/2021/01/03/%E3%80%8C%E6%A0%B8%E5%BF%83%E3%80%8DCeph%E5%AD%A6%E4%B9%A0%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E4%B8%83%EF%BC%9A%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E7%BD%91%E5%85%B3RGW/>参考阅读</a></p>
+</blockquote>
+<h3 id=deploy-rgw>
+Deploy RGW
+<a class=anchor href=#deploy-rgw>#</a>
+</h3>
+<p>
+<a href=https://docs.ceph.com/en/latest/cephadm/services/rgw/>参考：RGW SERVICE</a></p>
+<ul>
+<li>To deploy a set of radosgw daemons, with an arbitrary service name name, run the following command:</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph orch apply rgw *&lt;name&gt;* <span style=color:#f92672>[</span>--realm<span style=color:#f92672>=</span>*&lt;realm-name&gt;*<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>--zone<span style=color:#f92672>=</span>*&lt;zone-name&gt;*<span style=color:#f92672>]</span> --placement<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;*&lt;num-daemons&gt;* [*&lt;host1&gt;* ...]&#34;</span>
+</code></pre></div><p>其中，<code>[]</code>中的内容为可选项，可以都添上。如 <code>ceph orch apply rgw *&lt;name>* --realm=default --zone=default --placement=3</code>。<code>--placement</code>参数的使用和先前实验也是类似的，还可以用 <code>3 node1 node2 node3</code> 来完成指定，以及可以通过Label来指定。</p>
+<p>其实这一条命令就够了，然后我们可查看各个rgw节点是否已启动：<code>ceph orch ps --daemon-type rgw</code>。</p>
+<p>应能看到 <code>rgw*</code> 均为 <code>running</code> 的STATUS，则表明顺利启动。若为 <code>starting</code> 可稍等其转为 <code>running</code>。</p>
+<p>在执行上述命令的 Bootstrap host，<code>curl &lt;bootstrap_host_ip:80></code> 应能看到包含了 <code>&lt;Buckets/></code> 的 XML 形式的输出。</p>
 <h2 id=实验报告模板>
 实验报告模板
 <a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%e6%a8%a1%e6%9d%bf>#</a>
@@ -718,7 +761,7 @@ chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <sp
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/51ca6e0f87557f6519d1be3bb6d17414e7a7f7c4 title="Last modified by Nan Li | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/26be11eb987b6f6f04c668470f2329c6a2fa5c42 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>
@@ -761,6 +804,11 @@ chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <sp
 <ul>
 <li><a href=#部署-cephfs>部署 CephFS</a></li>
 <li><a href=#挂载-cephfs>挂载 CephFS</a></li>
+</ul>
+</li>
+<li><a href=#ceph-rgw-对象存储>Ceph RGW 对象存储</a>
+<ul>
+<li><a href=#deploy-rgw>Deploy RGW</a></li>
 </ul>
 </li>
 <li><a href=#实验报告模板>实验报告模板</a></li>

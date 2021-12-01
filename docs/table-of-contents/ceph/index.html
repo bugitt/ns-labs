@@ -54,13 +54,13 @@ Ceph是一个分布式的存储集群。大多数生产可用的分布式集群�
   ……">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-01T10:51:53+08:00">
+<meta property="article:modified_time" content="2021-12-01T10:55:57+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.5e29982898af7c610f1eddc4f64686aa057673963f6538d5062765760bc0c025.js integrity="sha256-XimYKJivfGEPHt3E9kaGqgV2c5Y/ZTjVBidldgvAwCU=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.31b5e18701431903d0f272a29b9229846c8248b6d97f20268484a1898f5bc23e.js integrity="sha256-MbXhhwFDGQPQ8nKim5IphGyCSLbZfyAmhIShiY9bwj4=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -607,15 +607,6 @@ Ceph Filesystem (选做)
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph fs volume create &lt;fs_name&gt; <span style=color:#f92672>[</span>--placement<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&lt;placement spec&gt;&#34;</span><span style=color:#f92672>]</span>
 </code></pre></div><p>其中，<code>fs_name</code> 是CephFS的名称，后面的 <code>--placement</code> 为可选参数，可以通过它来指定daemon container跑在哪几个hosts上。
 <a href=https://docs.ceph.com/en/latest/cephfs/fs-volumes/>参考资料</a></p>
-<p>我们也可以为每个host加label标签来进行指定：</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph orch host ls <span style=color:#75715e># 查看当前有的hosts</span>
-<span style=color:#75715e># 可有类似输出</span>
-HOST   ADDR      LABELS  STATUS
-host1  10.1.2.3
-host2  10.1.2.4
-host3  10.1.2.5
-</code></pre></div><p>但他们都没有Label标签，我们可通过 <code>ceph orch host label add host1 mylabel</code> 添加指定的Label。</p>
-<p>则 <code>[--placement="&lt;placement spec>"]</code> 可为 <code>--placement="label:mylabel"</code></p>
 </div><input type=radio class=toggle name="tabs-Deploy CephFS" id="tabs-Deploy CephFS-1">
 <label for="tabs-Deploy CephFS-1">More Custom Setup</label>
 <div class="book-tabs-content markdown-inner"><p>
@@ -633,17 +624,28 @@ ceph fs ls
 <span style=color:#75715e># name: cephfs, metadata pool: cephfs_metadata, data pools: [cephfs_data ]</span>
 
 ceph orch apply mds cephfs --placement<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;3 node1 node2 node3&#34;</span> <span style=color:#75715e># 应用部署CephFS</span>
-</code></pre></div><p>于是，我们便创建成功了CephFS。</p>
-</div></div>
+</code></pre></div></div></div>
+<p>于是，我们便创建成功了CephFS。</p>
+<p>在上述方法中，我们还经常看到有 <code>--placement</code>的可选参数，我们可以直接去输各host的名字，也可以为每个host加label标签来进行指定：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph orch host ls <span style=color:#75715e># 查看当前有的hosts</span>
+<span style=color:#75715e># 可有类似输出</span>
+HOST   ADDR      LABELS  STATUS
+host1  10.1.2.3
+host2  10.1.2.4
+host3  10.1.2.5
+</code></pre></div><p>但他们都没有Label标签，我们可通过 <code>ceph orch host label add host1 mylabel</code> 添加指定的Label。</p>
+<p>则 <code>[--placement="&lt;placement spec>"]</code> 可为 <code>--placement="label:mylabel"</code></p>
+<p>想折腾的可能会想到如何删除CephFS，Ceph中非常“贴心”地防止你误删除，所以删除起来会有一些麻烦。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph fs volume rm ns_ceph_fs <span style=color:#f92672>[</span>--yes-i-really-mean-it<span style=color:#f92672>]</span> <span style=color:#75715e># 要加上这么一长串后缀，但这样其实还是没法删除</span>
+ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还需要通过这条命令修改ceph config配置</span>
+</code></pre></div><blockquote class="book-hint info">
 <ul>
 <li>通过 <code>rados df</code> 命令可查看刚才创建的资源池Pool的相关信息。</li>
 <li><code>ceph fs status</code> 可查看CephFS状态，验证当前已有至少一个MDS处在Active状态。</li>
 <li>还可经常性地执行 <code>ceph -s</code> 查看Ceph集群的状态，确保一直处在 <code>HEALTH_OK</code>。</li>
 </ul>
-<p>想折腾的可能会想到如何删除CephFS，Ceph中非常“贴心”地防止你误删除，所以删除起来会有一些麻烦。</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph fs volume rm ns_ceph_fs <span style=color:#f92672>[</span>--yes-i-really-mean-it<span style=color:#f92672>]</span> <span style=color:#75715e># 要加上这么一长串后缀，但这样其实还是没法删除</span>
-ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还需要通过这条命令修改ceph config配置</span>
-</code></pre></div><h2 id=实验报告模板>
+</blockquote>
+<h2 id=实验报告模板>
 实验报告模板
 <a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%e6%a8%a1%e6%9d%bf>#</a>
 </h2>
@@ -687,7 +689,7 @@ ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还�
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/90dd27c56d3513fe86ed5832bdd1c0537db147be title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/48cc1707a8d31fab2836d6d3e5fbbfb89b9915a1 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>

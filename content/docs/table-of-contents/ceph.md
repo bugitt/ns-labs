@@ -735,7 +735,15 @@ chmod 600 /etc/ceph/ceph.client.foo.keyring # 赋权
 
 #### 创建 OSD 
 
-#### Ceph Filesystem
+### Ceph Filesystem（选）
+
+#### 部署 CephFS（选）
+
+#### 挂载 CephFS（选）
+
+### 自行扩展和设计内容（选）
+
+<!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常突出*可直接将其作为申优答辩的内容 -->
 
 ## 实验总结与心得
 

@@ -627,6 +627,13 @@ ceph orch apply mds cephfs --placement="3 node1 node2 node3" # 应用部署CephF
 - `ceph fs status` 可查看CephFS状态，验证当前已有至少一个MDS处在Active状态。
 - 还可经常性地执行 `ceph -s` 查看Ceph集群的状态，确保一直处在 `HEALTH_OK`。
 
+想折腾的可能会想到如何删除CephFS，Ceph中非常“贴心”地防止你误删除，所以删除起来会有一些麻烦。
+
+```bash
+ceph fs volume rm ns_ceph_fs [--yes-i-really-mean-it] # 要加上这么一长串后缀，但这样其实还是没法删除
+ceph config set mon mon_allow_pool_delete true # 还需要通过这条命令修改ceph config配置
+```
+
 ## 实验报告模板
 
 
@@ -663,6 +670,8 @@ ceph orch apply mds cephfs --placement="3 node1 node2 node3" # 应用部署CephF
 #### 添加 Host
 
 #### 创建 OSD 
+
+#### Ceph Filesystem
 
 ## 实验总结与心得
 

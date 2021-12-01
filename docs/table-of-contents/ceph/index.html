@@ -28,7 +28,7 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-01T13:36:22+08:00">
+<meta property="article:modified_time" content="2021-12-01T13:38:08+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
@@ -120,7 +120,12 @@ Github
 <li><a href=#cephadm>Cephadm</a></li>
 <li><a href=#部署前操作>部署前操作</a></li>
 <li><a href=#部署>部署</a></li>
-<li><a href=#ceph-filesystem-选做>Ceph Filesystem (选做)</a></li>
+</ul>
+</li>
+<li><a href=#ceph-filesystem-选做>Ceph Filesystem (选做)</a>
+<ul>
+<li><a href=#部署-cephfs>部署 CephFS</a></li>
+<li><a href=#挂载-cephfs>挂载 CephFS</a></li>
 </ul>
 </li>
 <li><a href=#实验报告模板>实验报告模板</a></li>
@@ -570,18 +575,18 @@ ceph mgr module enable dashboard
 <p>
 <img src=https://cdn.loheagn.com/105544.png alt></p>
 <p>使用同样的方法，将所有节点的附加硬盘都加入进来。至此，我们再使用<code>ceph -s</code>查看当前集群的状态，应为<code>HEALTH_OK</code>。</p>
-<h3 id=ceph-filesystem-选做>
+<h2 id=ceph-filesystem-选做>
 Ceph Filesystem (选做)
 <a class=anchor href=#ceph-filesystem-%e9%80%89%e5%81%9a>#</a>
-</h3>
+</h2>
 <p>
 <a href=https://docs.ceph.com/en/latest/cephfs/>参考资料: CEPH FILE SYSTEM</a></p>
 <p>Ceph 文件系统 (Ceph FS)是个 POSIX 兼容的文件系统，它使用 Ceph 存储集群来存储数据。 Ceph 文件系统与 Ceph 块设备、同时提供 S3 和 Swift API 的 Ceph 对象存储、或者原生库 (librados) 一样，都使用着相同的 Ceph 存储集群系统。</p>
 <p>Ceph 文件系统要求 Ceph 存储集群内至少有一个 Ceph 元数据服务器 MDS。</p>
-<h4 id=部署-cephfs>
+<h3 id=部署-cephfs>
 部署 CephFS
 <a class=anchor href=#%e9%83%a8%e7%bd%b2-cephfs>#</a>
-</h4>
+</h3>
 <p>以上其实都是在搭建 Ceph 集群的环境，我们添加了 3 个 OSD 进程组建起了 Ceph Cluster。接下来，我们便可以在此基础上来具体地使用到 Ceph 所提供的分布式存储能力，从 Ceph 文件系统 CephFS 开始~</p>
 <div class=book-tabs><input type=radio class=toggle name="tabs-Deploy CephFS" id="tabs-Deploy CephFS-0" checked>
 <label for="tabs-Deploy CephFS-0">Automatic Setup</label>
@@ -627,10 +632,10 @@ ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还�
 <li>还可经常性地执行 <code>ceph -s</code> 查看 Ceph 集群的状态，确保一直处在 <code>HEALTH_OK</code>。</li>
 </ul>
 </blockquote>
-<h4 id=挂载-cephfs>
+<h3 id=挂载-cephfs>
 挂载 CephFS
 <a class=anchor href=#%e6%8c%82%e8%bd%bd-cephfs>#</a>
-</h4>
+</h3>
 <p>
 <a href=https://people.redhat.com/bhubbard/nature/default/cephfs/fuse/>参考资料：MOUNT CEPHFS USING FUSE</a></p>
 <p>CephFS 在创建后应当能被实际使用，如完成分布式存储文件的任务。在这一步，我们将把 CephFS 挂载到 Client 端，让 Client 能够创建和存储文件。</p>
@@ -712,7 +717,7 @@ chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <sp
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/b8223f921f37197ead77327fce304645abf3d8fe title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/d5cc0a43d60ebdb996289dbb3eb3ee478e12caa8 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>
@@ -749,7 +754,12 @@ chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <sp
 <li><a href=#cephadm>Cephadm</a></li>
 <li><a href=#部署前操作>部署前操作</a></li>
 <li><a href=#部署>部署</a></li>
-<li><a href=#ceph-filesystem-选做>Ceph Filesystem (选做)</a></li>
+</ul>
+</li>
+<li><a href=#ceph-filesystem-选做>Ceph Filesystem (选做)</a>
+<ul>
+<li><a href=#部署-cephfs>部署 CephFS</a></li>
+<li><a href=#挂载-cephfs>挂载 CephFS</a></li>
 </ul>
 </li>
 <li><a href=#实验报告模板>实验报告模板</a></li>

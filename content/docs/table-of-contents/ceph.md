@@ -844,7 +844,106 @@ s3cmd ls
 
 ## Ceph RBD（选做）
 
-未完待续
+- 创建 RBD
+
+```bash
+ceph osd pool create rbd 8
+# 值调小些，因为云平台资源有限，3个OSD的PG数默认是有上限的
+```
+
+- application enable RBD
+
+```bash
+ceph osd pool application enable rbd rbd
+```
+
+- 创建 rbd 存储, 指定大小为 1GB
+
+```bash
+rbd create rbd1 --size 1024
+```
+
+- 查看 rbd 信息
+
+```bash
+rbd --image rbd1 info
+```
+
+参考输出：
+
+```bash
+rbd image 'rbd1':
+	size 1 GiB in 256 objects
+	order 22 (4 MiB objects)
+	snapshot_count: 0
+	id: ace58352cf47
+	block_name_prefix: rbd_data.ace58352cf47
+	format: 2
+	features: layering, exclusive-lock, object-map, fast-diff, deep-flatten
+	op_features:
+	flags:
+	create_timestamp: Wed Dec  1 03:55:11 2021
+	access_timestamp: Wed Dec  1 03:55:11 2021
+	modify_timestamp: Wed Dec  1 03:55:11 2021
+```
+
+继续执行以下命令：
+
+```bash
+> root@ubuntu:/mnt# ceph osd crush tunables hammer
+adjusted tunables profile to hammer
+
+> root@ubuntu:/mnt# ceph osd crush reweight-all
+reweighted crush hierarchy
+
+# 关闭一些内核默认不支持的特性
+> root@ubuntu:/mnt# rbd feature disable rbd1 exclusive-lock object-map fast-diff deep-flatten
+
+# 查看特性是否已禁用
+> root@ubuntu:/mnt# rbd --image rbd1 info | grep features
+	features: layering
+	op_features:
+
+# 映射到客户端(在需要挂载的客户端运行)
+> root@ubuntu:/mnt# rbd map --image rbd1
+/dev/rbd0
+
+# 查看映射情况
+> root@ubuntu:/mnt# rbd showmapped
+id  pool  namespace  image  snap  device
+0   rbd              rbd1   -     /dev/rbd0
+```
+
+再继续！
+
+```bash
+# 格式化磁盘
+> root@ubuntu:/mnt# mkfs.xfs /dev/rbd0
+meta-data=/dev/rbd0              isize=512    agcount=8, agsize=32768 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1
+data     =                       bsize=4096   blocks=262144, imaxpct=25
+         =                       sunit=16     swidth=16 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=16 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+
+# 创建挂载目录, 并将 rbd 挂载到指定目录
+> root@ubuntu:/mnt# mkdir /mnt/rbd
+> root@ubuntu:/mnt# mount /dev/rbd0 /mnt/rbd/
+
+# 查看挂载情况
+> root@ubuntu:/mnt# df -hl | grep rbd
+/dev/rbd0      1014M   40M  975M   4% /mnt/rbd
+```
+
+{{< hint info >}}
+
+和 CephFS 类似，我们同样可在挂载的目录中创建修改文件，感受 Ceph 的能力——如分布式存储的容错啊，存储共享等。
+
+{{< /hint >}}
 
 ## 实验报告模板
 

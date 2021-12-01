@@ -581,20 +581,6 @@ ceph fs volume create <fs_name> [--placement="<placement spec>"]
 
 其中，`fs_name` 是CephFS的名称，后面的 `--placement` 为可选参数，可以通过它来指定daemon container跑在哪几个hosts上。[参考资料](https://docs.ceph.com/en/latest/cephfs/fs-volumes/)
 
-我们也可以为每个host加label标签来进行指定：
-
-```bash
-ceph orch host ls # 查看当前有的hosts
-# 可有类似输出
-HOST   ADDR      LABELS  STATUS
-host1  10.1.2.3
-host2  10.1.2.4
-host3  10.1.2.5
-```
-但他们都没有Label标签，我们可通过 `ceph orch host label add host1 mylabel` 添加指定的Label。
-
-则 `[--placement="<placement spec>"]` 可为 `--placement="label:mylabel"`
-
 {{< /tab >}}
 
 {{< tab "More Custom Setup" >}}
@@ -617,15 +603,25 @@ ceph fs ls
 ceph orch apply mds cephfs --placement="3 node1 node2 node3" # 应用部署CephFS
 ```
 
-于是，我们便创建成功了CephFS。
-
 {{< /tab >}}
 
 {{< /tabs >}}
 
-- 通过 `rados df` 命令可查看刚才创建的资源池Pool的相关信息。
-- `ceph fs status` 可查看CephFS状态，验证当前已有至少一个MDS处在Active状态。
-- 还可经常性地执行 `ceph -s` 查看Ceph集群的状态，确保一直处在 `HEALTH_OK`。
+于是，我们便创建成功了CephFS。
+
+在上述方法中，我们还经常看到有 `--placement`的可选参数，我们可以直接去输各host的名字，也可以为每个host加label标签来进行指定：
+
+```bash
+ceph orch host ls # 查看当前有的hosts
+# 可有类似输出
+HOST   ADDR      LABELS  STATUS
+host1  10.1.2.3
+host2  10.1.2.4
+host3  10.1.2.5
+```
+但他们都没有Label标签，我们可通过 `ceph orch host label add host1 mylabel` 添加指定的Label。
+
+则 `[--placement="<placement spec>"]` 可为 `--placement="label:mylabel"`
 
 想折腾的可能会想到如何删除CephFS，Ceph中非常“贴心”地防止你误删除，所以删除起来会有一些麻烦。
 
@@ -633,6 +629,14 @@ ceph orch apply mds cephfs --placement="3 node1 node2 node3" # 应用部署CephF
 ceph fs volume rm ns_ceph_fs [--yes-i-really-mean-it] # 要加上这么一长串后缀，但这样其实还是没法删除
 ceph config set mon mon_allow_pool_delete true # 还需要通过这条命令修改ceph config配置
 ```
+
+{{< hint info >}}
+
+- 通过 `rados df` 命令可查看刚才创建的资源池Pool的相关信息。
+- `ceph fs status` 可查看CephFS状态，验证当前已有至少一个MDS处在Active状态。
+- 还可经常性地执行 `ceph -s` 查看Ceph集群的状态，确保一直处在 `HEALTH_OK`。
+
+{{< /hint >}}
 
 ## 实验报告模板
 

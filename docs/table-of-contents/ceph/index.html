@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-01T13:38:08+08:00">
+<meta property="article:modified_time" content="2021-12-01T16:10:03+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.28a98c08c62649ec8d1544ff3b4eef7cf3c05b55cc41d03c15caa85a82258380.js integrity="sha256-KKmMCMYmSeyNFUT/O07vfPPAW1XMQdA8FcqoWoIlg4A=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.f9af8e58ca603bd7d8ea270c5b70f973ac2afe4e8b87748cb5cb13e23fd96a17.js integrity="sha256-+a+OWMpgO9fY6icMW3D5c6wq/k6Lh3SMtcsT4j/Zahc=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -439,7 +439,7 @@ BootStrap
 <a class=anchor href=#bootstrap>#</a>
 </h4>
 <p>我们首先需要在一台选定的机器上，使用<code>cephadm</code>启动一个 mini 集群。</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cephadm bootstrap --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 --mon-ip *&lt;mon-ip&gt;*
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cephadm --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 bootstrap  --mon-ip *&lt;mon-ip&gt;*
 </code></pre></div><p>请将<code>*&lt;mon-ip>*</code>替换为你执行这命令的机器的 IP。</p>
 <p>如：</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cephadm --image harbor.scs.buaa.edu.cn/ceph/ceph:v16 bootstrap --mon-ip 10.251.219.248
@@ -717,7 +717,7 @@ chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <sp
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/d5cc0a43d60ebdb996289dbb3eb3ee478e12caa8 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/51ca6e0f87557f6519d1be3bb6d17414e7a7f7c4 title="Last modified by Nan Li | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>

@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-01T23:53:53+08:00">
+<meta property="article:modified_time" content="2021-12-01T23:55:30+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.b8f16cb8ab1790ef02ddfd1a779d95b49788606cbdf02779aa15889bc7df8279.js integrity="sha256-uPFsuKsXkO8C3f0ad52VtJeIYGy98Cd5qhWIm8ffgnk=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.df24b7e5d4cbce3e867e5e44e8f8fbedc31a29710ac01a665d77bf40a92f0872.js integrity="sha256-3yS35dTLzj6Gfl5E6Pj77cMaKXEKwBpmXXe/QKkvCHI=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -134,6 +134,7 @@ Github
 <li><a href=#使用对象存储选做>使用对象存储（选做）</a></li>
 </ul>
 </li>
+<li><a href=#ceph-rbd选做>Ceph RBD（选做）</a></li>
 <li><a href=#实验报告模板>实验报告模板</a></li>
 </ul>
 </li>
@@ -787,6 +788,11 @@ secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#7
 <p>在 Dashboard 里有丰富的信息，可以多多尝试。如查看 rgw 的用户、查看 Bucket、Pool 等，欢迎多多体验。</p>
 <p>如上传文件不成功，有提示：<code>ERROR: S3 error: 416 (InvalidRange)</code> 的错误，可释放掉一些先前创建的资源，如 drop 掉 CephFS 再试试。OSD 只有 3 个，导致 PG 数量吃紧可能不够用。</p>
 </blockquote>
+<h2 id=ceph-rbd选做>
+Ceph RBD（选做）
+<a class=anchor href=#ceph-rbd%e9%80%89%e5%81%9a>#</a>
+</h2>
+<p>未完待续</p>
 <h2 id=实验报告模板>
 实验报告模板
 <a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%e6%a8%a1%e6%9d%bf>#</a>
@@ -836,6 +842,8 @@ secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#7
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>### 使用对象存储（选）
 </span><span style=color:#75715e></span>
+<span style=color:#75715e>## Ceph RBD（选）
+</span><span style=color:#75715e></span>
 <span style=color:#75715e>### 自行扩展和设计内容（选）
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>&lt;!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常突出*可直接将其作为申优答辩的内容 --&gt;</span>
@@ -844,7 +852,7 @@ secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#7
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/194356288e6285a7246a8145fdfa964d8baeb26f title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/f6100ef6ecaef49bb1768d7d9121366fb198be1b title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>
@@ -895,6 +903,7 @@ secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#7
 <li><a href=#使用对象存储选做>使用对象存储（选做）</a></li>
 </ul>
 </li>
+<li><a href=#ceph-rbd选做>Ceph RBD（选做）</a></li>
 <li><a href=#实验报告模板>实验报告模板</a></li>
 </ul>
 </li>

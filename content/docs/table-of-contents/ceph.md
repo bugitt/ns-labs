@@ -844,6 +844,23 @@ s3cmd ls
 
 ## Ceph RBD（选做）
 
+{{< hint info >}}
+
+[参考：CEPH BLOCK DEVICE](https://docs.ceph.com/en/pacific/rbd/index.html)
+
+RBD 即 RADOS Block Device 的简称，RBD 块存储是最稳定且最常用的存储类型。RBD 块设备类似磁盘可以被挂载。 RBD 块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在 Ceph 集群的多个 OSD 中。如下是对 Ceph RBD 的理解。
+
+- RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁盘用；
+- resizable：这个块可大可小；
+- data striped：这个块在 Ceph 里面是被切割成若干小块来保存，不然 1PB 的块怎么存的下；
+- thin-provisioned：精简置备，1TB 的集群是能创建无数 1PB 的块的。其实就是块的大小和在 Ceph 中实际占用大小是没有关系的，刚创建出来的块是不占空间，今后用多大空间，才会在 Ceph 中占用多大空间。举例：你有一个 32G 的 U 盘，存了一个 2G 的电影，那么 RBD 大小就类似于 32G，而 2G 就相当于在 Ceph 中占用的空间；
+
+块存储本质就是将裸磁盘或类似裸磁盘(lvm)设备映射给主机使用，主机可以对其进行格式化并存储和读取数据，块设备读取速度快但是不支持共享。
+
+Ceph 可以通过内核模块和 librbd 库提供块设备支持。客户端可以通过内核模块挂在 rbd 使用，客户端使用 rbd 块设备就像使用普通硬盘一样，可以对其就行格式化然后使用；客户应用也可以通过 librbd 使用 ceph 块，典型的是云平台的块存储服务（如下图），云平台可以使用 rbd 作为云的存储后端提供镜像存储、volume 块或者客户的系统引导盘等。
+
+{{< /hint >}}
+
 - 创建 RBD
 
 ```bash

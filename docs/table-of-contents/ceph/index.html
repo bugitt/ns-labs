@@ -34,7 +34,7 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.f9af8e58ca603bd7d8ea270c5b70f973ac2afe4e8b87748cb5cb13e23fd96a17.js integrity="sha256-+a+OWMpgO9fY6icMW3D5c6wq/k6Lh3SMtcsT4j/Zahc=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.83dd58a93e9cccdb40de5cb74229b254bd61b66ea3774f493c953c447bdfbea7.js integrity="sha256-g91YqT6czNtA3ly3QimyVL1htm6jd09JPJU8RHvfvqc=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -628,6 +628,7 @@ ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还�
 </code></pre></div><blockquote class="book-hint info">
 <ul>
 <li>通过 <code>rados df</code> 命令可查看刚才创建的资源池 Pool 的相关信息。</li>
+<li><code>ceph fs ls</code> 可列出 CephFS。</li>
 <li><code>ceph fs status</code> 可查看 CephFS 状态，验证当前已有至少一个 MDS 处在 Active 状态。</li>
 <li>还可经常性地执行 <code>ceph -s</code> 查看 Ceph 集群的状态，确保一直处在 <code>HEALTH_OK</code>。</li>
 </ul>

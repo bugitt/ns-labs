@@ -567,13 +567,21 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 
 ### Ceph Filesystem (选做)
 
+[参考资料: CEPH FILE SYSTEM](https://docs.ceph.com/en/latest/cephfs/)
+
+Ceph 文件系统 (Ceph FS)是个 POSIX 兼容的文件系统，它使用 Ceph 存储集群来存储数据。 Ceph 文件系统与 Ceph 块设备、同时提供 S3 和 Swift API 的 Ceph 对象存储、或者原生库 (librados) 一样，都使用着相同的 Ceph 存储集群系统。
+
+Ceph 文件系统要求 Ceph 存储集群内至少有一个 Ceph 元数据服务器 MDS。
+
+#### 部署 CephFS
+
 以上其实都是在搭建Ceph集群的环境，我们添加了3个OSD进程组建起了Ceph Cluster。接下来，我们便可以在此基础上来具体地使用到Ceph所提供的分布式存储能力，从Ceph 文件系统 CephFS开始~
 
 {{< tabs "Deploy CephFS" >}}
 
 {{< tab "Automatic Setup" >}}
 
-创建CephFS的前提是需要至少一个的MDS daemon 元数据服务器守护进程。其实以下的一条命令即可自动地创建好MDS daemon：
+创建CephFS的前提是需要至少一个的 MDS daemon 元数据服务器守护进程。其实以下的一条命令即可自动地创建好MDS daemon、Pool等：
 
 ```bash
 ceph fs volume create <fs_name> [--placement="<placement spec>"]
@@ -635,6 +643,58 @@ ceph config set mon mon_allow_pool_delete true # 还需要通过这条命令修�
 - 通过 `rados df` 命令可查看刚才创建的资源池Pool的相关信息。
 - `ceph fs status` 可查看CephFS状态，验证当前已有至少一个MDS处在Active状态。
 - 还可经常性地执行 `ceph -s` 查看Ceph集群的状态，确保一直处在 `HEALTH_OK`。
+
+{{< /hint >}}
+
+#### 挂载 CephFS
+
+[参考资料：MOUNT CEPHFS USING FUSE](https://people.redhat.com/bhubbard/nature/default/cephfs/fuse/)
+
+CephFS在创建后应当能被实际使用，如完成分布式存储文件的任务。在这一步，我们将把CephFS挂载到Client端，让Client能够创建和存储文件。
+
+我们先要对Client端进行一些配置，保证Client端能连接到MON主机，即Bootstrap Host。
+
+第一步：Generate a minimal conf for the client host. The conf file should be placed at /etc/ceph:
+
+```bash
+# on client host
+mkdir /etc/ceph
+ssh {user}@{mon-host} "sudo ceph config generate-minimal-conf" | sudo tee /etc/ceph/ceph.conf
+chmod 644 /etc/ceph/ceph.conf # 赋权
+```
+
+如果不能成功，可直接到MON主机执行`sudo ceph config generate-minimal-conf`，将输出的内容粘贴到 `/etc/ceph/ceph.conf`（下同）。
+
+第二步：Create the CephX user and get its secret key:
+
+```bash
+# on client host
+ssh {user}@{mon-host} "sudo ceph fs authorize cephfs client.foo / rw" | sudo tee /etc/ceph/ceph.client.foo.keyring
+chmod 600 /etc/ceph/ceph.client.foo.keyring # 赋权
+```
+
+在上述命令中，cephfs是先前所创建的CephFS的名称，请将其替换。foo是CephX的用户名，也可自己起。
+
+以上是前置准备，完成后，我们可通过 ceph-fuse 工具实现文件挂接。如机器上没有，则需要连网安装一下。
+
+安装完成后，我们可以创建一个被挂接的目录，如 `mycephfs`：`mkdir /mnt/mycephfs`
+
+执行 `ceph-fuse -id foo /mnt/mycephfs` 即可完成挂接。
+
+如上条命令无法成功运行，可从[参考资料：MOUNT CEPHFS USING FUSE](https://people.redhat.com/bhubbard/nature/default/cephfs/fuse/)试一下其他的命令，如 `ceph-fuse --id foo -m 192.168.0.1:6789 /mnt/mycephfs`，进一步指定了 MON 进程的IP和端口号。
+
+若想取消挂接非常简单，只需 `umount /mnt/mycephfs`。
+
+{{< hint info >}}
+
+**如何判断挂接成功？**
+
+上述命令不报错是一方面，我们也可以通过一些命令来看挂接的情况。
+
+- `lsblk` 列出所有可用块设备的信息，还能显示他们之间的依赖关系
+- `df -h` 查看磁盘占用的空间
+
+通过这些命令，应能看到挂接盘mycephfs的存在，查看到其容量等信息。
 
 {{< /hint >}}
 

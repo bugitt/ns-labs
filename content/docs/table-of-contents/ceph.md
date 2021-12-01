@@ -565,7 +565,7 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 
 使用同样的方法，将所有节点的附加硬盘都加入进来。至此，我们再使用`ceph -s`查看当前集群的状态，应为`HEALTH_OK`。
 
-### Ceph Filesystem (选做)
+## Ceph Filesystem (选做)
 
 [参考资料: CEPH FILE SYSTEM](https://docs.ceph.com/en/latest/cephfs/)
 
@@ -573,7 +573,7 @@ Ceph 文件系统 (Ceph FS)是个 POSIX 兼容的文件系统，它使用 Ceph �
 
 Ceph 文件系统要求 Ceph 存储集群内至少有一个 Ceph 元数据服务器 MDS。
 
-#### 部署 CephFS
+### 部署 CephFS
 
 以上其实都是在搭建 Ceph 集群的环境，我们添加了 3 个 OSD 进程组建起了 Ceph Cluster。接下来，我们便可以在此基础上来具体地使用到 Ceph 所提供的分布式存储能力，从 Ceph 文件系统 CephFS 开始~
 
@@ -647,7 +647,7 @@ ceph config set mon mon_allow_pool_delete true # 还需要通过这条命令修�
 
 {{< /hint >}}
 
-#### 挂载 CephFS
+### 挂载 CephFS
 
 [参考资料：MOUNT CEPHFS USING FUSE](https://people.redhat.com/bhubbard/nature/default/cephfs/fuse/)
 

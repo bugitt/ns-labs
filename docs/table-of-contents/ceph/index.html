@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-01T23:55:30+08:00">
+<meta property="article:modified_time" content="2021-12-02T00:02:32+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.df24b7e5d4cbce3e867e5e44e8f8fbedc31a29710ac01a665d77bf40a92f0872.js integrity="sha256-3yS35dTLzj6Gfl5E6Pj77cMaKXEKwBpmXXe/QKkvCHI=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.67418b1a07c536c69c679614de1f8b00026c7cdde4810e225cc98520fe5ba3f8.js integrity="sha256-Z0GLGgfFNsacZ5YU3h+LAAJsfN3kgQ4iXMmFIP5bo/g=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -792,7 +792,84 @@ secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#7
 Ceph RBD（选做）
 <a class=anchor href=#ceph-rbd%e9%80%89%e5%81%9a>#</a>
 </h2>
-<p>未完待续</p>
+<ul>
+<li>创建 RBD</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph osd pool create rbd <span style=color:#ae81ff>8</span>
+<span style=color:#75715e># 值调小些，因为云平台资源有限，3个OSD的PG数默认是有上限的</span>
+</code></pre></div><ul>
+<li>application enable RBD</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph osd pool application enable rbd rbd
+</code></pre></div><ul>
+<li>创建 rbd 存储, 指定大小为 1GB</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>rbd create rbd1 --size <span style=color:#ae81ff>1024</span>
+</code></pre></div><ul>
+<li>查看 rbd 信息</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>rbd --image rbd1 info
+</code></pre></div><p>参考输出：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>rbd image <span style=color:#e6db74>&#39;rbd1&#39;</span>:
+	size <span style=color:#ae81ff>1</span> GiB in <span style=color:#ae81ff>256</span> objects
+	order <span style=color:#ae81ff>22</span> <span style=color:#f92672>(</span><span style=color:#ae81ff>4</span> MiB objects<span style=color:#f92672>)</span>
+	snapshot_count: <span style=color:#ae81ff>0</span>
+	id: ace58352cf47
+	block_name_prefix: rbd_data.ace58352cf47
+	format: <span style=color:#ae81ff>2</span>
+	features: layering, exclusive-lock, object-map, fast-diff, deep-flatten
+	op_features:
+	flags:
+	create_timestamp: Wed Dec  <span style=color:#ae81ff>1</span> 03:55:11 <span style=color:#ae81ff>2021</span>
+	access_timestamp: Wed Dec  <span style=color:#ae81ff>1</span> 03:55:11 <span style=color:#ae81ff>2021</span>
+	modify_timestamp: Wed Dec  <span style=color:#ae81ff>1</span> 03:55:11 <span style=color:#ae81ff>2021</span>
+</code></pre></div><p>继续执行以下命令：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>&gt; root@ubuntu:/mnt# ceph osd crush tunables hammer
+adjusted tunables profile to hammer
+
+&gt; root@ubuntu:/mnt# ceph osd crush reweight-all
+reweighted crush hierarchy
+
+<span style=color:#75715e># 关闭一些内核默认不支持的特性</span>
+&gt; root@ubuntu:/mnt# rbd feature disable rbd1 exclusive-lock object-map fast-diff deep-flatten
+
+<span style=color:#75715e># 查看特性是否已禁用</span>
+&gt; root@ubuntu:/mnt# rbd --image rbd1 info | grep features
+	features: layering
+	op_features:
+
+<span style=color:#75715e># 映射到客户端(在需要挂载的客户端运行)</span>
+&gt; root@ubuntu:/mnt# rbd map --image rbd1
+/dev/rbd0
+
+<span style=color:#75715e># 查看映射情况</span>
+&gt; root@ubuntu:/mnt# rbd showmapped
+id  pool  namespace  image  snap  device
+<span style=color:#ae81ff>0</span>   rbd              rbd1   -     /dev/rbd0
+</code></pre></div><p>再继续！</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 格式化磁盘</span>
+&gt; root@ubuntu:/mnt# mkfs.xfs /dev/rbd0
+meta-data<span style=color:#f92672>=</span>/dev/rbd0              isize<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>    agcount<span style=color:#f92672>=</span>8, agsize<span style=color:#f92672>=</span><span style=color:#ae81ff>32768</span> blks
+         <span style=color:#f92672>=</span>                       sectsz<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>   attr<span style=color:#f92672>=</span>2, projid32bit<span style=color:#f92672>=</span>1
+         <span style=color:#f92672>=</span>                       crc<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>        finobt<span style=color:#f92672>=</span>1, sparse<span style=color:#f92672>=</span>1, rmapbt<span style=color:#f92672>=</span>0
+         <span style=color:#f92672>=</span>                       reflink<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+data     <span style=color:#f92672>=</span>                       bsize<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span>   blocks<span style=color:#f92672>=</span>262144, imaxpct<span style=color:#f92672>=</span>25
+         <span style=color:#f92672>=</span>                       sunit<span style=color:#f92672>=</span><span style=color:#ae81ff>16</span>     swidth<span style=color:#f92672>=</span><span style=color:#ae81ff>16</span> blks
+naming   <span style=color:#f92672>=</span>version <span style=color:#ae81ff>2</span>              bsize<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span>   ascii-ci<span style=color:#f92672>=</span>0, ftype<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+log      <span style=color:#f92672>=</span>internal log           bsize<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span>   blocks<span style=color:#f92672>=</span>2560, version<span style=color:#f92672>=</span>2
+         <span style=color:#f92672>=</span>                       sectsz<span style=color:#f92672>=</span><span style=color:#ae81ff>512</span>   sunit<span style=color:#f92672>=</span><span style=color:#ae81ff>16</span> blks, lazy-count<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+realtime <span style=color:#f92672>=</span>none                   extsz<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span>   blocks<span style=color:#f92672>=</span>0, rtextents<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+
+<span style=color:#75715e># 创建挂载目录, 并将 rbd 挂载到指定目录</span>
+&gt; root@ubuntu:/mnt# mkdir /mnt/rbd
+&gt; root@ubuntu:/mnt# mount /dev/rbd0 /mnt/rbd/
+
+<span style=color:#75715e># 查看挂载情况</span>
+&gt; root@ubuntu:/mnt# df -hl | grep rbd
+/dev/rbd0      1014M   40M  975M   4% /mnt/rbd
+</code></pre></div><blockquote class="book-hint info">
+和 CephFS 类似，我们同样可在挂载的目录中创建修改文件，感受 Ceph 的能力——如分布式存储的容错啊，存储共享等。
+</blockquote>
 <h2 id=实验报告模板>
 实验报告模板
 <a class=anchor href=#%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%e6%a8%a1%e6%9d%bf>#</a>
@@ -852,7 +929,7 @@ Ceph RBD（选做）
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/f6100ef6ecaef49bb1768d7d9121366fb198be1b title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/ca9d4c8b640c23c9a46829b0a38d5297222b3ea3 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>

@@ -726,7 +726,7 @@ Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADO
 
 {{< /hint >}}
 
-### Deploy RGW
+### Deploy RGW（选做）
 
 [参考：RGW SERVICE](https://docs.ceph.com/en/latest/cephadm/services/rgw/)
 
@@ -736,65 +736,65 @@ Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADO
 ceph orch apply rgw *<name>* [--realm=*<realm-name>*] [--zone=*<zone-name>*] --placement="*<num-daemons>* [*<host1>* ...]"
 ```
 
-其中，`[]`中的内容为可选项，可以都添上。如 `ceph orch apply rgw *<name>* --realm=default --zone=default --placement=3`。`--placement`参数的使用和先前实验也是类似的，还可以用 `3 node1 node2 node3` 来完成指定，以及可以通过Label来指定。
+其中，`[]`中的内容为可选项，可以都添上。如 `ceph orch apply rgw *<name>* --realm=default --zone=default --placement=3`。`--placement`参数的使用和先前实验也是类似的，还可以用 `3 node1 node2 node3` 来完成指定，以及可以通过 Label 来指定。
 
-其实这一条命令就够了，然后我们可查看各个rgw节点是否已启动：`ceph orch ps --daemon-type rgw`。
+其实这一条命令就够了，然后我们可查看各个 rgw 节点是否已启动：`ceph orch ps --daemon-type rgw`。
 
-应能看到 `rgw*` 均为 `running` 的STATUS，则表明顺利启动。若为 `starting` 可稍等其转为 `running`。
+应能看到 `rgw*` 均为 `running` 的 STATUS，则表明顺利启动。若为 `starting` 可稍等其转为 `running`。
 
 在执行上述命令的 Bootstrap host，`curl <bootstrap_host_ip:80>` 应能看到包含了 `<Buckets/>` 的 XML 形式的输出。
 
-### 使用对象存储
+### 使用对象存储（选做）
 
-我们为rgw创建用户：`radosgw-admin user create --uid=<username> --display-name=<your_display_name> --system`。如 `radosgw-admin user create --uid=s3 --display-name="objcet_storage" --system`。执行后，能看到类似输出：
+我们为 rgw 创建用户：`radosgw-admin user create --uid=<username> --display-name=<your_display_name> --system`。如 `radosgw-admin user create --uid=s3 --display-name="objcet_storage" --system`。执行后，能看到类似输出：
 
 ```json
 {
-    "user_id": "s3",
-    "display_name": "objcet_storage",
-    "email": "",
-    "suspended": 0,
-    "max_buckets": 1000,
-    "subusers": [],
-    "keys": [
-        {
-            "user": "x",
-            "access_key": "xxxxxxxxkey01",
-            "secret_key": "xxxxxxxxkey01"
-        }
-    ],
-    "swift_keys": [],
-    "caps": [],
-    "op_mask": "read, write, delete",
-    "system": "true",
-    "default_placement": "",
-    "default_storage_class": "",
-    "placement_tags": [],
-    "bucket_quota": {
-        "enabled": false,
-        "check_on_raw": false,
-        "max_size": -1,
-        "max_size_kb": 0,
-        "max_objects": -1
-    },
-    "user_quota": {
-        "enabled": false,
-        "check_on_raw": false,
-        "max_size": -1,
-        "max_size_kb": 0,
-        "max_objects": -1
-    },
-    "temp_url_keys": [],
-    "type": "rgw",
-    "mfa_ids": []
+  "user_id": "s3",
+  "display_name": "objcet_storage",
+  "email": "",
+  "suspended": 0,
+  "max_buckets": 1000,
+  "subusers": [],
+  "keys": [
+    {
+      "user": "x",
+      "access_key": "xxxxxxxxkey01",
+      "secret_key": "xxxxxxxxkey01"
+    }
+  ],
+  "swift_keys": [],
+  "caps": [],
+  "op_mask": "read, write, delete",
+  "system": "true",
+  "default_placement": "",
+  "default_storage_class": "",
+  "placement_tags": [],
+  "bucket_quota": {
+    "enabled": false,
+    "check_on_raw": false,
+    "max_size": -1,
+    "max_size_kb": 0,
+    "max_objects": -1
+  },
+  "user_quota": {
+    "enabled": false,
+    "check_on_raw": false,
+    "max_size": -1,
+    "max_size_kb": 0,
+    "max_objects": -1
+  },
+  "temp_url_keys": [],
+  "type": "rgw",
+  "mfa_ids": []
 }
 ```
 
 从命令行的输出中，可以看到 `access_key: xxxxxxxxkey01` 和 `secret_key: xxxxxxxxkey01`，我们将其保存下来，后面还要用。
 
-使用Ceph的RGW对象存储，可以有很多工具，如s3cmd、 minio-client等，这里我们以s3cmd为例。有兴趣的还可以尝试 [minio](https://github.com/minio/minio)可以可视化进行操作。
+使用 Ceph 的 RGW 对象存储，可以有很多工具，如 s3cmd、 minio-client 等，这里我们以 s3cmd 为例。有兴趣的还可以尝试 [minio](https://github.com/minio/minio)可以可视化进行操作。
 
-如是在Ubuntu中，执行 `apt install s3cmd` 先安装 AWS s3 API，再继续接下来的操作：
+如是在 Ubuntu 中，执行 `apt install s3cmd` 先安装 AWS s3 API，再继续接下来的操作：
 
 我们执行 `s3cmd --configure` 去进行相关的配置。
 
@@ -807,7 +807,7 @@ DNS-style bucket....[%(bucket)s.s3.amazonaws.com]: "<bootstrap_host_ip:80>/%(buc
 HTTPS 选 no，其余基本默认enter
 ```
 
-如果fail了，可进入到刚刚保存新建的config：`/root/.s3cfg`中，参考如下，修改处末尾用了 `#` 标识：
+如果 fail 了，可进入到刚刚保存新建的 config：`/root/.s3cfg`中，参考如下，修改处末尾用了 `#` 标识：
 
 ```bash
 [default]
@@ -828,17 +828,17 @@ secret_key = xxxxxxxxkey02 #
 s3cmd ls
 ```
 
-一开始没有创建过Bucket，故没有输出，我们来新建一个 `s3cmd mb s3://s3cmd-demo`，再执行 `s3cmd ls`，即可看到新创建的bucket。
+一开始没有创建过 Bucket，故没有输出，我们来新建一个 `s3cmd mb s3://s3cmd-demo`，再执行 `s3cmd ls`，即可看到新创建的 bucket。
 
-[参考资料：使用s3cmd](https://www.cnblogs.com/sunhongleibibi/p/11661123.html)
+[参考资料：使用 s3cmd](https://www.cnblogs.com/sunhongleibibi/p/11661123.html)
 
-参考以上资料，可以尝试继续上传文件、上传文件夹、下载、`ls` 、删除等命令，体验 ceph-rgw 的Bucket 与 S3 存储的交互。
+参考以上资料，可以尝试继续上传文件、上传文件夹、下载、`ls` 、删除等命令，体验 ceph-rgw 的 Bucket 与 S3 存储的交互。
 
 {{< hint info >}}
 
-在 Dashboard 里有丰富的信息，可以多多尝试。如查看rgw的用户、查看Bucket、Pool等，欢迎多多体验。
+在 Dashboard 里有丰富的信息，可以多多尝试。如查看 rgw 的用户、查看 Bucket、Pool 等，欢迎多多体验。
 
-如上传文件不成功，有提示：`ERROR: S3 error: 416 (InvalidRange)` 的错误，可释放掉一些先前创建的资源，如drop掉CephFS再试试。OSD只有3个，导致PG数量吃紧可能不够用。
+如上传文件不成功，有提示：`ERROR: S3 error: 416 (InvalidRange)` 的错误，可释放掉一些先前创建的资源，如 drop 掉 CephFS 再试试。OSD 只有 3 个，导致 PG 数量吃紧可能不够用。
 
 {{< /hint >}}
 
@@ -883,6 +883,12 @@ s3cmd ls
 #### 部署 CephFS（选）
 
 #### 挂载 CephFS（选）
+
+## Ceph RGW 对象存储
+
+### ### Deploy RGW（选）
+
+### 使用对象存储（选）
 
 ### 自行扩展和设计内容（选）
 

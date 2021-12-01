@@ -591,7 +591,7 @@ ceph fs volume create <fs_name> [--placement="<placement spec>"]
 
 {{< /tab >}}
 
-{{< tab "More Custom Setup" >}}
+{{< tab "More Customized Setup" >}}
 
 [参考：下列命令的一些具体参数含义](https://amito.me/2018/Pools-and-Placement-Groups-in-Ceph/)
 

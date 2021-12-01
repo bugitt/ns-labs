@@ -642,6 +642,7 @@ ceph config set mon mon_allow_pool_delete true # 还需要通过这条命令修�
 {{< hint info >}}
 
 - 通过 `rados df` 命令可查看刚才创建的资源池 Pool 的相关信息。
+- `ceph fs ls` 可列出 CephFS。
 - `ceph fs status` 可查看 CephFS 状态，验证当前已有至少一个 MDS 处在 Active 状态。
 - 还可经常性地执行 `ceph -s` 查看 Ceph 集群的状态，确保一直处在 `HEALTH_OK`。
 

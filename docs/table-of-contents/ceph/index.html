@@ -54,13 +54,13 @@ Ceph是一个分布式的存储集群。大多数生产可用的分布式集群�
   ……">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-01T10:55:57+08:00">
+<meta property="article:modified_time" content="2021-12-01T13:06:19+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.31b5e18701431903d0f272a29b9229846c8248b6d97f20268484a1898f5bc23e.js integrity="sha256-MbXhhwFDGQPQ8nKim5IphGyCSLbZfyAmhIShiY9bwj4=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.bba9d341d375d1c041f47c03b360db2fbecd6e184a00e5928955e045b145cc50.js integrity="sha256-u6nTQdN10cBB9HwDs2DbL77NbhhKAOWSiVXgRbFFzFA=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -600,10 +600,18 @@ ceph mgr module enable dashboard
 Ceph Filesystem (选做)
 <a class=anchor href=#ceph-filesystem-%e9%80%89%e5%81%9a>#</a>
 </h3>
+<p>
+<a href=https://docs.ceph.com/en/latest/cephfs/>参考资料: CEPH FILE SYSTEM</a></p>
+<p>Ceph 文件系统 (Ceph FS)是个 POSIX 兼容的文件系统，它使用 Ceph 存储集群来存储数据。 Ceph 文件系统与 Ceph 块设备、同时提供 S3 和 Swift API 的 Ceph 对象存储、或者原生库 (librados) 一样，都使用着相同的 Ceph 存储集群系统。</p>
+<p>Ceph 文件系统要求 Ceph 存储集群内至少有一个 Ceph 元数据服务器 MDS。</p>
+<h4 id=部署-cephfs>
+部署 CephFS
+<a class=anchor href=#%e9%83%a8%e7%bd%b2-cephfs>#</a>
+</h4>
 <p>以上其实都是在搭建Ceph集群的环境，我们添加了3个OSD进程组建起了Ceph Cluster。接下来，我们便可以在此基础上来具体地使用到Ceph所提供的分布式存储能力，从Ceph 文件系统 CephFS开始~</p>
 <div class=book-tabs><input type=radio class=toggle name="tabs-Deploy CephFS" id="tabs-Deploy CephFS-0" checked>
 <label for="tabs-Deploy CephFS-0">Automatic Setup</label>
-<div class="book-tabs-content markdown-inner"><p>创建CephFS的前提是需要至少一个的MDS daemon 元数据服务器守护进程。其实以下的一条命令即可自动地创建好MDS daemon：</p>
+<div class="book-tabs-content markdown-inner"><p>创建CephFS的前提是需要至少一个的 MDS daemon 元数据服务器守护进程。其实以下的一条命令即可自动地创建好MDS daemon、Pool等：</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ceph fs volume create &lt;fs_name&gt; <span style=color:#f92672>[</span>--placement<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&lt;placement spec&gt;&#34;</span><span style=color:#f92672>]</span>
 </code></pre></div><p>其中，<code>fs_name</code> 是CephFS的名称，后面的 <code>--placement</code> 为可选参数，可以通过它来指定daemon container跑在哪几个hosts上。
 <a href=https://docs.ceph.com/en/latest/cephfs/fs-volumes/>参考资料</a></p>
@@ -644,6 +652,40 @@ ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还�
 <li><code>ceph fs status</code> 可查看CephFS状态，验证当前已有至少一个MDS处在Active状态。</li>
 <li>还可经常性地执行 <code>ceph -s</code> 查看Ceph集群的状态，确保一直处在 <code>HEALTH_OK</code>。</li>
 </ul>
+</blockquote>
+<h4 id=挂载-cephfs>
+挂载 CephFS
+<a class=anchor href=#%e6%8c%82%e8%bd%bd-cephfs>#</a>
+</h4>
+<p>
+<a href=https://people.redhat.com/bhubbard/nature/default/cephfs/fuse/>参考资料：MOUNT CEPHFS USING FUSE</a></p>
+<p>CephFS在创建后应当能被实际使用，如完成分布式存储文件的任务。在这一步，我们将把CephFS挂载到Client端，让Client能够创建和存储文件。</p>
+<p>我们先要对Client端进行一些配置，保证Client端能连接到MON主机，即Bootstrap Host。</p>
+<p>第一步：Generate a minimal conf for the client host. The conf file should be placed at /etc/ceph:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># on client host</span>
+mkdir /etc/ceph
+ssh <span style=color:#f92672>{</span>user<span style=color:#f92672>}</span>@<span style=color:#f92672>{</span>mon-host<span style=color:#f92672>}</span> <span style=color:#e6db74>&#34;sudo ceph config generate-minimal-conf&#34;</span> | sudo tee /etc/ceph/ceph.conf
+chmod <span style=color:#ae81ff>644</span> /etc/ceph/ceph.conf <span style=color:#75715e># 赋权</span>
+</code></pre></div><p>如果不能成功，可直接到MON主机执行<code>sudo ceph config generate-minimal-conf</code>，将输出的内容粘贴到 <code>/etc/ceph/ceph.conf</code>（下同）。</p>
+<p>第二步：Create the CephX user and get its secret key:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># on client host</span>
+ssh <span style=color:#f92672>{</span>user<span style=color:#f92672>}</span>@<span style=color:#f92672>{</span>mon-host<span style=color:#f92672>}</span> <span style=color:#e6db74>&#34;sudo ceph fs authorize cephfs client.foo / rw&#34;</span> | sudo tee /etc/ceph/ceph.client.foo.keyring
+chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <span style=color:#75715e># 赋权</span>
+</code></pre></div><p>在上述命令中，cephfs是先前所创建的CephFS的名称，请将其替换。foo是CephX的用户名，也可自己起。</p>
+<p>以上是前置准备，完成后，我们可通过 ceph-fuse 工具实现文件挂接。如机器上没有，则需要连网安装一下。</p>
+<p>安装完成后，我们可以创建一个被挂接的目录，如 <code>mycephfs</code>：<code>mkdir /mnt/mycephfs</code></p>
+<p>执行 <code>ceph-fuse -id foo /mnt/mycephfs</code> 即可完成挂接。</p>
+<p>如上条命令无法成功运行，可从
+<a href=https://people.redhat.com/bhubbard/nature/default/cephfs/fuse/>参考资料：MOUNT CEPHFS USING FUSE</a>试一下其他的命令，如 <code>ceph-fuse --id foo -m 192.168.0.1:6789 /mnt/mycephfs</code>，进一步指定了 MON 进程的IP和端口号。</p>
+<p>若想取消挂接非常简单，只需 <code>umount /mnt/mycephfs</code>。</p>
+<blockquote class="book-hint info">
+<p><strong>如何判断挂接成功？</strong></p>
+<p>上述命令不报错是一方面，我们也可以通过一些命令来看挂接的情况。</p>
+<ul>
+<li><code>lsblk</code> 列出所有可用块设备的信息，还能显示他们之间的依赖关系</li>
+<li><code>df -h</code> 查看磁盘占用的空间</li>
+</ul>
+<p>通过这些命令，应能看到挂接盘mycephfs的存在，查看到其容量等信息。</p>
 </blockquote>
 <h2 id=实验报告模板>
 实验报告模板
@@ -689,7 +731,7 @@ ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还�
 </code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/48cc1707a8d31fab2836d6d3e5fbbfb89b9915a1 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/41bff77b6535cf0280639e7ed1cbbefa91e54acc title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>

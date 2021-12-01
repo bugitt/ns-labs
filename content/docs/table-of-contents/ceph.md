@@ -635,7 +635,7 @@ host3  10.1.2.5
 想折腾的可能会想到如何删除 CephFS，Ceph 中非常“贴心”地防止你误删除，所以删除起来会有一些麻烦。
 
 ```bash
-ceph fs volume rm ns_ceph_fs [--yes-i-really-mean-it] # 要加上这么一长串后缀，但这样其实还是没法删除
+ceph fs volume rm <fs_name> [--yes-i-really-mean-it] # 要加上这么一长串后缀，但这样其实还是没法删除
 ceph config set mon mon_allow_pool_delete true # 还需要通过这条命令修改ceph config配置
 ```
 
@@ -699,6 +699,54 @@ chmod 600 /etc/ceph/ceph.client.foo.keyring # 赋权
 通过这些命令，应能看到挂接盘 mycephfs 的存在，查看到其容量等信息。
 
 {{< /hint >}}
+
+## Ceph RGW 对象存储
+
+Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADOS 接口封装实现的 FastCGI 服务，对外提供存储和管理对象数据的 Restful API。对象存储适用于图片、视频等各类文件的上传下载，可以设置相应的访问权限。目前 Ceph RGW 兼容常见的对象存储 API，例如兼容绝大部分 Amazon S3 API，兼容 OpenStack Swift API。
+
+通俗理解是 RGW 作为一个协议转换层，把从上层应用符合 S3 或 Swift 协议的请求转换成 rados 的请求，将数据保存在 rados 集群中。
+
+{{< hint info >}}
+
+**内部概念**
+
+- zone：包含多个 RGW 实例的一个逻辑概念。zone 不能跨集群，同一个 zone 的数据保存在同一组 pool 中。
+- zonegroup：一个 zonegroup 如果包含 1 个或多个 zone。如果一个 zonegroup 包含多个 zone，必须指定一个 zone 作为 master
+- zone，用来处理 bucket 和用户的创建。一个集群可以创建多个 zonegroup，一个 zonegroup 也可以跨多个集群。
+- realm：一个 realm 包含 1 个或多个 zonegroup。如果 realm 包含多个 zonegroup，必须指定一个 zonegroup 为 master
+- zonegroup， 用来处理系统操作。一个系统中可以包含多个 realm，多个 realm 之间资源完全隔离。
+
+**外部概念**
+
+- user：对象存储的使用者，默认情况下，一个用户只能创建 1000 个存储桶。
+- bucket：存储桶，用来管理对象的容器。
+- object：对象，泛指一个文档、图片或视频文件等，尽管用户可以直接上传一个目录，但是 ceph 并不按目录层级结构保存对象， ceph 所有的对象扁平化的保存在 bucket 中。
+
+[参考阅读](https://durantthorvalds.top/2021/01/03/%E3%80%8C%E6%A0%B8%E5%BF%83%E3%80%8DCeph%E5%AD%A6%E4%B9%A0%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E4%B8%83%EF%BC%9A%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E7%BD%91%E5%85%B3RGW/)
+
+{{< /hint >}}
+
+### Deploy RGW
+
+[参考：RGW SERVICE](https://docs.ceph.com/en/latest/cephadm/services/rgw/)
+
+- To deploy a set of radosgw daemons, with an arbitrary service name name, run the following command:
+
+```bash
+ceph orch apply rgw *<name>* [--realm=*<realm-name>*] [--zone=*<zone-name>*] --placement="*<num-daemons>* [*<host1>* ...]"
+```
+
+其中，`[]`中的内容为可选项，可以都添上。如 `ceph orch apply rgw *<name>* --realm=default --zone=default --placement=3`。`--placement`参数的使用和先前实验也是类似的，还可以用 `3 node1 node2 node3` 来完成指定，以及可以通过Label来指定。
+
+其实这一条命令就够了，然后我们可查看各个rgw节点是否已启动：`ceph orch ps --daemon-type rgw`。
+
+应能看到 `rgw*` 均为 `running` 的STATUS，则表明顺利启动。若为 `starting` 可稍等其转为 `running`。
+
+在执行上述命令的 Bootstrap host，`curl <bootstrap_host_ip:80>` 应能看到包含了 `<Buckets/>` 的 XML 形式的输出。
+
+
+
+
 
 ## 实验报告模板
 

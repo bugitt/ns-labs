@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-02T00:02:32+08:00">
+<meta property="article:modified_time" content="2021-12-02T00:05:49+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.67418b1a07c536c69c679614de1f8b00026c7cdde4810e225cc98520fe5ba3f8.js integrity="sha256-Z0GLGgfFNsacZ5YU3h+LAAJsfN3kgQ4iXMmFIP5bo/g=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.edc15551e3555130cfdcbfee136b70b74672d76bbc27a7ddbd76d56f27cb115c.js integrity="sha256-7cFVUeNVUTDP3L/uE2twt0Zy12u8J6fdvXbVbyfLEVw=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -792,6 +792,19 @@ secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#7
 Ceph RBD（选做）
 <a class=anchor href=#ceph-rbd%e9%80%89%e5%81%9a>#</a>
 </h2>
+<blockquote class="book-hint info">
+<p>
+<a href=https://docs.ceph.com/en/pacific/rbd/index.html>参考：CEPH BLOCK DEVICE</a></p>
+<p>RBD 即 RADOS Block Device 的简称，RBD 块存储是最稳定且最常用的存储类型。RBD 块设备类似磁盘可以被挂载。 RBD 块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在 Ceph 集群的多个 OSD 中。如下是对 Ceph RBD 的理解。</p>
+<ul>
+<li>RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁盘用；</li>
+<li>resizable：这个块可大可小；</li>
+<li>data striped：这个块在 Ceph 里面是被切割成若干小块来保存，不然 1PB 的块怎么存的下；</li>
+<li>thin-provisioned：精简置备，1TB 的集群是能创建无数 1PB 的块的。其实就是块的大小和在 Ceph 中实际占用大小是没有关系的，刚创建出来的块是不占空间，今后用多大空间，才会在 Ceph 中占用多大空间。举例：你有一个 32G 的 U 盘，存了一个 2G 的电影，那么 RBD 大小就类似于 32G，而 2G 就相当于在 Ceph 中占用的空间；</li>
+</ul>
+<p>块存储本质就是将裸磁盘或类似裸磁盘(lvm)设备映射给主机使用，主机可以对其进行格式化并存储和读取数据，块设备读取速度快但是不支持共享。</p>
+<p>Ceph 可以通过内核模块和 librbd 库提供块设备支持。客户端可以通过内核模块挂在 rbd 使用，客户端使用 rbd 块设备就像使用普通硬盘一样，可以对其就行格式化然后使用；客户应用也可以通过 librbd 使用 ceph 块，典型的是云平台的块存储服务（如下图），云平台可以使用 rbd 作为云的存储后端提供镜像存储、volume 块或者客户的系统引导盘等。</p>
+</blockquote>
 <ul>
 <li>创建 RBD</li>
 </ul>
@@ -929,7 +942,7 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/ca9d4c8b640c23c9a46829b0a38d5297222b3ea3 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/278dbcc76b56883a23348ed8a2905033f255fe47 title="Last modified by Yinghao Zhu | December 1, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 1, 2021</span>
 </a>

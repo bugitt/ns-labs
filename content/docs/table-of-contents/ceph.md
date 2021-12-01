@@ -744,9 +744,103 @@ ceph orch apply rgw *<name>* [--realm=*<realm-name>*] [--zone=*<zone-name>*] --p
 
 在执行上述命令的 Bootstrap host，`curl <bootstrap_host_ip:80>` 应能看到包含了 `<Buckets/>` 的 XML 形式的输出。
 
+### 使用对象存储
 
+我们为rgw创建用户：`radosgw-admin user create --uid=<username> --display-name=<your_display_name> --system`。如 `radosgw-admin user create --uid=s3 --display-name="objcet_storage" --system`。执行后，能看到类似输出：
 
+```json
+{
+    "user_id": "s3",
+    "display_name": "objcet_storage",
+    "email": "",
+    "suspended": 0,
+    "max_buckets": 1000,
+    "subusers": [],
+    "keys": [
+        {
+            "user": "x",
+            "access_key": "xxxxxxxxkey01",
+            "secret_key": "xxxxxxxxkey01"
+        }
+    ],
+    "swift_keys": [],
+    "caps": [],
+    "op_mask": "read, write, delete",
+    "system": "true",
+    "default_placement": "",
+    "default_storage_class": "",
+    "placement_tags": [],
+    "bucket_quota": {
+        "enabled": false,
+        "check_on_raw": false,
+        "max_size": -1,
+        "max_size_kb": 0,
+        "max_objects": -1
+    },
+    "user_quota": {
+        "enabled": false,
+        "check_on_raw": false,
+        "max_size": -1,
+        "max_size_kb": 0,
+        "max_objects": -1
+    },
+    "temp_url_keys": [],
+    "type": "rgw",
+    "mfa_ids": []
+}
+```
 
+从命令行的输出中，可以看到 `access_key: xxxxxxxxkey01` 和 `secret_key: xxxxxxxxkey01`，我们将其保存下来，后面还要用。
+
+使用Ceph的RGW对象存储，可以有很多工具，如s3cmd、 minio-client等，这里我们以s3cmd为例。有兴趣的还可以尝试 [minio](https://github.com/minio/minio)可以可视化进行操作。
+
+如是在Ubuntu中，执行 `apt install s3cmd` 先安装 AWS s3 API，再继续接下来的操作：
+
+我们执行 `s3cmd --configure` 去进行相关的配置。
+
+```bash
+> Access Key: "xxxxxxxxkey01"
+> Secret Key: "xxxxxxxxkey02"
+
+> S3 Endpoint [s3.amazonaws.com]: "<bootstrap_host_ip:80>"，如 "10.1.1.2:80"
+DNS-style bucket....[%(bucket)s.s3.amazonaws.com]: "<bootstrap_host_ip:80>/%(bucket)s"，如"10.1.1.2:80/%(bucket)s"
+HTTPS 选 no，其余基本默认enter
+```
+
+如果fail了，可进入到刚刚保存新建的config：`/root/.s3cfg`中，参考如下，修改处末尾用了 `#` 标识：
+
+```bash
+[default]
+access_key = xxxxxxxxkey01 #
+...
+cloudfront_host = 10.1.1.2:80 #
+...
+host_base = 10.1.1.2:80 #
+host_bucket = 10.1.1.2:80/%(bucket)s #
+...
+secret_key = xxxxxxxxkey02 #
+...
+```
+
+查看 Bucket：
+
+```bash
+s3cmd ls
+```
+
+一开始没有创建过Bucket，故没有输出，我们来新建一个 `s3cmd mb s3://s3cmd-demo`，再执行 `s3cmd ls`，即可看到新创建的bucket。
+
+[参考资料：使用s3cmd](https://www.cnblogs.com/sunhongleibibi/p/11661123.html)
+
+参考以上资料，可以尝试继续上传文件、上传文件夹、下载、`ls` 、删除等命令，体验 ceph-rgw 的Bucket 与 S3 存储的交互。
+
+{{< hint info >}}
+
+在 Dashboard 里有丰富的信息，可以多多尝试。如查看rgw的用户、查看Bucket、Pool等，欢迎多多体验。
+
+如上传文件不成功，有提示：`ERROR: S3 error: 416 (InvalidRange)` 的错误，可释放掉一些先前创建的资源，如drop掉CephFS再试试。OSD只有3个，导致PG数量吃紧可能不够用。
+
+{{< /hint >}}
 
 ## 实验报告模板
 

@@ -565,6 +565,68 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 
 使用同样的方法，将所有节点的附加硬盘都加入进来。至此，我们再使用`ceph -s`查看当前集群的状态，应为`HEALTH_OK`。
 
+### Ceph Filesystem (选做)
+
+以上其实都是在搭建Ceph集群的环境，我们添加了3个OSD进程组建起了Ceph Cluster。接下来，我们便可以在此基础上来具体地使用到Ceph所提供的分布式存储能力，从Ceph 文件系统 CephFS开始~
+
+{{< tabs "Deploy CephFS" >}}
+
+{{< tab "Automatic Setup" >}}
+
+创建CephFS的前提是需要至少一个的MDS daemon 元数据服务器守护进程。其实以下的一条命令即可自动地创建好MDS daemon：
+
+```bash
+ceph fs volume create <fs_name> [--placement="<placement spec>"]
+```
+
+其中，`fs_name` 是CephFS的名称，后面的 `--placement` 为可选参数，可以通过它来指定daemon container跑在哪几个hosts上。[参考资料](https://docs.ceph.com/en/latest/cephfs/fs-volumes/)
+
+我们也可以为每个host加label标签来进行指定：
+
+```bash
+ceph orch host ls # 查看当前有的hosts
+# 可有类似输出
+HOST   ADDR      LABELS  STATUS
+host1  10.1.2.3
+host2  10.1.2.4
+host3  10.1.2.5
+```
+但他们都没有Label标签，我们可通过 `ceph orch host label add host1 mylabel` 添加指定的Label。
+
+则 `[--placement="<placement spec>"]` 可为 `--placement="label:mylabel"`
+
+{{< /tab >}}
+
+{{< tab "More Custom Setup" >}}
+
+[参考：下列命令的一些具体参数含义](https://amito.me/2018/Pools-and-Placement-Groups-in-Ceph/)
+
+```bash
+ceph osd pool create cephfs_data 8 8 # 后面的数量可以调，设大了会无法创建，数值和osd的数量有关，需要是2的倍数
+# pool 'cephfs_data' created
+
+ceph osd pool create cephfs_metadata 8 8
+# pool 'cephfs_metadata' created
+
+ceph fs new cephfs cephfs_metadata cephfs_data
+# new fs with metadata pool 3 and data pool 2
+
+ceph fs ls
+# name: cephfs, metadata pool: cephfs_metadata, data pools: [cephfs_data ]
+
+ceph orch apply mds cephfs --placement="3 node1 node2 node3" # 应用部署CephFS
+```
+
+于是，我们便创建成功了CephFS。
+
+{{< /tab >}}
+
+{{< /tabs >}}
+
+- 通过 `rados df` 命令可查看刚才创建的资源池Pool的相关信息。
+- `ceph fs status` 可查看CephFS状态，验证当前已有至少一个MDS处在Active状态。
+- 还可经常性地执行 `ceph -s` 查看Ceph集群的状态，确保一直处在 `HEALTH_OK`。
+
 ## 实验报告模板
 
 

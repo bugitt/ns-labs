@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-02T11:01:19+08:00">
+<meta property="article:modified_time" content="2021-12-02T11:16:15+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.7f1bd698e1e5e0c88f25756a1013c20035864d26fde8639cc8eccd2658cf0fad.js integrity="sha256-fxvWmOHl4MiPJXVqEBPCADWGTSb96GOcyOzNJljPD60=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.dbc3c1a6100efb342db1cd132dae95777b636b3dcfd19ce72d21e0ba5d2a535e.js integrity="sha256-28PBphAO+zQtsc0TLa6Vd3tjaz3P0ZznLSHgul0qU14=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -122,19 +122,19 @@ Github
 <li><a href=#部署>部署</a></li>
 </ul>
 </li>
-<li><a href=#ceph-filesystem-选做>Ceph Filesystem (选做)</a>
+<li><a href=#ceph-filesystem-选>Ceph Filesystem (选)</a>
 <ul>
 <li><a href=#部署-cephfs>部署 CephFS</a></li>
 <li><a href=#挂载-cephfs>挂载 CephFS</a></li>
 </ul>
 </li>
-<li><a href=#ceph-rgw-对象存储>Ceph RGW 对象存储</a>
+<li><a href=#ceph-rgw-对象存储-选>Ceph RGW 对象存储 (选)</a>
 <ul>
-<li><a href=#deploy-rgw选做>Deploy RGW（选做）</a></li>
-<li><a href=#使用对象存储选做>使用对象存储（选做）</a></li>
+<li><a href=#deploy-rgw>Deploy RGW</a></li>
+<li><a href=#使用对象存储>使用对象存储</a></li>
 </ul>
 </li>
-<li><a href=#ceph-rbd选做>Ceph RBD（选做）</a></li>
+<li><a href=#ceph-rbd-选>Ceph RBD (选)</a></li>
 <li><a href=#实验报告模板>实验报告模板</a></li>
 </ul>
 </li>
@@ -495,9 +495,9 @@ BootStrap
 <p>
 <img src=https://cdn.loheagn.com/091703.png alt></p>
 <p>可以看到，最上面那两个容器，对应的就是 ceph 集群的 Monitor 进程和 Manager 进程。</p>
-<h4 id=ceph-dashboard可选>
-Ceph Dashboard（可选）
-<a class=anchor href=#ceph-dashboard%e5%8f%af%e9%80%89>#</a>
+<h4 id=ceph-dashboard-选>
+Ceph Dashboard (选)
+<a class=anchor href=#ceph-dashboard-%e9%80%89>#</a>
 </h4>
 <p>注意看<code>bootstrap</code>指令的输出，你可以看到一段这样的内容：</p>
 <p>
@@ -592,9 +592,9 @@ ceph mgr module enable dashboard
 <p>
 <img src=https://cdn.loheagn.com/105544.png alt></p>
 <p>使用同样的方法，将所有节点的附加硬盘都加入进来。至此，我们再使用<code>ceph -s</code>查看当前集群的状态，应为<code>HEALTH_OK</code>。</p>
-<h2 id=ceph-filesystem-选做>
-Ceph Filesystem (选做)
-<a class=anchor href=#ceph-filesystem-%e9%80%89%e5%81%9a>#</a>
+<h2 id=ceph-filesystem-选>
+Ceph Filesystem (选)
+<a class=anchor href=#ceph-filesystem-%e9%80%89>#</a>
 </h2>
 <p>
 <a href=https://docs.ceph.com/en/latest/cephfs/>参考资料: CEPH FILE SYSTEM</a></p>
@@ -684,9 +684,9 @@ chmod <span style=color:#ae81ff>600</span> /etc/ceph/ceph.client.foo.keyring <sp
 </ul>
 <p>通过这些命令，应能看到挂接盘 mycephfs 的存在，查看到其容量等信息。</p>
 </blockquote>
-<h2 id=ceph-rgw-对象存储>
-Ceph RGW 对象存储
-<a class=anchor href=#ceph-rgw-%e5%af%b9%e8%b1%a1%e5%ad%98%e5%82%a8>#</a>
+<h2 id=ceph-rgw-对象存储-选>
+Ceph RGW 对象存储 (选)
+<a class=anchor href=#ceph-rgw-%e5%af%b9%e8%b1%a1%e5%ad%98%e5%82%a8-%e9%80%89>#</a>
 </h2>
 <p>Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADOS 接口封装实现的 FastCGI 服务，对外提供存储和管理对象数据的 Restful API。对象存储适用于图片、视频等各类文件的上传下载，可以设置相应的访问权限。目前 Ceph RGW 兼容常见的对象存储 API，例如兼容绝大部分 Amazon S3 API，兼容 OpenStack Swift API。</p>
 <p>通俗理解是 RGW 作为一个协议转换层，把从上层应用符合 S3 或 Swift 协议的请求转换成 rados 的请求，将数据保存在 rados 集群中。</p>
@@ -710,9 +710,9 @@ Ceph RGW 对象存储
 <p>
 <a href=https://durantthorvalds.top/2021/01/03/%E3%80%8C%E6%A0%B8%E5%BF%83%E3%80%8DCeph%E5%AD%A6%E4%B9%A0%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E4%B8%83%EF%BC%9A%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E7%BD%91%E5%85%B3RGW/>参考阅读</a></p>
 </blockquote>
-<h3 id=deploy-rgw选做>
-Deploy RGW（选做）
-<a class=anchor href=#deploy-rgw%e9%80%89%e5%81%9a>#</a>
+<h3 id=deploy-rgw>
+Deploy RGW
+<a class=anchor href=#deploy-rgw>#</a>
 </h3>
 <p>
 <a href=https://docs.ceph.com/en/latest/cephadm/services/rgw/>参考：RGW SERVICE</a></p>
@@ -728,9 +728,9 @@ Deploy RGW（选做）
 <p>删除刚刚创建的 unknown/error 的 rgw 的命令为<code>ceph orch rm rgw.*&lt;rgw_name>*</code></p>
 </blockquote>
 <p>在执行上述命令的 Bootstrap host，<code>curl &lt;bootstrap_host_ip:80></code> 应能看到包含了 <code>&lt;Buckets/></code> 的 XML 形式的输出。</p>
-<h3 id=使用对象存储选做>
-使用对象存储（选做）
-<a class=anchor href=#%e4%bd%bf%e7%94%a8%e5%af%b9%e8%b1%a1%e5%ad%98%e5%82%a8%e9%80%89%e5%81%9a>#</a>
+<h3 id=使用对象存储>
+使用对象存储
+<a class=anchor href=#%e4%bd%bf%e7%94%a8%e5%af%b9%e8%b1%a1%e5%ad%98%e5%82%a8>#</a>
 </h3>
 <p>我们为 rgw 创建用户：<code>radosgw-admin user create --uid=&lt;username> --display-name=&lt;your_display_name> --system</code>。如 <code>radosgw-admin user create --uid=s3 --display-name="objcet_storage" --system</code>。执行后，能看到类似输出：</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
@@ -804,9 +804,9 @@ secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#7
 <p>在 Dashboard 里有丰富的信息，可以多多尝试。如查看 rgw 的用户、查看 Bucket、Pool 等，欢迎多多体验。</p>
 <p>如上传文件不成功，有提示：<code>ERROR: S3 error: 416 (InvalidRange)</code> 的错误，同样也可释放掉一些先前创建的资源，如 drop 掉 CephFS 再试试，Dashboard 里也能删除 Pool。OSD 只有 3 个，导致 PG 数量吃紧可能不够用。</p>
 </blockquote>
-<h2 id=ceph-rbd选做>
-Ceph RBD（选做）
-<a class=anchor href=#ceph-rbd%e9%80%89%e5%81%9a>#</a>
+<h2 id=ceph-rbd-选>
+Ceph RBD (选)
+<a class=anchor href=#ceph-rbd-%e9%80%89>#</a>
 </h2>
 <blockquote class="book-hint info">
 <p>
@@ -935,21 +935,21 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>### 创建 OSD
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>## Ceph Filesystem（选）
+<span style=color:#75715e>## Ceph Filesystem (选)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### 部署 CephFS（选）
+<span style=color:#75715e>### 部署 CephFS (选)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### 挂载 CephFS（选）
+<span style=color:#75715e>### 挂载 CephFS (选)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>## Ceph RGW 对象存储
+<span style=color:#75715e>## Ceph RGW 对象存储 (选)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### Deploy RGW（选）
+<span style=color:#75715e>### Deploy RGW (选)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### 使用对象存储（选）
+<span style=color:#75715e>### 使用对象存储 (选)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>## Ceph RBD（选）
+<span style=color:#75715e>## Ceph RBD (选)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>## 自行扩展和设计内容（选）
+<span style=color:#75715e>## 自行扩展和设计内容 (选)
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>&lt;!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常非常非常突出*可直接将其作为申优答辩的内容 --&gt;</span>
 
@@ -957,7 +957,7 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/96e35a0e6c9c5c3ff0e64131da6956f43cf49223 title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/ce882738d5a205b5d1e46acc582195eb7f9cf92d title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 2, 2021</span>
 </a>
@@ -996,19 +996,19 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 <li><a href=#部署>部署</a></li>
 </ul>
 </li>
-<li><a href=#ceph-filesystem-选做>Ceph Filesystem (选做)</a>
+<li><a href=#ceph-filesystem-选>Ceph Filesystem (选)</a>
 <ul>
 <li><a href=#部署-cephfs>部署 CephFS</a></li>
 <li><a href=#挂载-cephfs>挂载 CephFS</a></li>
 </ul>
 </li>
-<li><a href=#ceph-rgw-对象存储>Ceph RGW 对象存储</a>
+<li><a href=#ceph-rgw-对象存储-选>Ceph RGW 对象存储 (选)</a>
 <ul>
-<li><a href=#deploy-rgw选做>Deploy RGW（选做）</a></li>
-<li><a href=#使用对象存储选做>使用对象存储（选做）</a></li>
+<li><a href=#deploy-rgw>Deploy RGW</a></li>
+<li><a href=#使用对象存储>使用对象存储</a></li>
 </ul>
 </li>
-<li><a href=#ceph-rbd选做>Ceph RBD（选做）</a></li>
+<li><a href=#ceph-rbd-选>Ceph RBD (选)</a></li>
 <li><a href=#实验报告模板>实验报告模板</a></li>
 </ul>
 </li>

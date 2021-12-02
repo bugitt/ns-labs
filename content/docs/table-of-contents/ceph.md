@@ -139,9 +139,17 @@ Manager 进程主要负责跟踪当前集群的运行时状况，包括当前集
 
 {{< /hint >}}
 
-#### Pool 与 Placement Group（PG）
+#### Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
 
-请查阅 Ceph 的相关文档，阐述 Pool、Placement Group 与 OSD 之间的关系。
+请查阅 Ceph 的相关文档，阐述 Pool、PG、PGP 与 OSD 之间的关系。可定性/定量分析 OSD、PG、PGP、OSD、PG_NUM 之间的数量关系。
+
+#### Ceph 集群的 HEALTH STATUS
+
+你在实验过程中，打 `ceph -s` 都遇到过哪些 HEALTH STATUS？（`ceph health detail` 能看到更为详细的状态信息）如果是 `WARN/ERROR` 都是哪些原因？
+
+#### PG_NUM 的相关计算
+
+请查阅 Ceph 的相关文档，
 
 ## Ceph 部署
 
@@ -854,7 +862,7 @@ s3cmd ls
 
 [参考：CEPH BLOCK DEVICE](https://docs.ceph.com/en/pacific/rbd/index.html)
 
-RBD 即 RADOS Block Device 的简称，RBD 块存储是最稳定且最常用的存储类型。RBD 块设备类似磁盘可以被挂载。 RBD 块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在 Ceph 集群的多个 OSD 中。如下是对 Ceph RBD 的理解。
+RBD 即 RADOS Block Device 的简称，RBD 块存储是最稳定且最常用的存储类型。RBD 块设备类似磁盘可以被挂载。RBD 块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在 Ceph 集群的多个 OSD 中。如下是对 Ceph RBD 的理解：
 
 - RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁盘用；
 - resizable：这个块可大可小；
@@ -889,12 +897,7 @@ rbd create rbd1 --size 1024
 - 查看 rbd 信息
 
 ```bash
-rbd --image rbd1 info
-```
-
-参考输出：
-
-```bash
+> rbd --image rbd1 info
 rbd image 'rbd1':
 	size 1 GiB in 256 objects
 	order 22 (4 MiB objects)
@@ -986,7 +989,9 @@ realtime =none                   extsz=4096   blocks=0, rtextents=0
 
 回答下列问题：
 
-#### Pool、Placement Group 与 OSD 之间的关系
+#### Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
+
+#### Ceph 集群的 HEALTH STATUS
 
 ### Ceph 部署
 
@@ -1018,9 +1023,9 @@ realtime =none                   extsz=4096   blocks=0, rtextents=0
 
 ## Ceph RBD（选）
 
-### 自行扩展和设计内容（选）
+## 自行扩展和设计内容（选）
 
-<!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常突出*可直接将其作为申优答辩的内容 -->
+<!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常非常非常突出*可直接将其作为申优答辩的内容 -->
 
 ## 实验总结与心得
 ```

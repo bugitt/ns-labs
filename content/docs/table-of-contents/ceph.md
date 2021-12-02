@@ -432,7 +432,7 @@ mini 集群启动完成后，可以使用`podman ps`查看当前启动的容器�
 
 可以看到，最上面那两个容器，对应的就是 ceph 集群的 Monitor 进程和 Manager 进程。
 
-#### Ceph Dashboard（可选）
+#### Ceph Dashboard (选)
 
 注意看`bootstrap`指令的输出，你可以看到一段这样的内容：
 
@@ -573,7 +573,7 @@ ceph orch daemon add osd ceph-01:/dev/sdb --verbose
 
 使用同样的方法，将所有节点的附加硬盘都加入进来。至此，我们再使用`ceph -s`查看当前集群的状态，应为`HEALTH_OK`。
 
-## Ceph Filesystem (选做)
+## Ceph Filesystem (选)
 
 [参考资料: CEPH FILE SYSTEM](https://docs.ceph.com/en/latest/cephfs/)
 
@@ -708,7 +708,7 @@ chmod 600 /etc/ceph/ceph.client.foo.keyring # 赋权
 
 {{< /hint >}}
 
-## Ceph RGW 对象存储
+## Ceph RGW 对象存储 (选)
 
 Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADOS 接口封装实现的 FastCGI 服务，对外提供存储和管理对象数据的 Restful API。对象存储适用于图片、视频等各类文件的上传下载，可以设置相应的访问权限。目前 Ceph RGW 兼容常见的对象存储 API，例如兼容绝大部分 Amazon S3 API，兼容 OpenStack Swift API。
 
@@ -736,7 +736,7 @@ Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADO
 
 {{< /hint >}}
 
-### Deploy RGW（选做）
+### Deploy RGW
 
 [参考：RGW SERVICE](https://docs.ceph.com/en/latest/cephadm/services/rgw/)
 
@@ -762,7 +762,7 @@ ceph orch apply rgw *<name>* [--realm=*<realm-name>*] [--zone=*<zone-name>*] --p
 
 在执行上述命令的 Bootstrap host，`curl <bootstrap_host_ip:80>` 应能看到包含了 `<Buckets/>` 的 XML 形式的输出。
 
-### 使用对象存储（选做）
+### 使用对象存储
 
 我们为 rgw 创建用户：`radosgw-admin user create --uid=<username> --display-name=<your_display_name> --system`。如 `radosgw-admin user create --uid=s3 --display-name="objcet_storage" --system`。执行后，能看到类似输出：
 
@@ -860,7 +860,7 @@ s3cmd ls
 
 {{< /hint >}}
 
-## Ceph RBD（选做）
+## Ceph RBD (选)
 
 {{< hint info >}}
 
@@ -1011,21 +1011,21 @@ realtime =none                   extsz=4096   blocks=0, rtextents=0
 
 ### 创建 OSD
 
-## Ceph Filesystem（选）
+## Ceph Filesystem (选)
 
-### 部署 CephFS（选）
+### 部署 CephFS (选)
 
-### 挂载 CephFS（选）
+### 挂载 CephFS (选)
 
-## Ceph RGW 对象存储
+## Ceph RGW 对象存储 (选)
 
-### Deploy RGW（选）
+### Deploy RGW (选)
 
-### 使用对象存储（选）
+### 使用对象存储 (选)
 
-## Ceph RBD（选）
+## Ceph RBD (选)
 
-## 自行扩展和设计内容（选）
+## 自行扩展和设计内容 (选)
 
 <!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常非常非常突出*可直接将其作为申优答辩的内容 -->
 

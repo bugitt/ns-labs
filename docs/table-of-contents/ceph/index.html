@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-02T10:42:14+08:00">
+<meta property="article:modified_time" content="2021-12-02T10:44:21+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.0a5d9122d1782c4c197ce26d6d64c058f93ceeb5aaa8d75a1824908911ceabdc.js integrity="sha256-Cl2RItF4LEwZfOJtbWTAWPk87rWqqNdaGCSQiRHOq9w=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.30f8e6c9cb3fc5733c77706fda59059ea890bd5afda8e078027a7037cb296b4a.js integrity="sha256-MPjmycs/xXM8d3Bv2lkFnqiQvVr9qOB4AnpwN8spa0o=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -908,41 +908,39 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span><span style=font-style:italic></span>
 ---
 
-<span style=color:#75715e>## 实验内容
-</span><span style=color:#75715e></span>
-<span style=color:#75715e>### 基本概念思考
+<span style=color:#75715e>## 基本概念思考
 </span><span style=color:#75715e></span>
 回答下列问题：
 
-<span style=color:#75715e>#### Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
+<span style=color:#75715e>### Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>#### Ceph 集群的 HEALTH STATUS
+<span style=color:#75715e>### Ceph 集群的 HEALTH STATUS
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### Ceph 部署
+<span style=color:#75715e>## Ceph 部署
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>&lt;!-- 本部分内容可以根据部署方式的不同进行不同的改动，这里是使用Cephadm部署的模板 --&gt;</span>
 
-<span style=color:#75715e>#### 实验前置准备
+<span style=color:#75715e>### 实验前置准备
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>&lt;!-- 可写内容包括： --&gt;</span>
 <span style=color:#75715e>&lt;!-- 云平台/本机，操作系统的具体版本，各台机器的Hostname --&gt;</span>
 <span style=color:#75715e>&lt;!-- 一些前置工具的安装、配静态IP、改Hostname的记录 --&gt;</span>
 
-<span style=color:#75715e>#### Bootstrap
+<span style=color:#75715e>### Bootstrap
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>#### 添加 Host
+<span style=color:#75715e>### 添加 Host
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>#### 创建 OSD
+<span style=color:#75715e>### 创建 OSD
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### Ceph Filesystem（选）
+<span style=color:#75715e>## Ceph Filesystem（选）
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>#### 部署 CephFS（选）
+<span style=color:#75715e>### 部署 CephFS（选）
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>#### 挂载 CephFS（选）
+<span style=color:#75715e>### 挂载 CephFS（选）
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>## Ceph RGW 对象存储
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### ### Deploy RGW（选）
+<span style=color:#75715e>### Deploy RGW（选）
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>### 使用对象存储（选）
 </span><span style=color:#75715e></span>
@@ -956,7 +954,7 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/e38e2a191b6724d59b90e67b638388c754cdc76a title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/e46b26a0df2fd4e5a7349a66d400b074363712c1 title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 2, 2021</span>
 </a>

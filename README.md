@@ -1,2 +1,2 @@
 # ns-labs
-Network Storage Course Labs
+BUAA Network Storage Course Labs

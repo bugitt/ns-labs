@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-02T10:44:21+08:00">
+<meta property="article:modified_time" content="2021-12-02T11:01:19+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.30f8e6c9cb3fc5733c77706fda59059ea890bd5afda8e078027a7037cb296b4a.js integrity="sha256-MPjmycs/xXM8d3Bv2lkFnqiQvVr9qOB4AnpwN8spa0o=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.7f1bd698e1e5e0c88f25756a1013c20035864d26fde8639cc8eccd2658cf0fad.js integrity="sha256-fxvWmOHl4MiPJXVqEBPCADWGTSb96GOcyOzNJljPD60=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -690,6 +690,8 @@ Ceph RGW 对象存储
 </h2>
 <p>Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADOS 接口封装实现的 FastCGI 服务，对外提供存储和管理对象数据的 Restful API。对象存储适用于图片、视频等各类文件的上传下载，可以设置相应的访问权限。目前 Ceph RGW 兼容常见的对象存储 API，例如兼容绝大部分 Amazon S3 API，兼容 OpenStack Swift API。</p>
 <p>通俗理解是 RGW 作为一个协议转换层，把从上层应用符合 S3 或 Swift 协议的请求转换成 rados 的请求，将数据保存在 rados 集群中。</p>
+<p>
+<img src=https://docs.ceph.com/en/octopus/_images/1ae399f8fa9af1042d3e1cbf31828f14eb3fe01a6eb3352f88c3d2a04ac4dc50.png alt=rgw></p>
 <blockquote class="book-hint info">
 <p><strong>内部概念</strong></p>
 <ul>
@@ -722,7 +724,8 @@ Deploy RGW（选做）
 <p>其实这一条命令就够了，然后我们可查看各个 rgw 节点是否已启动：<code>ceph orch ps --daemon-type rgw</code>。</p>
 <p>应能看到 <code>rgw*</code> 均为 <code>running</code> 的 STATUS，则表明顺利启动。若为 <code>starting</code> 可稍等其转为 <code>running</code>。</p>
 <blockquote class="book-hint info">
-如一直显示 unknown/error 的 STATUS，也是因为 pg 资源不足（受 osd 数量所限）导致的，可以将前面创建的 CephFS 删掉，释放资源。
+<p>如一直显示 unknown/error 的 STATUS，也是因为 pg 资源不足（受 osd 数量所限）导致的，可以将前面创建的 CephFS 删掉，释放资源。</p>
+<p>删除刚刚创建的 unknown/error 的 rgw 的命令为<code>ceph orch rm rgw.*&lt;rgw_name>*</code></p>
 </blockquote>
 <p>在执行上述命令的 Bootstrap host，<code>curl &lt;bootstrap_host_ip:80></code> 应能看到包含了 <code>&lt;Buckets/></code> 的 XML 形式的输出。</p>
 <h3 id=使用对象存储选做>
@@ -954,7 +957,7 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/e46b26a0df2fd4e5a7349a66d400b074363712c1 title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/96e35a0e6c9c5c3ff0e64131da6956f43cf49223 title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 2, 2021</span>
 </a>

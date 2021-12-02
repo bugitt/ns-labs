@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-02T10:16:12+08:00">
+<meta property="article:modified_time" content="2021-12-02T10:42:14+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.ee41453b306fa45969c71cb155959150376ccd6fd1100d65b6336418f34b4724.js integrity="sha256-7kFFOzBvpFlpxxyxVZWRUDdszW/REA1ltjNkGPNLRyQ=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.0a5d9122d1782c4c197ce26d6d64c058f93ceeb5aaa8d75a1824908911ceabdc.js integrity="sha256-Cl2RItF4LEwZfOJtbWTAWPk87rWqqNdaGCSQiRHOq9w=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -285,11 +285,21 @@ Manager
 <p>比如，对于 Monitor 进程来讲，集群中仅有一个就够用了。但如果运行这一个 Monitor 进程的机器挂了，那么整个集群就会瘫痪（Client 将不知道该跟谁通信来拿到校验信息和集群状态信息等）。因此，一个高可用的 Ceph 集群中会包含多个执行几乎相同任务的运行在不同机器上的 Monitor 进程；这样挂了一个，Client 还可以跟剩下的通信，整个集群依旧可以正常对外提供服务。同样的道理，OSD 进程和 Manager 进程也有多个副本。</p>
 <p>另外，Ceph 为了保证数据的可靠性（也就是说 Client 存储进来的数据不能丢失）——注意区分其与整个系统可靠性的区别——在默认情况下，会将每份数据存储<strong>3 份</strong>，每份都会存储在不同的 OSD 上（鸡蛋不能放到同一个篮子里）。这样，即使有部分 OSD 挂掉，也能保证大部分数据不会丢失。因此，一个健康的 Ceph 集群要求至少同时存在三个健康的 OSD 进程（当然，这个默认的数值可以更改）。</p>
 </blockquote>
-<h4 id=pool-与-placement-grouppg>
-Pool 与 Placement Group（PG）
-<a class=anchor href=#pool-%e4%b8%8e-placement-grouppg>#</a>
+<h4 id=pool-与-placement-group-pg-与-placement-group-for-placement-purpose-pgp>
+Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
+<a class=anchor href=#pool-%e4%b8%8e-placement-group-pg-%e4%b8%8e-placement-group-for-placement-purpose-pgp>#</a>
 </h4>
-<p>请查阅 Ceph 的相关文档，阐述 Pool、Placement Group 与 OSD 之间的关系。</p>
+<p>请查阅 Ceph 的相关文档，阐述 Pool、PG、PGP 与 OSD 之间的关系。可定性/定量分析 OSD、PG、PGP、OSD、PG_NUM 之间的数量关系。</p>
+<h4 id=ceph-集群的-health-status>
+Ceph 集群的 HEALTH STATUS
+<a class=anchor href=#ceph-%e9%9b%86%e7%be%a4%e7%9a%84-health-status>#</a>
+</h4>
+<p>你在实验过程中，打 <code>ceph -s</code> 都遇到过哪些 HEALTH STATUS？（<code>ceph health detail</code> 能看到更为详细的状态信息）如果是 <code>WARN/ERROR</code> 都是哪些原因？</p>
+<h4 id=pg_num-的相关计算>
+PG_NUM 的相关计算
+<a class=anchor href=#pg_num-%e7%9a%84%e7%9b%b8%e5%85%b3%e8%ae%a1%e7%ae%97>#</a>
+</h4>
+<p>请查阅 Ceph 的相关文档，</p>
 <h2 id=ceph-部署>
 Ceph 部署
 <a class=anchor href=#ceph-%e9%83%a8%e7%bd%b2>#</a>
@@ -798,7 +808,7 @@ Ceph RBD（选做）
 <blockquote class="book-hint info">
 <p>
 <a href=https://docs.ceph.com/en/pacific/rbd/index.html>参考：CEPH BLOCK DEVICE</a></p>
-<p>RBD 即 RADOS Block Device 的简称，RBD 块存储是最稳定且最常用的存储类型。RBD 块设备类似磁盘可以被挂载。 RBD 块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在 Ceph 集群的多个 OSD 中。如下是对 Ceph RBD 的理解。</p>
+<p>RBD 即 RADOS Block Device 的简称，RBD 块存储是最稳定且最常用的存储类型。RBD 块设备类似磁盘可以被挂载。RBD 块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在 Ceph 集群的多个 OSD 中。如下是对 Ceph RBD 的理解：</p>
 <ul>
 <li>RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁盘用；</li>
 <li>resizable：这个块可大可小；</li>
@@ -824,9 +834,8 @@ Ceph RBD（选做）
 </code></pre></div><ul>
 <li>查看 rbd 信息</li>
 </ul>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>rbd --image rbd1 info
-</code></pre></div><p>参考输出：</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>rbd image <span style=color:#e6db74>&#39;rbd1&#39;</span>:
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>&gt; rbd --image rbd1 info
+rbd image <span style=color:#e6db74>&#39;rbd1&#39;</span>:
 	size <span style=color:#ae81ff>1</span> GiB in <span style=color:#ae81ff>256</span> objects
 	order <span style=color:#ae81ff>22</span> <span style=color:#f92672>(</span><span style=color:#ae81ff>4</span> MiB objects<span style=color:#f92672>)</span>
 	snapshot_count: <span style=color:#ae81ff>0</span>
@@ -905,7 +914,9 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span><span style=color:#75715e></span>
 回答下列问题：
 
-<span style=color:#75715e>#### Pool、Placement Group 与 OSD 之间的关系
+<span style=color:#75715e>#### Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
+</span><span style=color:#75715e></span>
+<span style=color:#75715e>#### Ceph 集群的 HEALTH STATUS
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>### Ceph 部署
 </span><span style=color:#75715e></span>
@@ -937,15 +948,15 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span><span style=color:#75715e></span>
 <span style=color:#75715e>## Ceph RBD（选）
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>### 自行扩展和设计内容（选）
+<span style=color:#75715e>## 自行扩展和设计内容（选）
 </span><span style=color:#75715e></span>
-<span style=color:#75715e>&lt;!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常突出*可直接将其作为申优答辩的内容 --&gt;</span>
+<span style=color:#75715e>&lt;!-- 本次实验可自行自由进行扩展，体验和尝试Ceph的各项功能，做得*非常非常非常突出*可直接将其作为申优答辩的内容 --&gt;</span>
 
 <span style=color:#75715e>## 实验总结与心得
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/16103b79388bd4e739d2b448bce358dc69d93802 title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/e38e2a191b6724d59b90e67b638388c754cdc76a title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 2, 2021</span>
 </a>

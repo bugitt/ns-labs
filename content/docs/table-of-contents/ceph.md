@@ -983,41 +983,39 @@ realtime =none                   extsz=4096   blocks=0, rtextents=0
 
 ---
 
-## 实验内容
-
-### 基本概念思考
+## 基本概念思考
 
 回答下列问题：
 
-#### Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
+### Pool 与 Placement Group (PG) 与 Placement Group for Placement purpose (PGP)
 
-#### Ceph 集群的 HEALTH STATUS
+### Ceph 集群的 HEALTH STATUS
 
-### Ceph 部署
+## Ceph 部署
 
 <!-- 本部分内容可以根据部署方式的不同进行不同的改动，这里是使用Cephadm部署的模板 -->
 
-#### 实验前置准备
+### 实验前置准备
 
 <!-- 可写内容包括： -->
 <!-- 云平台/本机，操作系统的具体版本，各台机器的Hostname -->
 <!-- 一些前置工具的安装、配静态IP、改Hostname的记录 -->
 
-#### Bootstrap
+### Bootstrap
 
-#### 添加 Host
+### 添加 Host
 
-#### 创建 OSD
+### 创建 OSD
 
-### Ceph Filesystem（选）
+## Ceph Filesystem（选）
 
-#### 部署 CephFS（选）
+### 部署 CephFS（选）
 
-#### 挂载 CephFS（选）
+### 挂载 CephFS（选）
 
 ## Ceph RGW 对象存储
 
-### ### Deploy RGW（选）
+### Deploy RGW（选）
 
 ### 使用对象存储（选）
 

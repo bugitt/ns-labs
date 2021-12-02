@@ -714,6 +714,8 @@ Ceph RGW(即 RADOS Gateway)是 Ceph 对象存储网关服务，是基于 LIBRADO
 
 通俗理解是 RGW 作为一个协议转换层，把从上层应用符合 S3 或 Swift 协议的请求转换成 rados 的请求，将数据保存在 rados 集群中。
 
+![rgw](https://docs.ceph.com/en/octopus/_images/1ae399f8fa9af1042d3e1cbf31828f14eb3fe01a6eb3352f88c3d2a04ac4dc50.png)
+
 {{< hint info >}}
 
 **内部概念**
@@ -753,6 +755,8 @@ ceph orch apply rgw *<name>* [--realm=*<realm-name>*] [--zone=*<zone-name>*] --p
 {{< hint info >}}
 
 如一直显示 unknown/error 的 STATUS，也是因为 pg 资源不足（受 osd 数量所限）导致的，可以将前面创建的 CephFS 删掉，释放资源。
+
+删除刚刚创建的 unknown/error 的 rgw 的命令为`ceph orch rm rgw.*<rgw_name>*`
 
 {{< /hint >}}
 

@@ -742,6 +742,12 @@ ceph orch apply rgw *<name>* [--realm=*<realm-name>*] [--zone=*<zone-name>*] --p
 
 应能看到 `rgw*` 均为 `running` 的 STATUS，则表明顺利启动。若为 `starting` 可稍等其转为 `running`。
 
+{{< hint info >}}
+
+如一直显示 unknown/error 的 STATUS，也是因为 pg 资源不足（受 osd 数量所限）导致的，可以将前面创建的 CephFS 删掉，释放资源。
+
+{{< /hint >}}
+
 在执行上述命令的 Bootstrap host，`curl <bootstrap_host_ip:80>` 应能看到包含了 `<Buckets/>` 的 XML 形式的输出。
 
 ### 使用对象存储（选做）
@@ -838,7 +844,7 @@ s3cmd ls
 
 在 Dashboard 里有丰富的信息，可以多多尝试。如查看 rgw 的用户、查看 Bucket、Pool 等，欢迎多多体验。
 
-如上传文件不成功，有提示：`ERROR: S3 error: 416 (InvalidRange)` 的错误，可释放掉一些先前创建的资源，如 drop 掉 CephFS 再试试。OSD 只有 3 个，导致 PG 数量吃紧可能不够用。
+如上传文件不成功，有提示：`ERROR: S3 error: 416 (InvalidRange)` 的错误，同样也可释放掉一些先前创建的资源，如 drop 掉 CephFS 再试试，Dashboard 里也能删除 Pool。OSD 只有 3 个，导致 PG 数量吃紧可能不够用。
 
 {{< /hint >}}
 
@@ -907,26 +913,26 @@ rbd image 'rbd1':
 继续执行以下命令：
 
 ```bash
-> root@ubuntu:/mnt# ceph osd crush tunables hammer
+> root@ceph:/mnt# ceph osd crush tunables hammer
 adjusted tunables profile to hammer
 
-> root@ubuntu:/mnt# ceph osd crush reweight-all
+> root@ceph:/mnt# ceph osd crush reweight-all
 reweighted crush hierarchy
 
 # 关闭一些内核默认不支持的特性
-> root@ubuntu:/mnt# rbd feature disable rbd1 exclusive-lock object-map fast-diff deep-flatten
+> root@ceph:/mnt# rbd feature disable rbd1 exclusive-lock object-map fast-diff deep-flatten
 
 # 查看特性是否已禁用
-> root@ubuntu:/mnt# rbd --image rbd1 info | grep features
+> root@ceph:/mnt# rbd --image rbd1 info | grep features
 	features: layering
 	op_features:
 
 # 映射到客户端(在需要挂载的客户端运行)
-> root@ubuntu:/mnt# rbd map --image rbd1
+> root@ceph:/mnt# rbd map --image rbd1
 /dev/rbd0
 
 # 查看映射情况
-> root@ubuntu:/mnt# rbd showmapped
+> root@ceph:/mnt# rbd showmapped
 id  pool  namespace  image  snap  device
 0   rbd              rbd1   -     /dev/rbd0
 ```
@@ -935,7 +941,7 @@ id  pool  namespace  image  snap  device
 
 ```bash
 # 格式化磁盘
-> root@ubuntu:/mnt# mkfs.xfs /dev/rbd0
+> root@ceph:/mnt# mkfs.xfs /dev/rbd0
 meta-data=/dev/rbd0              isize=512    agcount=8, agsize=32768 blks
          =                       sectsz=512   attr=2, projid32bit=1
          =                       crc=1        finobt=1, sparse=1, rmapbt=0
@@ -948,11 +954,11 @@ log      =internal log           bsize=4096   blocks=2560, version=2
 realtime =none                   extsz=4096   blocks=0, rtextents=0
 
 # 创建挂载目录, 并将 rbd 挂载到指定目录
-> root@ubuntu:/mnt# mkdir /mnt/rbd
-> root@ubuntu:/mnt# mount /dev/rbd0 /mnt/rbd/
+> root@ceph:/mnt# mkdir /mnt/rbd
+> root@ceph:/mnt# mount /dev/rbd0 /mnt/rbd/
 
 # 查看挂载情况
-> root@ubuntu:/mnt# df -hl | grep rbd
+> root@ceph:/mnt# df -hl | grep rbd
 /dev/rbd0      1014M   40M  975M   4% /mnt/rbd
 ```
 

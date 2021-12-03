@@ -666,6 +666,17 @@ CephFS 在创建后应当能被实际使用，如完成分布式存储文件的�
 
 第一步：Generate a minimal conf for the client host. The conf file should be placed at /etc/ceph:
 
+{{< hint danger >}}
+
+**这一步操作高危！**
+
+以防万一，请先执行两个操作：
+
+1.  `echo /etc/ceph/ceph.conf > /etc/ceph/backup_ceph.conf` 备份原来的 `ceph.conf`
+2.  在 cephadm shell 里面，用 `ceph config generate-minimal-conf` 生成 config，将生成的内容也保存备份一下
+
+{{< /hint >}}
+
 ```bash
 # on client host
 mkdir /etc/ceph
@@ -673,7 +684,7 @@ ssh {user}@{mon-host} "sudo ceph config generate-minimal-conf" | sudo tee /etc/c
 chmod 644 /etc/ceph/ceph.conf # 赋权
 ```
 
-如果不能成功，可直接到 MON 主机执行`sudo ceph config generate-minimal-conf`，将输出的内容粘贴到 `/etc/ceph/ceph.conf`（下同）。
+如果不能成功，可直接到 MON 主机执行 `sudo ceph config generate-minimal-conf`，将输出的内容粘贴到 `/etc/ceph/ceph.conf`（下同）。如果上述操作导致 Client/Bootstrap Host 挂了，多半是 `/etc/ceph/ceph.conf` 被误清空了，将先前备份的 `ceph.conf` 写回即可恢复。
 
 第二步：Create the CephX user and get its secret key:
 
@@ -834,7 +845,7 @@ access_key = xxxxxxxxkey01 #
 cloudfront_host = 10.1.1.2:80 #
 ...
 host_base = 10.1.1.2:80 #
-host_bucket = 10.1.1.2:80/%(bucket)s #
+host_bucket = 10.1.1.2:80/%(bucket)s # 如后面不成功，也试试 10.251.255.87/%(buckes 这样的形式
 ...
 secret_key = xxxxxxxxkey02 #
 ...

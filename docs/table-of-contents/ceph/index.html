@@ -8,11 +8,11 @@
 当然，你也可以选择自己完成实验。但这要求你在本地的虚拟机管理工具中，新建 3 台以上的机器进行实验（或者使用其他公有云产品中的机器）。
 对于使用自己的机器的同学，建议采用 CentOS 系统（这样 Kernel 版本不至于太新，减少出错的可能），每台机器配置为 2 核 2G 即可，并且每台机器至少附带一个全新的大于 5G 的虚拟磁盘。
 请在云平台作业提交截止时间之前，将作业提交到云平台，命名为：lab03-学号-姓名.pdf，如 lab03-18373722-朱英豪.pdf。
-Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群的部署安装都不简单，Ceph 也不例外。很多时候，需要对 Linux Kernel 和 Linux 网络管理有基本的了解。
+组内的每一位成员都要交实验报告，前面部分可共享，实验感想自己写自己的~  本次实验选做部分占分！分值分布如下：
+ 必做部分：70 分 CephFS：10 分 RGW：10 分 RBD：10 分   Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群的部署安装都不简单，Ceph 也不例外。很多时候，需要对 Linux Kernel 和 Linux 网络管理有基本的了解。
 实验中遇到的困难请及时在课程微信群中抛出。
 实验文档不可能将整个 Ceph 的文档都搬过来，因此，在实验的整个过程中，请务必将 Ceph 官方文档也作为重要的参考依据。实验文档中有描述不到位的地方，可以参考 Ceph 官方文档的相关讨论。
-另外，因为 Ceph 是 Red Hat 主导开发的产品，因此，Red Hat 也有关于 Ceph 完整的技术介绍， 它的文档同样值得参考，比如，你在这里可以找到它的 Ceph 部署指南，甚至在很多方面比 Ceph 官方更加详实。
- 在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
+另外，因为 Ceph 是 Red Hat 主导开发的产品，因此，Red Hat 也有关于 Ceph 完整的技术介绍， 它的文档同样值得参考，比如，你在这里可以找到它的 Ceph 部署指南，甚至在很多方面比 Ceph 官方更加详实。">
 <meta name=theme-color content="#FFFFFF">
 <meta name=color-scheme content="light dark"><meta property="og:title" content="Lab03 Ceph存储集群实践">
 <meta property="og:description" content="Lab03 Ceph 存储集群实践 #  实验目的 #    了解 Ceph 存储的基本工作原理
@@ -21,20 +21,20 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
 当然，你也可以选择自己完成实验。但这要求你在本地的虚拟机管理工具中，新建 3 台以上的机器进行实验（或者使用其他公有云产品中的机器）。
 对于使用自己的机器的同学，建议采用 CentOS 系统（这样 Kernel 版本不至于太新，减少出错的可能），每台机器配置为 2 核 2G 即可，并且每台机器至少附带一个全新的大于 5G 的虚拟磁盘。
 请在云平台作业提交截止时间之前，将作业提交到云平台，命名为：lab03-学号-姓名.pdf，如 lab03-18373722-朱英豪.pdf。
-Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群的部署安装都不简单，Ceph 也不例外。很多时候，需要对 Linux Kernel 和 Linux 网络管理有基本的了解。
+组内的每一位成员都要交实验报告，前面部分可共享，实验感想自己写自己的~  本次实验选做部分占分！分值分布如下：
+ 必做部分：70 分 CephFS：10 分 RGW：10 分 RBD：10 分   Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群的部署安装都不简单，Ceph 也不例外。很多时候，需要对 Linux Kernel 和 Linux 网络管理有基本的了解。
 实验中遇到的困难请及时在课程微信群中抛出。
 实验文档不可能将整个 Ceph 的文档都搬过来，因此，在实验的整个过程中，请务必将 Ceph 官方文档也作为重要的参考依据。实验文档中有描述不到位的地方，可以参考 Ceph 官方文档的相关讨论。
-另外，因为 Ceph 是 Red Hat 主导开发的产品，因此，Red Hat 也有关于 Ceph 完整的技术介绍， 它的文档同样值得参考，比如，你在这里可以找到它的 Ceph 部署指南，甚至在很多方面比 Ceph 官方更加详实。
- 在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
+另外，因为 Ceph 是 Red Hat 主导开发的产品，因此，Red Hat 也有关于 Ceph 完整的技术介绍， 它的文档同样值得参考，比如，你在这里可以找到它的 Ceph 部署指南，甚至在很多方面比 Ceph 官方更加详实。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-03T18:21:52+08:00">
+<meta property="article:modified_time" content="2021-12-03T19:43:44+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.7ed8f7de11ca40b0198b11e31c930f0708f4a5b427fabc1d6106dd74914664a4.js integrity="sha256-ftj33hHKQLAZixHjHJMPBwj0pbQn+rwdYQbddJFGZKQ=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.468a6912b6e8fdfc8cbb17e0a8d33fa2867f9a3b2045f922ab5086305ecf9292.js integrity="sha256-RoppErbo/fyMuxfgqNM/ooZ/mjsgRfkiq1CGMF7PkpI=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -166,6 +166,18 @@ Lab03 Ceph 存储集群实践
 <p>当然，你也可以选择自己完成实验。但这要求你在本地的虚拟机管理工具中，新建 3 台以上的机器进行实验（或者使用其他公有云产品中的机器）。</p>
 <p>对于使用自己的机器的同学，建议采用 CentOS 系统（这样 Kernel 版本不至于太新，减少出错的可能），每台机器配置为 2 核 2G 即可，并且每台机器至少附带一个全新的大于 5G 的虚拟磁盘。</p>
 <p>请在云平台作业提交截止时间之前，将作业提交到云平台，命名为：lab03-学号-姓名.pdf，如 lab03-18373722-朱英豪.pdf。</p>
+<blockquote class="book-hint info">
+组内的每一位成员都要交实验报告，前面部分可共享，实验感想自己写自己的~
+</blockquote>
+<blockquote class="book-hint danger">
+<p>本次实验选做部分占分！分值分布如下：</p>
+<ul>
+<li>必做部分：70 分</li>
+<li>CephFS：10 分</li>
+<li>RGW：10 分</li>
+<li>RBD：10 分</li>
+</ul>
+</blockquote>
 <blockquote class="book-hint info">
 <p>Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群的部署安装都不简单，Ceph 也不例外。很多时候，需要对 Linux Kernel 和 Linux 网络管理有基本的了解。</p>
 <p><strong>实验中遇到的困难请及时在课程微信群中抛出。</strong></p>
@@ -965,7 +977,7 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/2bec666b3415771178d332521a92f00a98746138 title="Last modified by Yinghao Zhu | December 3, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/9de7bcaa5a846a6b0622adad975a653db76b9637 title="Last modified by Yinghao Zhu | December 3, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
 <span>December 3, 2021</span>
 </a>

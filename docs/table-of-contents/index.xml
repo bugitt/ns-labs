@@ -24,11 +24,11 @@ Hypervisor # 我们知道，一台计算机一般有以下的结构：
 当然，你也可以选择自己完成实验。但这要求你在本地的虚拟机管理工具中，新建 3 台以上的机器进行实验（或者使用其他公有云产品中的机器）。
 对于使用自己的机器的同学，建议采用 CentOS 系统（这样 Kernel 版本不至于太新，减少出错的可能），每台机器配置为 2 核 2G 即可，并且每台机器至少附带一个全新的大于 5G 的虚拟磁盘。
 请在云平台作业提交截止时间之前，将作业提交到云平台，命名为：lab03-学号-姓名.pdf，如 lab03-18373722-朱英豪.pdf。
-Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群的部署安装都不简单，Ceph 也不例外。很多时候，需要对 Linux Kernel 和 Linux 网络管理有基本的了解。
+组内的每一位成员都要交实验报告，前面部分可共享，实验感想自己写自己的~ 本次实验选做部分占分！分值分布如下：
+必做部分：70 分 CephFS：10 分 RGW：10 分 RBD：10 分 Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群的部署安装都不简单，Ceph 也不例外。很多时候，需要对 Linux Kernel 和 Linux 网络管理有基本的了解。
 实验中遇到的困难请及时在课程微信群中抛出。
 实验文档不可能将整个 Ceph 的文档都搬过来，因此，在实验的整个过程中，请务必将 Ceph 官方文档也作为重要的参考依据。实验文档中有描述不到位的地方，可以参考 Ceph 官方文档的相关讨论。
-另外，因为 Ceph 是 Red Hat 主导开发的产品，因此，Red Hat 也有关于 Ceph 完整的技术介绍， 它的文档同样值得参考，比如，你在这里可以找到它的 Ceph 部署指南，甚至在很多方面比 Ceph 官方更加详实。
-在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。</description></item><item><title>FAQ</title><link>https://bugitt.github.io/ns-labs/docs/table-of-contents/faq/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bugitt.github.io/ns-labs/docs/table-of-contents/faq/</guid><description>FAQ # 如何登录实验虚拟机 # 在云平台中查看虚拟机访问IP、账户以及密码
+另外，因为 Ceph 是 Red Hat 主导开发的产品，因此，Red Hat 也有关于 Ceph 完整的技术介绍， 它的文档同样值得参考，比如，你在这里可以找到它的 Ceph 部署指南，甚至在很多方面比 Ceph 官方更加详实。</description></item><item><title>FAQ</title><link>https://bugitt.github.io/ns-labs/docs/table-of-contents/faq/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://bugitt.github.io/ns-labs/docs/table-of-contents/faq/</guid><description>FAQ # 如何登录实验虚拟机 # 在云平台中查看虚拟机访问IP、账户以及密码
 Windows win+R 打开“运行”，然后输入mstsc，然后在弹出窗口中输入IP、账号、密码即可 MacOS（Linux？） Parallels Client Microsoft Remote Desktop （有Bug——或者说是Feature——无法使用macOS本地工具截图） VMware Fusion 云平台上没有显示虚拟机IP或显示的IP无法登录怎么办 # 可以用来登录的IP位于10.251.252.1~10.251.255.254之间
 如果未登录过实验虚拟机
 云平台上显示的IP是169或者无IP则暂时无法登录，需要重启虚拟机重新获取IP。需要注意的是，虚拟机的重启、以及DHCP IP的获取都需要时间，开机后应等待3分钟以上，请勿频繁开关机 如果之前登录过实验虚拟机

@@ -28,13 +28,13 @@ Ceph 是一个分布式的存储集群。大多数生产可用的分布式集群
  在中文互联网上，你很容易找到 Ceph 的中文文档。但它有很多过时的内容，比如它还在使用ceph-deploy这个官方已经不再维护的工具（这个工具同样不支持新版的 Ceph）来部署集群。因此，它的内容充其量也只能作为部分参考。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-02T11:16:15+08:00">
+<meta property="article:modified_time" content="2021-12-03T18:21:52+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.dbc3c1a6100efb342db1cd132dae95777b636b3dcfd19ce72d21e0ba5d2a535e.js integrity="sha256-28PBphAO+zQtsc0TLa6Vd3tjaz3P0ZznLSHgul0qU14=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.7ed8f7de11ca40b0198b11e31c930f0708f4a5b427fabc1d6106dd74914664a4.js integrity="sha256-ftj33hHKQLAZixHjHJMPBwj0pbQn+rwdYQbddJFGZKQ=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -659,11 +659,19 @@ ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还�
 <p>CephFS 在创建后应当能被实际使用，如完成分布式存储文件的任务。在这一步，我们将把 CephFS 挂载到 Client 端，让 Client 能够创建和存储文件。</p>
 <p>我们先要对 Client 端进行一些配置，保证 Client 端能连接到 MON 主机，即 Bootstrap Host。</p>
 <p>第一步：Generate a minimal conf for the client host. The conf file should be placed at /etc/ceph:</p>
+<blockquote class="book-hint danger">
+<p><strong>这一步操作高危！</strong></p>
+<p>以防万一，请先执行两个操作：</p>
+<ol>
+<li><code>echo /etc/ceph/ceph.conf > /etc/ceph/backup_ceph.conf</code> 备份原来的 <code>ceph.conf</code></li>
+<li>在 cephadm shell 里面，用 <code>ceph config generate-minimal-conf</code> 生成 config，将生成的内容也保存备份一下</li>
+</ol>
+</blockquote>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># on client host</span>
 mkdir /etc/ceph
 ssh <span style=color:#f92672>{</span>user<span style=color:#f92672>}</span>@<span style=color:#f92672>{</span>mon-host<span style=color:#f92672>}</span> <span style=color:#e6db74>&#34;sudo ceph config generate-minimal-conf&#34;</span> | sudo tee /etc/ceph/ceph.conf
 chmod <span style=color:#ae81ff>644</span> /etc/ceph/ceph.conf <span style=color:#75715e># 赋权</span>
-</code></pre></div><p>如果不能成功，可直接到 MON 主机执行<code>sudo ceph config generate-minimal-conf</code>，将输出的内容粘贴到 <code>/etc/ceph/ceph.conf</code>（下同）。</p>
+</code></pre></div><p>如果不能成功，可直接到 MON 主机执行 <code>sudo ceph config generate-minimal-conf</code>，将输出的内容粘贴到 <code>/etc/ceph/ceph.conf</code>（下同）。如果上述操作导致 Client/Bootstrap Host 挂了，多半是 <code>/etc/ceph/ceph.conf</code> 被误清空了，将先前备份的 <code>ceph.conf</code> 写回即可恢复。</p>
 <p>第二步：Create the CephX user and get its secret key:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># on client host</span>
 ssh <span style=color:#f92672>{</span>user<span style=color:#f92672>}</span>@<span style=color:#f92672>{</span>mon-host<span style=color:#f92672>}</span> <span style=color:#e6db74>&#34;sudo ceph fs authorize cephfs client.foo / rw&#34;</span> | sudo tee /etc/ceph/ceph.client.foo.keyring
@@ -790,7 +798,7 @@ access_key <span style=color:#f92672>=</span> xxxxxxxxkey01 <span style=color:#7
 cloudfront_host <span style=color:#f92672>=</span> 10.1.1.2:80 <span style=color:#75715e>#</span>
 ...
 host_base <span style=color:#f92672>=</span> 10.1.1.2:80 <span style=color:#75715e>#</span>
-host_bucket <span style=color:#f92672>=</span> 10.1.1.2:80/%<span style=color:#f92672>(</span>bucket<span style=color:#f92672>)</span>s <span style=color:#75715e>#</span>
+host_bucket <span style=color:#f92672>=</span> 10.1.1.2:80/%<span style=color:#f92672>(</span>bucket<span style=color:#f92672>)</span>s <span style=color:#75715e># 如后面不成功，也试试 10.251.255.87/%(buckes 这样的形式</span>
 ...
 secret_key <span style=color:#f92672>=</span> xxxxxxxxkey02 <span style=color:#75715e>#</span>
 ...
@@ -957,9 +965,9 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/ce882738d5a205b5d1e46acc582195eb7f9cf92d title="Last modified by Yinghao Zhu | December 2, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/2bec666b3415771178d332521a92f00a98746138 title="Last modified by Yinghao Zhu | December 3, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
-<span>December 2, 2021</span>
+<span>December 3, 2021</span>
 </a>
 </div>
 <div>

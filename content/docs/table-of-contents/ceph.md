@@ -690,7 +690,7 @@ CephFS 在创建后应当能被实际使用，如完成分布式存储文件的�
 以防万一，请先执行两个操作：
 
 1.  `echo /etc/ceph/ceph.conf > /etc/ceph/backup_ceph.conf` 备份原来的 `ceph.conf`
-2.  在 cephadm shell 里面，用 `ceph config generate-minimal-conf` 生成 config，将生成的内容也保存备份一下
+2.  在 cephadm shell (即 bootstarp 主机) 里面，用 `ceph config generate-minimal-conf` 生成 config，将生成出来的内容也保存备份一下 (复制粘贴+截图大法 / 重定向输出)
 
 {{< /hint >}}
 

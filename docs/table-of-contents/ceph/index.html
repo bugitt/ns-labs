@@ -28,13 +28,13 @@
 另外，因为 Ceph 是 Red Hat 主导开发的产品，因此，Red Hat 也有关于 Ceph 完整的技术介绍， 它的文档同样值得参考，比如，你在这里可以找到它的 Ceph 部署指南，甚至在很多方面比 Ceph 官方更加详实。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bugitt.github.io/ns-labs/docs/table-of-contents/ceph/"><meta property="article:section" content="docs">
-<meta property="article:modified_time" content="2021-12-17T21:19:42+08:00">
+<meta property="article:modified_time" content="2021-12-18T21:59:14+08:00">
 <title>Lab03 Ceph存储集群实践 | Network Storage Labs</title>
 <link rel=manifest href=/ns-labs/manifest.json>
 <link rel=icon href=/ns-labs/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/ns-labs/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
 <script defer src=/ns-labs/flexsearch.min.js></script>
-<script defer src=/ns-labs/en.search.min.285f68b0ae7ae49779f7812645dd5bd77c73479b3e9b3ea6eca7e44306520ab2.js integrity="sha256-KF9osK565Jd594EmRd1b13xzR5s+mz6m7KfkQwZSCrI=" crossorigin=anonymous></script>
+<script defer src=/ns-labs/en.search.min.ebfb4034a80d540df8718e3e41d58a25436612d7579c5e57ea146f3c5db1df7f.js integrity="sha256-6/tANKgNVA34cY4+QdWKJUNmEtdXnF5X6hRvPF2x338=" crossorigin=anonymous></script>
 <script defer src=/ns-labs/sw.min.e807e073195b27145d6580fa7d77604a8722176c4cd8c5b2c54bb1ca82ab66fa.js integrity="sha256-6AfgcxlbJxRdZYD6fXdgSociF2xM2MWyxUuxyoKrZvo=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
@@ -675,7 +675,7 @@ ceph config set mon mon_allow_pool_delete true <span style=color:#75715e># 还�
 <p><strong>这一步操作高危！</strong></p>
 <p>以防万一，请先执行两个操作：</p>
 <ol>
-<li><code>echo /etc/ceph/ceph.conf > /etc/ceph/backup_ceph.conf</code> 备份原来的 <code>ceph.conf</code></li>
+<li><code>cat /etc/ceph/ceph.conf > /etc/ceph/backup_ceph.conf</code> 备份原来的 <code>ceph.conf</code></li>
 <li>在 cephadm shell (即 bootstarp 主机) 里面，用 <code>ceph config generate-minimal-conf</code> 生成 config，将生成出来的内容也保存备份一下 (复制粘贴+截图大法 / 重定向输出)</li>
 </ol>
 </blockquote>
@@ -977,9 +977,9 @@ realtime <span style=color:#f92672>=</span>none                   extsz<span sty
 </span></code></pre></div></article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
-<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/7aeda4955bfca0c6ecd9748eb925bb22dfe0655a title="Last modified by Yinghao Zhu | December 17, 2021" target=_blank rel=noopener>
+<div><a class="flex align-center" href=https://github.com/alex-shpak/hugo-book/commit/97dac2425d7431350b077576edca51d016f51625 title="Last modified by Yinghao Zhu | December 18, 2021" target=_blank rel=noopener>
 <img src=/ns-labs/svg/calendar.svg class=book-icon alt=Calendar>
-<span>December 17, 2021</span>
+<span>December 18, 2021</span>
 </a>
 </div>
 <div>
